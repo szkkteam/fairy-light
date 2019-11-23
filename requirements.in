@@ -1,0 +1,10 @@
+# config file used to generate requirements.txt
+#
+# pip-compile requirements.in --output-file requirements.txt
+
+flask
+
+celery
+loguru
+redis
+appdirs
