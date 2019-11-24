@@ -183,6 +183,14 @@ class BaseConfig(object):
     SECURITY_CONFIRM_ERROR_VIEW = '/sign-up/resend-confirmation-email'
     SECURITY_POST_CONFIRM_VIEW = '/?welcome'
 
+    # If it is True, your User model will require the following additional fields:
+    # - last_login_at
+    # - current_login_at
+    # - last_login_ip
+    # - current_login_ip
+    # - login_count
+    SECURITY_TRACKABLE = False
+
 class ProdConfig(BaseConfig):
     ##########################################################################
     # flask                                                                  #
