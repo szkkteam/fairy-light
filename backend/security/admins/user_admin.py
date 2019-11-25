@@ -43,7 +43,9 @@ class UserAdmin(ModelAdmin):
 
     form_base_class = BaseUserForm
 
-    form_columns = ('username', 'email', 'first_name', 'last_name', 'roles', 'active')
+    form_columns = ('username', 'email', 'first_name', 'last_name', 'active')
+    # FIXME: I think the role field is now excluded from the form?
+    #form_columns = ('username', 'email', 'first_name', 'last_name', 'roles', 'active')
     form_excluded_columns = ('articles', 'password', 'user_roles')
 
     form_overrides = dict(email=html5.EmailField)

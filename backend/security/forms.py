@@ -11,7 +11,11 @@ from flask_security.forms import (
     PasswordField,
     PasswordFormMixin,
     password_required,
-    RegisterForm
+    RegisterForm,
+    get_form_field_label,
+    email_required,
+    email_validator,
+    unique_user_email
 )
 from wtforms import (
 	StringField,
@@ -54,11 +58,11 @@ class ChangePasswordForm(Form, PasswordFormMixin, ChangePasswordFormMixin):
         return True
 
 class ExtendedRegisterForm(RegisterForm):
-	 """ Add user_mail field to the register's class
+    """
+    Add user_mail field to the register's class
     """
     user_mail = StringField(get_form_field_label('email'),
         validators=[email_required, email_validator, unique_user_email])
-    # user_mail = StringField('E-mail Address', [DataRequired()])
 
     # TODO: Maybe the validate method is not needed now?
     """

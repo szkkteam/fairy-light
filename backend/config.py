@@ -37,30 +37,30 @@ STATIC_URL_PATH = '/static' # serve asset files in static/ at /static/
 
 # list of bundle modules to register with the app, in dot notation
 BUNDLES = [
-    #'backend.admin',
+    'backend.admin',
     #'backend.blog',
-    #'backend.security',
+    'backend.security',
     #'backend.site',
 ]
 
 # ordered list of extensions to register before the bundles
 # syntax is import.name.in.dot.module.notation:extension_instance_name
 EXTENSIONS = [
-    #'backend.extensions:session',               # should be first
-    #'backend.extensions:csrf',                  # should be second
-    #'backend.extensions:db',
-    #'backend.extensions:alembic',               # must come after db
+    'backend.extensions:session',               # should be first
+    'backend.extensions:csrf',                  # should be second
+    'backend.extensions:db',
+    'backend.extensions:alembic',               # must come after db
     'backend.extensions.celery:celery',
-    #'backend.extensions.mail:mail',
-    #'backend.extensions.marshmallow:ma',        # must come after db
-    #'backend.extensions.security:security',     # must come after celery and mail
+    'backend.extensions.mail:mail',
+    'backend.extensions.marshmallow:ma',        # must come after db
+    'backend.extensions.security:security',     # must come after celery and mail
 ]
 
 # list of extensions to register after the bundles
 # syntax is import.name.in.dot.module.notation:extension_instance_name
 DEFERRED_EXTENSIONS = [
-    #'backend.extensions.api:api',
-    #'backend.extensions.admin:admin',
+    'backend.extensions.api:api',
+    'backend.extensions.admin:admin',
 ]
 
 # Declare role inheritances

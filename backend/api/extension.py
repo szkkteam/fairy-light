@@ -10,7 +10,8 @@ from flask.json import dumps, JSONEncoder as BaseJSONEncoder
 from flask.views import MethodViewType
 from flask_restful import Api as BaseApi
 from flask_sqlalchemy.model import camel_to_snake_case, Model
-from marshmallow import MarshalResult
+# FIXME: This is no longer present
+#from marshmallow import MarshalResult
 from werkzeug.wrappers import Response
 
 # Internal package imports
@@ -302,8 +303,9 @@ class Api(BaseApi):
                 data = self.serializers_many[model_name].dump(data).data
 
         # we got the result of serializer.dump(obj)
-        if isinstance(data, MarshalResult):
-            data = data.data
+        # FIXME: This is no longer present
+        #if isinstance(data, MarshalResult):
+        #    data = data.data
 
         # we got plain python data types that need to be serialized
         return super().make_response(data, *args, **kwargs)

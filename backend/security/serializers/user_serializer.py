@@ -15,7 +15,9 @@ NON_ALPHANUMERIC_RE = re.compile(r'[^\w]')
 
 class UserSerializer(ModelSerializer):
     email = fields.Email(required=True)
-    roles = fields.Nested('RoleSerializer', only='name', many=True)
+    #roles = fields.Nested('RoleSerializer', only='name', many=True)
+    # FIXME: Why 'only' has to be used?
+    roles = fields.Nested('RoleSerializer', many=True)
 
     class Meta:
         model = User
