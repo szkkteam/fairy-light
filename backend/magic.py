@@ -261,7 +261,7 @@ class Bundle(object):
 
     @property
     def _name(self):
-        return self.module_name.rsplit('.')[1]
+        return self.module_name.rsplit('.')[-1]
 
     @property
     def admin_category_name(self):
@@ -299,15 +299,16 @@ class Bundle(object):
     def has_config(self):
         if not self.config_module_name:
             return False
-        return bool(safe_import_module(self.config_module_name)
-        
+        return bool(safe_import_module(self.config_module_name))
+
     @property
-    def config(self):
+    def configs(self):
         if not self.has_config:
-            return Object
-        
+            return
+            #raise StopIteration
+
         module = safe_import_module(self.config_module_name)
-        return get_members(module, is_config)
+        yield from get_members(module, is_config)
 
     @property
     def blueprint_names(self):

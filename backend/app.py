@@ -117,7 +117,8 @@ def configure_app(app, config_object):
         
     # Configure the bundles
     for bundle in app.bundles:
-        app.config.from_object(bundle.config)        
+        for config_name, config in bundle.configs:
+            app.config.from_object(config)
 
 def register_extensions(app, extensions):
     """Register and initialize extensions."""

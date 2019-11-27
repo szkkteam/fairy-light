@@ -1,5 +1,5 @@
 
-class BaseConfig(Object):
+class BaseConfig(object):
     # Declare role inheritances
     # Keys here correspond to roles a user explicitly has (as set in the database).
     # Values should be a list of "inherited" roles. There is also a special flag,

@@ -5,7 +5,7 @@
 from http import HTTPStatus
 
 # Pip package imports
-from flask import abort
+from flask import abort, current_app
 from flask_login import current_user, login_user, logout_user
 from flask_principal import identity_loaded, RoleNeed
 from flask_security import Security as BaseSecurity
@@ -14,7 +14,7 @@ from flask_security.signals import user_confirmed
 from werkzeug.local import LocalProxy
 
 # Internal package imports
-from backend.config import ROLE_HIERARCHY
+#from backend.config import ROLE_HIERARCHY
 from backend.tasks import send_mail_async_task
 
 from .forms import ChangePasswordForm, ResetPasswordForm, ExtendedRegisterForm
@@ -97,8 +97,8 @@ def _get_role_hierarchy(role_name, parent=None):
         for action in ['CREATE', 'VIEW', 'EDIT', 'DELETE']:
             yield f'{parent}_{action}'
 
-    if role_name in ROLE_HIERARCHY:
-        for child_role_name in ROLE_HIERARCHY[role_name]:
+    if role_name in current_app.config['ROLE_HIERARCHY']:
+        for child_role_name in current_app.config['ROLE_HIERARCHY'][role_name]:
             yield from _get_role_hierarchy(child_role_name, role_name)
 
 
