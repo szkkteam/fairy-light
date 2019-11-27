@@ -17,6 +17,7 @@ from .decorators import (
 from .extension import Security
 
 security_bundle = Bundle(__name__,
+                         config_name='config',
                          admin_icon_class='glyphicon glyphicon-lock',
                          blueprint_names=('security', 'frontend'),
                          )

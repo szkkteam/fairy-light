@@ -114,6 +114,10 @@ def configure_app(app, config_object):
         if response:
             response.set_cookie('csrf_token', generate_csrf())
         return response
+        
+    # Configure the bundles
+    for bundle in app.bundles:
+        app.config.from_object(bundle.config)        
 
 def register_extensions(app, extensions):
     """Register and initialize extensions."""

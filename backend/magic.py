@@ -11,6 +11,7 @@ from importlib import import_module
 from loguru import logger
 
 # Internal package imports
+from flask.helpers import get_debug_flag
 from backend.utils import title_case
 
 def safe_import_module(module_name):
@@ -116,6 +117,9 @@ def is_serializer(name, obj):
         base_classes = ('ModelSerializer', 'ModelSchema')
         return is_model_schema and name not in base_classes
 
+def is_config(name, obj):
+    config_name = 'DevConfig' if get_debug_flag() else 'ProdConfig'
+    return name == config_name
 
 sentinel = object()
 
@@ -203,6 +207,7 @@ class Bundle(object):
     :param Iterable[str] blueprint_names: List of Blueprint name(s) to register. Defaults to [<bundle_folder_name>] (**NOTE**: names of the *instance variables*, not the Blueprints' endpoint names.)
     """
     module_name = None
+    _config_name = 'config'
     _admin_category_name = None
     admin_icon_class = None
     _admins_module_name = 'admins'
@@ -214,6 +219,7 @@ class Bundle(object):
     _blueprint_names = sentinel
 
     def __init__(self, module_name,
+                 config_name=sentinel,
                  admin_category_name=None,
                  admin_icon_class=None,
                  admins_module_name=sentinel,
@@ -229,6 +235,9 @@ class Bundle(object):
         self._admin_category_name = admin_category_name
 
         self.admin_icon_class = admin_icon_class
+
+        if config_name != sentinel:
+            self._config_name = self._normalize_module_name(config_name)
 
         if admins_module_name != sentinel:
             self._admins_module_name = self._normalize_module_name(admins_module_name)
@@ -279,8 +288,26 @@ class Bundle(object):
             yield obj
 
     @property
+    def config_module_name(self):
+        return self._get_full_module_name(self._config_name)
+
+    @property
     def views_module_name(self):
         return self._get_full_module_name(self._views_module_name)
+
+    @property
+    def has_config(self):
+        if not self.config_module_name:
+            return False
+        return bool(safe_import_module(self.config_module_name)
+        
+    @property
+    def config(self):
+        if not self.has_config:
+            return Object
+        
+        module = safe_import_module(self.config_module_name)
+        return get_members(module, is_config)
 
     @property
     def blueprint_names(self):
@@ -386,9 +413,9 @@ def is_bundle(obj):
 
 def get_bundles():
     from backend.config import BUNDLES
-
+       
     for bundle_or_module_name in BUNDLES:
-        if isinstance(bundle_or_module_name, Bundle):
+        if isinstance(bundle_or_module_name, Bundle):            
             yield bundle_or_module_name
         else:
             bundle_found = False
