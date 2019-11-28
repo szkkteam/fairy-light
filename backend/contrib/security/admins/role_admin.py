@@ -4,7 +4,7 @@
 # Common Python library imports
 # Pip package imports
 # Internal package imports
-from backend.admin import ModelAdmin
+from backend.contrib.admin import ModelAdmin
 
 from ..models import Role
 

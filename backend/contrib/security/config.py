@@ -22,10 +22,6 @@ class BaseConfig(object):
         'ROLE_ADMIN': ['ROLE_USER'],
     }
 
-    BUNDLE_DEPENDENCY = [
-        'backend.admin',
-    ]
-
     SECURITY_CUSTOM_CONFIG = True
     
 class ProdConfig(BaseConfig):

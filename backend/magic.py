@@ -87,7 +87,7 @@ def get_commands():
 
 def is_model_admin(name, obj):
     try:
-        from backend.admin import ModelAdmin
+        from backend.contrib.admin import ModelAdmin
     except ImportError as err:
         logger.warning("Commands bundle is not present")
         raise
