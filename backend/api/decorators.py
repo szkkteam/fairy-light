@@ -8,7 +8,9 @@ from functools import wraps
 from http import HTTPStatus
 
 # Pip package imports
-from flask import abort, request
+from flask import request
+from flask_restful import abort
+from marshmallow.exceptions import ValidationError
 from flask_sqlalchemy.model import Model, camel_to_snake_case
 
 # Internal package imports
@@ -142,12 +144,18 @@ def patch_loader(*args, serializer):
     def wrapped(fn):
         @wraps(fn)
         def decorated(*args, **kwargs):
-            result = serializer.load(request.get_json(),
-                                     instance=kwargs.pop('instance'),
-                                     partial=True)
-            if not result.errors and not result.data.id:
-                abort(HTTPStatus.NOT_FOUND)
-            return fn(*result)
+            try:
+                result = serializer.load(request.get_json(),
+                                         instance=kwargs.pop('instance'),
+                                         partial = True)
+            except ValidationError as v:
+                errors = v.messages
+                result = v.valid_data
+            else:
+                errors = None
+            # TODO: When to abort the request?
+            #abort(HTTPStatus.NOT_FOUND)
+            return fn(result, errors)
         return decorated
 
     if was_decorated_without_parenthesis(args):
@@ -164,11 +172,17 @@ def put_loader(*args, serializer):
     def wrapped(fn):
         @wraps(fn)
         def decorated(*args, **kwargs):
-            result = serializer.load(request.get_json(),
-                                     instance=kwargs.pop('instance'))
-            if not result.errors and not result.data.id:
-                abort(HTTPStatus.NOT_FOUND)
-            return fn(*result)
+            try:
+                result = serializer.load(request.get_json(),
+                                         instance=kwargs.pop('instance'))
+            except ValidationError as v:
+                errors = v.messages
+                result = v.valid_data
+            else:
+                errors = None
+            # TODO: When to abort the request?
+            #abort(HTTPStatus.NOT_FOUND)
+            return fn(result, errors)
         return decorated
 
     if was_decorated_without_parenthesis(args):
@@ -185,7 +199,14 @@ def post_loader(*args, serializer):
     def wrapped(fn):
         @wraps(fn)
         def decorated(*args, **kwargs):
-            return fn(*serializer.load(request.get_json()))
+            try:
+                result = serializer.load(request.get_json())
+            except ValidationError as v:
+                errors = v.messages
+                result = v.valid_data
+            else:
+                errors = None
+            return fn(result, errors)
         return decorated
 
     if was_decorated_without_parenthesis(args):

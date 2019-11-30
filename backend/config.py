@@ -227,6 +227,7 @@ class DevConfig(BaseConfig):
 class TestConfig(BaseConfig):
     TESTING = True
     DEBUG = True
+    PRESERVE_CONTEXT_ON_EXCEPTION = False
     SQLALCHEMY_DATABASE_URI = 'sqlite://'  # :memory:
 
     WTF_CSRF_ENABLED = False
