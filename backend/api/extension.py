@@ -282,7 +282,7 @@ class Api(BaseApi):
                 if isinstance(o, Model):
                     model_name = o.__class__.__name__
                     if model_name in serializers:
-                        return serializers[model_name].dump(o).data
+                        return serializers[model_name].dump(o)
                 return super().default(o)
 
         app.json_encoder = JSONEncoder
