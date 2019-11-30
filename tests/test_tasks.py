@@ -9,7 +9,6 @@ from flask_mail import Message
 # Internal package imports
 from backend.tasks import send_mail_async_task
 
-@pytest.mark.tasks
 class TestTasks:
     def test_send_mail_task(self, outbox):
         msg = Message(subject='hello world',

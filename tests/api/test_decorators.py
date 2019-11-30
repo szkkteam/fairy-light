@@ -18,8 +18,9 @@ from backend.api.decorators import (
 )
 
 
-@pytest.mark.models('User(user), Role(ROLE_USER)')
-class TestParamConverter:
+#@pytest.mark.parametrize("models",[(User(user), Role(ROLE_USER))], indirect=True)
+@pytest.mark.parametrize("models",['User(user), Role(ROLE_USER)'], indirect=True)
+class TestParamConverterWithModels:
     def test_it_works(self, models):
         from backend.contrib.security.models import User, Role
 
@@ -57,6 +58,16 @@ class TestParamConverter:
         with pytest.raises(NotFound):
             method(id=models.user.id, role_id=0)
 
+    def test_with_model_and_query_param(self, app, models):
+        from backend.contrib.security.models import User
+        with app.test_request_context('/?foo=42'):
+            @param_converter(id=User, foo=int)
+            def method(user, foo):
+                assert user == models.user
+                assert foo == 42
+            method(id=models.user.id)
+
+class TestParamConverterWithoutModels:
     def test_query_param_simple_type_conversion(self, app):
         with app.test_request_context('/?something=42'):
             @param_converter(something=int)
@@ -98,17 +109,7 @@ class TestParamConverter:
                 assert baz == 'boo'
             method()
 
-    def test_with_model_and_query_param(self, app, models):
-        from backend.contrib.security.models import User
-        with app.test_request_context('/?foo=42'):
-            @param_converter(id=User, foo=int)
-            def method(user, foo):
-                assert user == models.user
-                assert foo == 42
-            method(id=models.user.id)
-
-
-@pytest.mark.models('User(user1, user2, user3)')
+@pytest.mark.parametrize("models", ['(User(user1, user2, user3))'], indirect=True)
 def test_list_loader(models):
     from backend.contrib.security.models import User
 
@@ -119,7 +120,7 @@ def test_list_loader(models):
     method()
 
 
-@pytest.mark.models('User(user)')
+@pytest.mark.parametrize("models", ['(User(user))'], indirect=True)
 def test_patch_loader(app, models, monkeypatch):
     from backend.contrib.security.serializers import UserSerializer
 
@@ -139,7 +140,7 @@ def test_patch_loader(app, models, monkeypatch):
         monkeypatch.undo()
 
 
-@pytest.mark.models('User(user)')
+@pytest.mark.parametrize("models", ['(User(user))'], indirect=True)
 class TestPutLoader:
     def test_all_loadable_fields_required(self, app, models, monkeypatch):
         from backend.contrib.security.serializers import UserSerializer

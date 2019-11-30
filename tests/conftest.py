@@ -158,12 +158,11 @@ def admin(model_factory):
     yield model_factory.create('User', 'admin')
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture()
 def models(request, model_factory):
-    mark = request.keywords.get('models')
+    mark = request.param
     if mark is not None:
-        return model_factory.get_models(mark.args or mark.kwargs)
-        #return model_factory.get_models(mark.kwargs)
+        return model_factory.get_models(mark)
 
 
 @pytest.fixture()
