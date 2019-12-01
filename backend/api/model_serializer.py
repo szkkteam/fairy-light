@@ -57,21 +57,6 @@ class ModelSerializer(ma.ModelSchema):
         """
         return self.context.get('is_create', False)
 
-    """
-    def handle_error(self, error, data, *args, **kwargs):
-        Customize the error messages for required/not-null validators with
-        dynamically generated field names. This is definitely a little hacky
-        (it mutates state, uses hardcoded strings), but unsure how better to do it
-
-        required_messages = ('Missing data for required field.',
-                             'Field may not be null.')
-        for field_name in error.field_names:
-            for i, msg in enumerate(error.messages[field_name]):
-                if msg in required_messages:
-                    label = camel_to_snake_case(field_name).replace('_', ' ').title()
-                    error.messages[field_name][i] = f'{label} is required.'
-        """
-
     def on_bind_field(self, field_name, field_obj):
         converted = camelcase(field_obj.data_key or field_name)
         field_obj.data_key = converted
