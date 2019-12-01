@@ -22,4 +22,5 @@ __param_name_re = r'<(\w+:)?(?P<param_name>\w+)>'
 PARAM_NAME_RE = re.compile(__param_name_re)
 LAST_PARAM_NAME_RE = re.compile(__param_name_re + r'$')
 
+# TODO: Include to the dump_only fields
 READ_ONLY_FIELDS = ('slug', 'createdAt', 'updatedAt')

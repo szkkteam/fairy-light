@@ -126,11 +126,13 @@ def confirmations(app):
 
     def record(sender, *args, **kwargs):
         records.append(kwargs['user'])
+        print("Record: ", records[-1])
     user_confirmed.connect(record, app)
 
     try:
         yield records
     finally:
+        print("Disconnect record: ", records)
         user_confirmed.disconnect(record, app)
 
 

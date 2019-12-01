@@ -9,8 +9,9 @@ from marshmallow.exceptions import ValidationError
 # Internal package imports
 from backend.extensions.marshmallow import ma
 
-from .constants import READ_ONLY_FIELDS
-from .utils import to_camel_case
+#from .constants import READ_ONLY_FIELDS
+from .utils import camelcase
+from backend.api import validates
 
 
 class ModelSerializer(ma.ModelSchema):
@@ -47,6 +48,8 @@ class ModelSerializer(ma.ModelSchema):
     from JSON; it's just an example to show the automatic snake-to-camelcase
     field naming conversion.
     """
+    class Meta:
+        dump_only = ('slug', 'createdAt', 'updatedAt')
 
     def is_create(self):
         """Check if we're creating a new object. Note that this context flag
@@ -70,16 +73,13 @@ class ModelSerializer(ma.ModelSchema):
         """
 
     def on_bind_field(self, field_name, field_obj):
-        def camelcase(s):
-            parts = iter(s.split("_"))
-            return next(parts) + "".join(i.title() for i in parts)
-
-
         converted = camelcase(field_obj.data_key or field_name)
         field_obj.data_key = converted
 
-
+    @validates('id')
     def validate_id(self, id):
+        print("Validate ID: ", id)
+        print("is_create: ", self.is_create())
         if self.is_create() or int(id) == int(self.instance.id):
             return
         raise ValidationError('ids do not match')

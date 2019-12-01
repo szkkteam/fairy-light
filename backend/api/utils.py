@@ -14,6 +14,6 @@ def get_last_param_name(url_rule):
     return match.group('param_name') if match else None
 
 
-def to_camel_case(string):
-    parts = string.split('_')
-    return parts[0] + ''.join(x.title() for x in parts[1:])
+def camelcase(s):
+    parts = iter(s.split("_"))
+    return next(parts) + "".join(i.title() for i in parts)
