@@ -13,7 +13,6 @@ from backend.database import (
 class ContactSubmission(Model):
     name = Column(String(64))
     email = Column(String(50), index=True)
-    subject = Column(String(32), nullable=True)
     message = Column(String(500))
 
-    __repr_props__ = ('email', 'subject')
+    __repr_props__ = ('email', 'name')

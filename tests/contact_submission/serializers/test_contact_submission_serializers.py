@@ -23,9 +23,8 @@ def test_contact_submission_serializer():
     # check required fields
     with pytest.raises(ValidationError) as v:
         serializer.load({'name': None,
-                                     'email': None,
-                                     'subject': None,
-                                     'message': None})
+                         'email': None,
+                         'message': None})
 
         assert 'Name is required.' in v.messages['name']
         assert 'Email is required.' in v.messages['email']

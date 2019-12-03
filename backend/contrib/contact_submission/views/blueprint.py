@@ -7,4 +7,4 @@ from flask import Blueprint
 
 # Internal package imports
 
-csub = Blueprint('csub', __name__, template_folder='templates')
+contact_submission = Blueprint('contact_submission', __name__, template_folder='templates')

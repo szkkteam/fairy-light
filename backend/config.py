@@ -40,6 +40,7 @@ BUNDLES = [
     'backend.contrib.admin',
     #'backend.blog',
     'backend.contrib.security',
+    'backend.contrib.contact_submission',
     #'backend.site',
 ]
 

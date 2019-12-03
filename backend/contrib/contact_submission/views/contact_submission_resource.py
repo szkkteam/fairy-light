@@ -10,11 +10,11 @@ from backend.api import ModelResource, CREATE
 from backend.extensions.api import api
 from backend.utils import send_mail
 
-from .blueprint import csub
+from .blueprint import contact_submission
 from ..models import ContactSubmission
 
-@api.model_resource(csub, ContactSubmission, '/contact-submissions')
-class UserResource(ModelResource):
+@api.model_resource(contact_submission, ContactSubmission, '/contact-submissions')
+class ContactSubmissionResource(ModelResource):
     include_methods = [CREATE]
 
     def create(self, contact_submission, errors):

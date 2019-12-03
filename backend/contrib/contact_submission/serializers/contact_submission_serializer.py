@@ -7,6 +7,7 @@ import re
 
 # Pip package imports
 from marshmallow import validate
+from marshmallow.exceptions import ValidationError
 
 # Internal package imports
 from backend.api import ModelSerializer, pre_load, fields
@@ -24,16 +25,15 @@ class ContactSubmissionSerializer(ModelSerializer):
 
     @pre_load
     def message_to_html(self, data, **kwargs):
-        print(data)
-        if not data.get('message'):
-            return None
-        message = html.escape(data['message'])
-        message = re.sub(r'\n\n+', '\n\n', '\n'.join(map(
-            str.strip,
-            message.splitlines()
-        )))
-        data['message'] = '\n'.join(map(
-            lambda p: f'<p>{p!s}</p>',
-            message.splitlines()
-        ))
+        if data.get('message'):
+            message = html.escape(data['message'])
+            message = re.sub(r'\n\n+', '\n\n', '\n'.join(map(
+                str.strip,
+                message.splitlines()
+            )))
+            data['message'] = '\n'.join(map(
+                lambda p: f'<p>{p!s}</p>',
+                message.splitlines()
+            ))
         return data
+

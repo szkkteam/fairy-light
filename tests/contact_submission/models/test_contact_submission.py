@@ -11,7 +11,6 @@ from backend.contrib.contact_submission.models import ContactSubmission
 
 CONTACT_DATA = {'name': 'foo',
                 'email': 'a@b.com',
-                'subject': 'hello',
                 'message': 'hello world'}
 
 
