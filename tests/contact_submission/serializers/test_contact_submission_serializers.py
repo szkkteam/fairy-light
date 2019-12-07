@@ -26,11 +26,11 @@ def test_contact_submission_serializer():
                          'email': None,
                          'message': None})
 
-        assert 'Name is required.' in v.messages['name']
-        assert 'Email is required.' in v.messages['email']
-        assert 'Message is required.' in v.messages['message']
+    assert 'Field may not be null.' in v.value.args[0]['name']
+    assert 'Field may not be null.' in v.value.args[0]['email']
+    assert 'Field may not be null.' in v.value.args[0]['message']
 
     # check email must be valid
     with pytest.raises(ValidationError) as v:
         serializer.load({'email': 'invalid'})
-        assert 'Not a valid email address.' in v.messages['email']
+    assert 'Not a valid email address.' in v.value.args[0]['email']

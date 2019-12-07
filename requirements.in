@@ -12,6 +12,7 @@ flask-restful
 flask-security
 flask-session
 flask-sqlalchemy
+flask-debugtoolbar
 
 loguru
 appdirs

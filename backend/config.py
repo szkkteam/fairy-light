@@ -41,6 +41,7 @@ BUNDLES = [
     #'backend.blog',
     'backend.contrib.security',
     'backend.contrib.contact_submission',
+    'backend.contrib.newsletter_subscribe',
     #'backend.site',
 ]
 
@@ -55,6 +56,7 @@ EXTENSIONS = [
     'backend.extensions.mail:mail',
     'backend.extensions.marshmallow:ma',        # must come after db
     'backend.extensions.security:security',     # must come after celery and mail
+    'backend.extensions.debug:toolbar',
 ]
 
 # list of extensions to register after the bundles
@@ -163,6 +165,12 @@ class BaseConfig(object):
     SECURITY_CONFIRM_ERROR_VIEW = '/sign-up/resend-confirmation-email'
     SECURITY_POST_CONFIRM_VIEW = '/?welcome'
 
+    ##########################################################################
+    # debug                                                               #
+    ##########################################################################
+    # This mut be set to False during testing
+    DEBUG_TB_INTERCEPT_REDIRECTS = False
+
 class ProdConfig(BaseConfig):
     ##########################################################################
     # flask                                                                  #
@@ -223,7 +231,10 @@ class DevConfig(BaseConfig):
     ##########################################################################
     SECURITY_CONFIRMABLE = True
     SECURITY_CONFIRM_EMAIL_WITHIN = '1 minutes'  # for testing
-
+    ##########################################################################
+    # debug                                                               #
+    ##########################################################################
+    DEBUG_TB_TEMPLATE_EDITOR_ENABLED = True
 
 class TestConfig(BaseConfig):
     TESTING = True
@@ -234,3 +245,4 @@ class TestConfig(BaseConfig):
     WTF_CSRF_ENABLED = False
     SECURITY_PASSWORD_HASH_OPTIONS = dict(bcrypt={'rounds': 4})
     SECURITY__SEND_MAIL_TASK = None
+    DEBUG_TB_INTERCEPT_REDIRECTS = False

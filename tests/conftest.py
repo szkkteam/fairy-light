@@ -154,6 +154,9 @@ def password_resets(app):
 def user(model_factory):
     yield model_factory.create('User', 'user')
 
+@pytest.fixture()
+def newslettersubscribe(model_factory):
+    yield model_factory.create('NewsletterSubscribe', 'newslettersubscribe')
 
 @pytest.fixture()
 def admin(model_factory):

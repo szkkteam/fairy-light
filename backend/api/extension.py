@@ -269,7 +269,9 @@ class Api(BaseApi):
                 endpoint = f'{plural_model}_resource'
         else:
             endpoint = view_func.__name__
-        return f'{self.name}.{endpoint}'
+
+        str_c = f'{self.name}.{endpoint}'
+        return str_c
 
     def _register_json_encoder(self, app, serializers):
         BaseEncoderClass = app.json_encoder or BaseJSONEncoder

@@ -6,5 +6,5 @@
 # Internal package imports
 from backend.magic import Bundle
 
-contact_submission_bundle = Bundle(__name__,
+newsletter_subscribe = Bundle(__name__,
                          admin_icon_class='glyphicon glyphicon-lock')

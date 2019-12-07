@@ -4,4 +4,4 @@
 # Common Python library imports
 # Pip package imports
 # Internal package imports
-from .contact_submission_serializer import ContactSubmissionSerializer
+from .newsletter_subscribe import NewsletterSubscribe
