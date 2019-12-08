@@ -12,7 +12,7 @@ from backend.database import (
 )
 
 class NewsletterSubscribe(Model):
-    email = Column(String(50), index=True)
+    email = Column(String(50), index=True, unique=True)
     is_active = Column(Boolean(name='is_active'), default=True)
 
     __repr_props__ = ('id', 'email', 'is_active')

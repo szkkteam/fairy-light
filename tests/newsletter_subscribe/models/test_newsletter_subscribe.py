@@ -21,6 +21,12 @@ class TestNewsletterSubscribeModels:
         with pytest.raises(IntegrityError):
             NewsletterSubscribe.create(**data, commit=True)
 
+    def test_email_duplicated(self):
+        data = SUBSCRIBE_DATA.copy()
+        NewsletterSubscribe.create(**data, commit=True)
+        with pytest.raises(IntegrityError):
+            NewsletterSubscribe.create(**data, commit=True)
+
     def test_active_not_required(self):
         data = SUBSCRIBE_DATA.copy()
         data['is_active'] = None
