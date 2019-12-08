@@ -123,11 +123,7 @@ def configure_app(app, config_object):
 def register_extensions(app, extensions):
     """Register and initialize extensions."""
     for extension in extensions.values():
-        if is_extension(extension):
             extension.init_app(app)
-        else:
-            # TODO: Raise extension error
-            raise NotImplementedError(f'{str(extension)} is not an extension.')
 
 def register_blueprints(app):
     """Register bundle views."""
@@ -151,6 +147,7 @@ def register_models(app):
     for bundle in app.bundles:
         for model_name, model_class in bundle.models:
             models[model_name] = model_class
+    print(models)
     app.models = models
 
 def register_admins(app):
