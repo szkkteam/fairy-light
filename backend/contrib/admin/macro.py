@@ -17,15 +17,16 @@ def macro(name):
             }
     """
     def wrapper(view, context, model, column):
-        if '.' in name:
-            macro_import_name, macro_name = name.split('.')
-            m = getattr(context.get(macro_import_name), macro_name, None)
+        if context is not None:
+            if '.' in name:
+                macro_import_name, macro_name = name.split('.')
+                m = getattr(context.get(macro_import_name), macro_name, None)
+            else:
+                m = context.resolve(name)
+            if not m:
+                return m
+            return m(model=model, column=column)
         else:
-            m = context.resolve(name)
-
-        if not m:
-            return m
-
-        return m(model=model, column=column)
+            return None
 
     return wrapper

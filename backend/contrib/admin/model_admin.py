@@ -7,6 +7,8 @@ from datetime import date, datetime
 # Pip package imports
 from flask_admin.contrib.sqla import ModelView as BaseModelView
 from flask_admin.consts import ICON_TYPE_GLYPH
+from flask_admin.actions import action
+import flask_excel as excel
 
 # Internal package imports
 from .form import ReorderableForm, CustomAdminConverter
@@ -60,3 +62,25 @@ class ModelAdmin(AdminSecurityMixin, BaseModelView):
             base_value.update(value)
             return base_value
         return value
+
+    @action('export', 'Export')
+    def action_export(self, ids):
+        import pyexcel as pe
+        query_sets = self.model.filter(self.model.id.in_(ids)).all()
+        print("query_sets :", query_sets, flush=True)
+        column_names = self.model.__table__.columns
+        print("column_names :", column_names, flush=True)
+
+        file_stream = pe.save_as(query_sets=query_sets, column_names=['id', 'email', 'is_active'],
+                                 dest_file_type="csv")
+        return (
+            file_stream.read(),
+            200,
+            {
+                'Content-Type': 'application/csv',
+                'Pragma': 'no-cache',
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Expires': '0',
+                'Content-Disposition': 'attachment; filename="mymodel.csv"'
+            }
+        )

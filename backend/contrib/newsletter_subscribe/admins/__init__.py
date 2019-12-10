@@ -4,4 +4,4 @@
 # Common Python library imports
 # Pip package imports
 # Internal package imports
-from .contact_submission_admin import ContactSubmissionAdmin
+from .newsletter_subscribe_admin import NewsletterSubscribeAdmin

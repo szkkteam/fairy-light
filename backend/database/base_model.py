@@ -84,6 +84,9 @@ class BaseModel(db.Model):
     def filter(cls, *args, **kwargs):
         return cls.query.filter(*args, **kwargs)
 
+    #@classmethod
+    #def filter_in(cls, *args, **kwargs):
+
     @classmethod
     def filter_by(cls, **kwargs):
         """Find models by keyword arguments.

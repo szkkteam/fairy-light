@@ -147,7 +147,6 @@ def register_models(app):
     for bundle in app.bundles:
         for model_name, model_class in bundle.models:
             models[model_name] = model_class
-    print(models)
     app.models = models
 
 def register_admins(app):

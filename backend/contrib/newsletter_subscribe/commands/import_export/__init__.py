@@ -24,5 +24,5 @@ from ...models import NewsletterSubscribe
               help='Filtering the NewsletterSubscribe database for exporting.')
 @with_appcontext
 def export(out, filter):
-    data = NewsletterSubscribe.filter_by(**filter)
+    data = NewsletterSubscribe.filter_by(**filter).all()
     print("Exporting \'%s\' to: %s" %(data, out))
