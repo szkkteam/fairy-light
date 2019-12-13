@@ -9,6 +9,10 @@ from flask_admin.form.fields import Select2Field
 from flask_admin.model.form import converts
 from flask_admin.contrib.sqla.form import AdminModelConverter
 
+from flask_wtf import FlaskForm
+from wtforms import StringField, BooleanField
+from flask_wtf.file import FileField, FileRequired, FileAllowed
+
 # Internal package imports
 
 class ReorderableForm(BaseForm):
@@ -53,3 +57,10 @@ class CustomAdminConverter(AdminModelConverter):
     @converts('sqlalchemy.sql.sqltypes.Enum')
     def convert_enum(self, field_args, **extra):
         return EnumField(column=extra['column'], **field_args)
+
+
+class CustomImportForm(FlaskForm):
+    file = FileField('Import file', validators=[FileRequired(), FileAllowed(['csv'], 'Only .csv is supported.')])
+
+class CustomExportForm(FlaskForm):
+    file_name = StringField('File name')

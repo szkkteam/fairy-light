@@ -30,3 +30,12 @@ def pluralize(name):
     elif name.endswith('s'):
         return f'{name}es'
     return f'{name}s'
+
+
+def string_to_bool(s):
+    if isinstance(s, str):
+        if s.lower() in [ 'true', 'yes', 'y', '1', 'ye', 't' ]:
+            return True
+        elif s.lower() in [ 'false', 'no', 'n', '0', 'f' ]:
+            return False
+    return s

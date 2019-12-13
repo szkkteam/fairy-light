@@ -5,6 +5,28 @@
   {{ super() }}
 {% endblock %}
 
+{% block model_menu_bar_before_filters %}
+    {%- if admin_view.can_custom_import -%}
+      <li>
+        {%- if admin_view.custom_import_modal -%}
+          {{ lib.add_modal_button(url=get_url('.custom_import_view', url=return_url, modal=True), title=_gettext('Import From File'), content=_gettext('Import')) }}
+        {% else %}
+          <a href="{{ get_url('.custom_import_view', url=return_url) }}" title="{{ _gettext('Import From File') }}">Import</a>
+        {%- endif -%}
+      </li>
+    {%- endif -%}
+    {%- if admin_view.can_custom_export -%}
+      <li>
+        {%- if admin_view.create_modal -%}
+          {{ lib.add_modal_button(url=get_url('.custom_export_view', url=return_url, modal=True), title=_gettext('Export To File'), content=_gettext('Export')) }}
+        {% else %}
+          <a href="{{ get_url('.custom_export_view', url=return_url) }}" title="{{ _gettext('Export To File') }}">Export</a>
+        {%- endif -%}
+      </li>
+    {%- endif -%}
+{% endblock %}
+
+
 {# block overridden to make Actions the last column instead of first #}
 {% block list_header scoped %}
 
