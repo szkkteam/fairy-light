@@ -175,6 +175,25 @@ def register_admins(app):
 
                 admin.add_view(model_admin)
 
+            for FileAdmin in bundle.file_admins:
+                url = FileAdmin.url
+                if url[0] != '/':
+                    url = '/' + url
+                if url[-1] != '/':
+                    url = url + '/'
+
+                file_admin = FileAdmin(FileAdmin.path,
+                                       url,
+                                       name=FileAdmin.name)
+
+                # workaround upstream bug where certain values set as
+                # class attributes get overridden by the constructor
+                file_admin.menu_icon_value = getattr(FileAdmin, 'menu_icon_value', None)
+                if file_admin.menu_icon_value:
+                    file_admin.menu_icon_type = getattr(FileAdmin, 'menu_icon_type', None)
+
+                admin.add_view(file_admin)
+
 def register_serializers(app):
     """Register bundle serializers."""
     serializers = {}

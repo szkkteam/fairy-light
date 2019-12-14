@@ -86,15 +86,16 @@ def get_commands():
         yield from get_members(commands, _is_click_command)
 
 def is_model_admin(name, obj):
-    try:
-        from backend.contrib.admin import ModelAdmin
-    except ImportError as err:
-        logger.warning("Commands bundle is not present")
-        raise
-    else:
-        _is_model_admin = inspect.isclass(obj) and issubclass(obj, ModelAdmin)
-        base_classes = ('ModelAdmin',)
-        return _is_model_admin and name not in base_classes
+    from backend.contrib.admin import ModelAdmin
+    _is_model_admin = inspect.isclass(obj) and issubclass(obj, ModelAdmin)
+    base_classes = ('ModelAdmin',)
+    return _is_model_admin and name not in base_classes
+
+def is_file_admin(name, obj):
+    from backend.contrib.admin import FileAdmin
+    _is_file_admin = inspect.isclass(obj) and issubclass(obj, FileAdmin)
+    base_classes = ('FileAdmin',)
+    return _is_file_admin and name not in base_classes
 
 def is_model(name, obj):
     try:
@@ -145,6 +146,7 @@ class Bundle(object):
             ├── models.py
             ├── serializers.py
             └── views.py
+            └── config.py
 
     Big bundle example::
 
@@ -153,7 +155,7 @@ class Bundle(object):
         └── big/
             ├── __init__.py
             ├── admins
-            │   ├── __init__.py  # must import all ModelAdmin(s)
+            │   ├── __init__.py  # must import all ModelAdmin(s) and FileAdmin(s)
             │   ├── one_admin.py
             │   └── two_admin.py
             ├── commands
@@ -172,14 +174,15 @@ class Bundle(object):
             │   ├── __init__.py  # must import all ModelSerializer(s)
             │   ├── one_serializer.py
             │   └── two_serializer.py
-            └── views
-                ├── __init__.py  # must import the Blueprint(s) from .blueprint
-                │                # and all ModelResource(s)
-                ├── blueprint.py # the blueprint should have the same name as the
-                │                # bundle's folder, or to change it, pass the
-                │                # blueprint_names kwarg to Bundle
-                ├── one_resource.py
-                └── two_resource.py
+            ├── views
+            │   ├── __init__.py  # must import the Blueprint(s) from .blueprint
+            │   │                # and all ModelResource(s)
+            │   ├── blueprint.py # the blueprint should have the same name as the
+            │   │                # bundle's folder, or to change it, pass the
+            │   │                # blueprint_names kwarg to Bundle
+            │   ├── one_resource.py
+            │   └── two_resource.py
+            └── config.py
 
     In both cases, :file:`backend/<bundle_folder_name>/__init__.py` is the same::
 
@@ -281,10 +284,18 @@ class Bundle(object):
     def model_admins(self):
         if not self.has_admins:
             return
-            #raise StopIteration
 
         admins_module = safe_import_module(self.admins_module_name)
         for name, obj in get_members(admins_module, is_model_admin):
+            yield obj
+
+    @property
+    def file_admins(self):
+        if not self.has_admins:
+            return
+
+        admins_module = safe_import_module(self.admins_module_name)
+        for name, obj in get_members(admins_module, is_file_admin):
             yield obj
 
     @property

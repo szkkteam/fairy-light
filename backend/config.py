@@ -42,6 +42,7 @@ BUNDLES = [
     'backend.contrib.security',
     'backend.contrib.contact_submission',
     'backend.contrib.newsletter_subscribe',
+    'backend.contrib.test_file',
     #'backend.site',
 ]
 
