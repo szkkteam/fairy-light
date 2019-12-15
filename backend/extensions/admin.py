@@ -9,7 +9,7 @@ from flask_admin import Admin
 from backend.contrib.admin.views import AdminDashboardView
 
 
-admin = Admin(name='Flask React SPA Admin',
+admin = Admin(name='Flask Starter Admin',
               index_view=AdminDashboardView(),
               template_mode='bootstrap3',
               )

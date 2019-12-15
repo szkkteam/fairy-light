@@ -176,14 +176,8 @@ def register_admins(app):
                 admin.add_view(model_admin)
 
             for FileAdmin in bundle.file_admins:
-                url = FileAdmin.url
-                if url[0] != '/':
-                    url = '/' + url
-                if url[-1] != '/':
-                    url = url + '/'
-
-                file_admin = FileAdmin(FileAdmin.path,
-                                       url,
+                file_admin = FileAdmin(base_path=FileAdmin.path,
+                                       category=bundle.admin_category_name,
                                        name=FileAdmin.name)
 
                 # workaround upstream bug where certain values set as

@@ -8,4 +8,6 @@ from backend.magic import Bundle
 
 from .admins import FileModelAdmin
 
-test_bundle = Bundle(__name__)
+test_bundle = Bundle(__name__,
+                     admin_icon_class='glyphicon glyphicon-hdd',
+                     admin_category_name='Test')

@@ -2,16 +2,13 @@
 # -*- coding: utf-8 -*-
 
 # Common Python library imports
-import os.path as op
-
 # Pip package imports
-from flask import current_app
 
 # Internal package imports
 from backend.contrib.admin import FileAdmin
+from backend.config import STATIC_FOLDER
 
 class FileModelAdmin(FileAdmin):
 
-    path = op.join(op.dirname(__file__), 'static')
-    url = 'static'
+    path = STATIC_FOLDER
     name = 'Test Admin'

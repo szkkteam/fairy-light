@@ -22,7 +22,7 @@
       {%- if children %}
         {% set class_name = item.get_class_name() or '' %}
         {%- if item.is_active(admin_view) %}
-        <li class="active dropdown{% if class_name %} {{class_name}}{% endif %}">
+        <li class="active dropdown">
         {% else -%}
         <li class="dropdown">
         {%- endif %}
