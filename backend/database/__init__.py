@@ -33,6 +33,7 @@ from .types import (
     String,
     Text,
     Time,
+    ImageColumn,
 )
 
 session = db.session  # type: orm.session.Session
