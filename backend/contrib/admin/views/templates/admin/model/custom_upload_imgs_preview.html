@@ -1,7 +1,8 @@
 {% extends 'admin/master.html' %}
 {% import 'admin/lib.html' as lib with context %}
 {% from 'admin/lib.html' import extra with context %} {# backward compatible #}
-{% import 'admin/macros.html' import as custom_lib with context %}
+{% import 'admin/macros.html' as custom_lib with context %}
+{% from 'admin/macros.html' import custom_form_tag with context %}
 
 {% block head %}
   {{ super() }}
@@ -21,15 +22,18 @@
   {% endblock %}
 
   {% block create_form %}
-    {% call custom_lib.custom_form_tag(form_opts) %}
-        {{ render_form_fields(form, form_opts=form_opts) }}
-        {{ render_form_buttons(cancel_url, is_modal) }}
+    {% call custom_lib.custom_form_tag('upload-files', form_opts) %}
+        {{ lib.render_form_fields(form, form_opts=form_opts) }}
+        {{ lib.render_form_buttons(cancel_url, is_modal) }}
     {% endcall %}
   {% endblock %}
+  <div id="file-preview-list">
+
+  </div>
 {% endblock %}
 
 {% block tail %}
   {{ super() }}
   {{ lib.form_js() }}
-  <link href="{{ url_for('admin_.static', filename='js/form_upload_imgs_preview.css') }}" rel="stylesheet">
+  <script src="{{ url_for('admin_.static', filename='js/form_upload_imgs_preview.js') }}" type="text/javascript"></script>
 {% endblock %}

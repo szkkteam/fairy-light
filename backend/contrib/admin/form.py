@@ -11,7 +11,8 @@ from flask_admin.contrib.sqla.form import AdminModelConverter
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField
-from flask_wtf.file import FileField, FileRequired, FileAllowed, MultipleFileField
+from wtforms.fields import MultipleFileField
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 # Internal package imports
 from .field import ImagePreviewField
@@ -66,6 +67,6 @@ class CustomImportForm(FlaskForm):
 class CustomExportForm(FlaskForm):
     file_name = StringField('File name')
 
-class MultiImageUploadWithPreviewForm(FlaskForm):
-    upload = MultipleFileField('Import image(s)', validators=[FileRequired(), FileAllowed(['png', 'jpg'], 'Not supported image type.')])
-    image_field = ImagePreviewField('Image(s) preview')
+class MultiImageUploadForm(FlaskForm):
+    #upload = MultipleFileField('Import image(s)', validators=[FileRequired(), FileAllowed(['png', 'gif', 'jpg'], 'Not supported image type.')])
+    upload = MultipleFileField('Import image(s)')

@@ -49,7 +49,7 @@ var handleFileSelect = function(e) {
 
 var handleSubmit = function(e) {
     e.preventDefault();
-    const imgNameDiv = document.querySelector('#selectedFiles');
+    const imgNameDiv = document.querySelector('#file-preview-list');
     for (const imgDiv of imgNameDiv.querySelectorAll('.image-name-container')) {
         const placeholder = imgDiv.querySelector('input').placeholder;
         const userName = imgDiv.querySelector('input').value;
