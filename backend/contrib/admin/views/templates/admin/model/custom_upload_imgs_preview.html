@@ -1,0 +1,35 @@
+{% extends 'admin/master.html' %}
+{% import 'admin/lib.html' as lib with context %}
+{% from 'admin/lib.html' import extra with context %} {# backward compatible #}
+{% import 'admin/macros.html' import as custom_lib with context %}
+
+{% block head %}
+  {{ super() }}
+  {{ lib.form_css() }}
+{% endblock %}
+
+{% block body %}
+  {% block navlinks %}
+  <ul class="nav nav-tabs">
+    <li>
+        <a href="{{ return_url }}">{{ _gettext('List') }}</a>
+    </li>
+    <li class="active">
+        <a href="javascript:void(0)">{{ _gettext('Create') }}</a>
+    </li>
+  </ul>
+  {% endblock %}
+
+  {% block create_form %}
+    {% call custom_lib.custom_form_tag(form_opts) %}
+        {{ render_form_fields(form, form_opts=form_opts) }}
+        {{ render_form_buttons(cancel_url, is_modal) }}
+    {% endcall %}
+  {% endblock %}
+{% endblock %}
+
+{% block tail %}
+  {{ super() }}
+  {{ lib.form_js() }}
+  <link href="{{ url_for('admin_.static', filename='js/form_upload_imgs_preview.css') }}" rel="stylesheet">
+{% endblock %}

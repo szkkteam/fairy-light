@@ -1,0 +1,8 @@
+{% import 'admin/static.html' as admin_static with context %}
+
+{# ---------------------- Custom Form Macros -------------------------- #}
+{% macro custom_form_tag(id='', action=None) %}
+    <form id="{{ id }}" action="{{ action or '' }}" method="POST" role="form" class="admin-form form-horizontal" enctype="multipart/form-data">
+      {{ caller() }}
+    </form>
+{% endmacro %}

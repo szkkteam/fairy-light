@@ -11,9 +11,10 @@ from flask_admin.contrib.sqla.form import AdminModelConverter
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField
-from flask_wtf.file import FileField, FileRequired, FileAllowed
+from flask_wtf.file import FileField, FileRequired, FileAllowed, MultipleFileField
 
 # Internal package imports
+from .field import ImagePreviewField
 
 class ReorderableForm(BaseForm):
     def __init__(self, formdata=None, obj=None, prefix=u'', **kwargs):
@@ -64,3 +65,7 @@ class CustomImportForm(FlaskForm):
 
 class CustomExportForm(FlaskForm):
     file_name = StringField('File name')
+
+class MultiImageUploadWithPreviewForm(FlaskForm):
+    upload = MultipleFileField('Import image(s)', validators=[FileRequired(), FileAllowed(['png', 'jpg'], 'Not supported image type.')])
+    image_field = ImagePreviewField('Image(s) preview')
