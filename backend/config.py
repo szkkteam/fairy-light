@@ -59,7 +59,6 @@ EXTENSIONS = [
     'backend.extensions.marshmallow:ma',        # must come after db
     'backend.extensions.security:security',     # must come after celery and mail
     'backend.extensions.debug:toolbar',
-    'backend.extensions.filesystem:fs',
 ]
 
 # list of extensions to register after the bundles

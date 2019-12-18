@@ -7,6 +7,14 @@
 {% block head %}
   {{ super() }}
   {{ lib.form_css() }}
+  <style>
+	.img-preview {
+		max-width: 125px;
+		max-height: 125px;
+		float: left;
+		margin-bottom:10px;
+	}
+  </style>
 {% endblock %}
 
 {% block body %}
@@ -28,7 +36,7 @@
     {% endcall %}
   {% endblock %}
   <div id="file-preview-list">
-
+  {# This section will be filled out by js  #}
   </div>
 {% endblock %}
 

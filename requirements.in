@@ -13,7 +13,6 @@ flask-security
 flask-session
 flask-sqlalchemy
 flask-debugtoolbar
-flask-fs
 
 loguru
 appdirs

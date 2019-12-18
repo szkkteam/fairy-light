@@ -20,7 +20,7 @@ var handleFileSelect = function(e) {
 
     if(!e.target.files || !window.FileReader) return;
 
-    var selDiv = document.querySelector("#selectedFiles");
+    var selDiv = document.querySelector("#file-preview-list");
     // Clear the previously added elements
     selDiv.innerHTML = "";
 
@@ -60,6 +60,6 @@ var handleSubmit = function(e) {
 }
 
 document.addEventListener("DOMContentLoaded", function(e) {
-    document.querySelector('#files').addEventListener('change', handleFileSelect, false);
+    document.querySelector('input[type=file]').addEventListener('change', handleFileSelect, false);
     document.getElementById('upload-files').addEventListener('submit', handleSubmit, false);
 });
