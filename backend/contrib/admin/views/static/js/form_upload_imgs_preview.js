@@ -3,9 +3,12 @@ const getFileExtension = /(?:\.([^.]+))?$/;
 
 /* Helper functions */
 function renameFile(inFile, newName) {
+    //const token = document.getElementsByName("csrf_token").value;
+    const token = getCookie('csrf_token')
     var file = inFile.files[0];
     var results = new FormData();
     results.append('file', file, newName);
+    results.append('csrf_token', token)
     return results;
 }
 
@@ -14,6 +17,22 @@ function sendFile(url, formData) {
     request.open("POST", url);
     console.log("Endpoint: " + url);
     request.send(formData);
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
 }
 
 var handleFileSelect = function(e) {

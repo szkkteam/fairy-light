@@ -2,7 +2,7 @@
 {% import 'admin/lib.html' as lib with context %}
 {% from 'admin/lib.html' import extra with context %} {# backward compatible #}
 {% import 'admin/macros.html' as custom_lib with context %}
-{% from 'admin/macros.html' import custom_form_tag with context %}
+{% from 'admin/macros.html' import custom_render_form with context %}
 
 {% block head %}
   {{ super() }}
@@ -30,10 +30,7 @@
   {% endblock %}
 
   {% block create_form %}
-    {% call custom_lib.custom_form_tag('upload-files', form_opts) %}
-        {{ lib.render_form_fields(form, form_opts=form_opts) }}
-        {{ lib.render_form_buttons(cancel_url, is_modal) }}
-    {% endcall %}
+    {{ custom_lib.custom_render_form(form, return_url, extra(), form_opts) }}
   {% endblock %}
   <div id="file-preview-list">
   {# This section will be filled out by js  #}
@@ -43,5 +40,101 @@
 {% block tail %}
   {{ super() }}
   {{ lib.form_js() }}
-  <script src="{{ url_for('admin_.static', filename='js/form_upload_imgs_preview.js') }}" type="text/javascript"></script>
+  <script>
+    // File extension extract regex
+    const getFileExtension = /(?:\.([^.]+))?$/;
+
+    /* Helper functions */
+    function renameFile(inFile, newName, button) {
+        var file = inFile.files[0];
+        const album = document.querySelector('select[name=album]')
+        var results = new FormData();
+        results.append(album.name, album.value)
+        results.append('csrf_token', getCookie("csrf_token"))
+        results.append(inFile.name, file, newName);
+        results.append(button.name, button.value);
+        return results;
+    }
+
+    function sendFile(url, formData) {
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+        if (request.readyState == XMLHttpRequest.DONE && request.status == 200) {
+          document.open();
+          document.write(request.responseText);
+          document.close();
+          }
+        }
+
+        request.open("POST", url);
+        //request.setRequestHeader('Upgrade-Insecure-Requests', 1);
+        console.log("Endpoint: " + url);
+        request.send(formData);
+    }
+
+    function getCookie(cname) {
+      var name = cname + "=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+
+    var handleFileSelect = function(e) {
+
+        if(!e.target.files || !window.FileReader) return;
+
+        var selDiv = document.querySelector("#file-preview-list");
+        // Clear the previously added elements
+        selDiv.innerHTML = "";
+
+        var files = e.target.files;
+        var filesArr = Array.prototype.slice.call(files);
+        filesArr.forEach(function(f) {
+            if(!f.type.match("image.*")) {
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                // Creating a DIV element
+                var divSection = document.createElement('div');
+                divSection.setAttribute("class", "image-name-container");
+
+                const imgHtml = "<img class=\"img-preview\" src=\"" + e.target.result + "\">";
+                const nameHtml = "<input class=\"img-name\" type=text placeholder=\"" + f.name + "\"  >" + "<br clear=\"left\"/>";
+
+                divSection.innerHTML = imgHtml + nameHtml;
+                selDiv.appendChild(divSection);
+            }
+            reader.readAsDataURL(f);
+        });
+    }
+
+    var handleSubmit = function(e) {
+        e.preventDefault();
+        const imgNameDiv = document.querySelector('#file-preview-list');
+        for (const imgDiv of imgNameDiv.querySelectorAll('.image-name-container')) {
+            const placeholder = imgDiv.querySelector('input').placeholder;
+            const userName = imgDiv.querySelector('input').value;
+            // If the user does not provided an extension, keep the original extension
+            const name = userName ? ((!getFileExtension.exec(userName)[1]) ? userName + '.' + getFileExtension.exec(placeholder)[1] : userName) : placeholder;
+            sendFile(this.action, renameFile(document.querySelector('input[type=file]'), name, e.explicitOriginalTarget));
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function(e) {
+        document.querySelector('input[type=file]').addEventListener('change', handleFileSelect, false);
+        document.querySelector('form').addEventListener('submit', handleSubmit, false);
+    });
+
+  </script>
 {% endblock %}

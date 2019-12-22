@@ -59,6 +59,7 @@ EXTENSIONS = [
     'backend.extensions.marshmallow:ma',        # must come after db
     'backend.extensions.security:security',     # must come after celery and mail
     'backend.extensions.debug:toolbar',
+    'backend.extensions.mediamanager:storage',
 ]
 
 # list of extensions to register after the bundles
@@ -174,22 +175,16 @@ class BaseConfig(object):
     DEBUG_TB_INTERCEPT_REDIRECTS = False
 
     ##########################################################################
-    # Flask FS - FileSystem                                            #
+    # Flask NN - MediaManager                                            #
     ##########################################################################
     # The global local storage root.
-    FS_ROOT = STATIC_FOLDER
-
-    # An optionnal URL path prefix for storages
-    #FS_PREFIX = '/fs'
-
-    # An optionnal URL on which the FS_ROOT is visible
-    #FS_URL = 'https://static.mydomain.com/'
-
-    # The default backend used for storages. Can be one of ['local', 's3', 'gridfs', 'swift']
-    FS_BACKEND = 'local'
-
-    # Whether or not image should be compressedd/optimized by default.
-    FS_IMAGES_OPTIMIZE = False
+    MM_PHOTO_ALBUM = {
+        'ROOT': os.path.join(STATIC_FOLDER, 'photo_album'),
+        'PREFIX': '/photo',
+        'STORAGE': 'local',
+        'MANAGER': 'image',
+        'THUMBNAIL_SIZE': (150,150,True),
+    }
 
 class ProdConfig(BaseConfig):
     ##########################################################################

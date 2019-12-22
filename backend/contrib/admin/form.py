@@ -4,7 +4,7 @@
 # Common Python library imports
 # Pip package imports
 import sqlalchemy
-from flask_admin.form import BaseForm
+from flask_admin.form import BaseForm, ImageUploadField
 from flask_admin.form.fields import Select2Field
 from flask_admin.model.form import converts
 from flask_admin.contrib.sqla.form import AdminModelConverter
@@ -15,7 +15,7 @@ from wtforms.fields import MultipleFileField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 # Internal package imports
-from .field import ImagePreviewField
+from .field import MediaManagerImageUploadField
 
 class ReorderableForm(BaseForm):
     def __init__(self, formdata=None, obj=None, prefix=u'', **kwargs):
@@ -69,4 +69,5 @@ class CustomExportForm(FlaskForm):
 
 class MultiImageUploadForm(FlaskForm):
     #upload = MultipleFileField('Import image(s)', validators=[FileRequired(), FileAllowed(['png', 'gif', 'jpg'], 'Not supported image type.')])
-    upload = MultipleFileField('Import image(s)')
+    #upload = MultipleFileField('Import image(s)')
+    upload = MediaManagerImageUploadField('Import image(s)')

@@ -32,3 +32,4 @@ class Album(Model):
     @classmethod
     def get_album_preview(cls, limit=4):
         return cls.query(Image).join(Album).filter(Image.album_id == cls.id).limit(limit)
+
