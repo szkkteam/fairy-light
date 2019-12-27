@@ -2,11 +2,14 @@
 # -*- coding: utf-8 -*-
 
 # Common Python library imports
+import os
+
 # Pip package imports
-from flask import redirect, request, flash
+from flask import redirect, request, url_for
 
 from sqlalchemy.orm.base import manager_of_class, instance_state
 
+from flask_admin import form
 from flask_admin.base import expose
 from flask_admin.helpers import get_redirect_target
 from flask_admin.babel import gettext
@@ -15,13 +18,33 @@ import flask_mm as mm
 
 from loguru import logger
 
+from jinja2 import Markup
+
 # Internal package imports
 from backend.contrib.admin import ModelAdmin, macro
 from backend.contrib.admin.field import MediaManagerImageUploadField
 from backend.utils import string_to_bool
-from backend.extensions.mediamanager import storage
 
-from ..models import Image
+from ..models import Image, Album
+from .. import photo_album_storage
+
+def _list_album(view, context, model, name):
+    print("Model: ", model)
+    return "Album test"
+
+from flask_admin.form import Select2Widget
+from flask_admin.contrib.sqla.fields import QuerySelectField
+#from flask_admin.fields import QuerySelectField
+
+
+"""
+'album': QuerySelectField(
+    label='Album',
+    query_factory=lambda: Album.all(),
+    widget=Select2Widget
+)
+"""
+
 
 class ImageAdmin(ModelAdmin):
     model = Image
@@ -33,16 +56,22 @@ class ImageAdmin(ModelAdmin):
     can_create = True
     can_edit = True
 
-    column_list = ('title', 'album', 'created_at', )
+    column_list = ('title', 'preview', 'album', 'created_at', )
+
     column_labels = {'created_at': 'Date'}
     column_default_sort = ('created_at', True)
 
-    column_details_list = ('title', 'created_at', 'updated_at')
+    column_details_list = ('title', 'album', 'created_at', 'updated_at')
 
     form_columns = ('album', 'path')
 
+    column_formatters = {
+        'preview': lambda view, context, model, name: model.get_thumbnail(),
+        'album': _list_album
+    }
+
     form_extra_fields = {
-        'path': MediaManagerImageUploadField('Image(s)', storage=storage.by_name('photo_album'))
+        'path': MediaManagerImageUploadField('Image(s)', storage=photo_album_storage()),
     }
 
 
@@ -73,9 +102,21 @@ class ImageAdmin(ModelAdmin):
         return model
     """
 
+    def edit_form(self, obj=None):
+        from flask_admin.helpers import (get_form_data, validate_form_on_submit,
+                                         get_redirect_target, flash_errors)
+        """
+            Instantiate model editing form and return it.
+            Override to implement custom behavior.
+        """
+        print("Object: ", obj, flush=True)
+        return self._edit_form_class(get_form_data(), obj=obj)
+
     @expose('/new/', methods=('GET', 'POST'))
     def create_view(self):
         from flask_admin.form import BaseForm, FormOpts, rules
+        from flask_admin.helpers import is_form_submitted
+        from flask import jsonify
         """
             Create model view
         """
@@ -89,28 +130,19 @@ class ImageAdmin(ModelAdmin):
         if not hasattr(form, '_validated_ruleset') or not form._validated_ruleset:
             self._validate_form_instance(ruleset=self._form_create_rules, form=form)
 
-        if self.validate_form(form):
-            # in versions 1.1.0 and before, this returns a boolean
-            # in later versions, this is the model itself
-            model = self.create_model(form)
-            if model:
-                print("Model created: ", model, flush=True)
-                flash(gettext('Record was successfully created.'), 'success')
+        if is_form_submitted():
 
-                print("Request form: ", request.form, flush=True)
+            if form.validate():
+                # in versions 1.1.0 and before, this returns a boolean
+                # in later versions, this is the model itself
+                model = self.create_model(form)
+                if model:
+                    return jsonify({'status': 'success', 'error': form.errors})
 
-                if '_add_another' in request.form:
-                    return redirect(request.url)
-                elif '_continue_editing' in request.form:
-                    # if we have a valid model, try to go to the edit view
-                    if model is not True:
-                        url = self.get_url('.edit_view', id=self.get_pk_value(model), url=return_url)
-                    else:
-                        url = return_url
-                    return redirect(url)
                 else:
-                    # save button
-                    return redirect(self.get_save_return_url(model, is_created=True))
+                    return jsonify({'status': 'failed', 'error': form.errors})
+            else:
+                return jsonify({'status': 'failed', 'error': form.errors})
 
         form_opts = FormOpts(widget_args=self.form_widget_args,
                              form_rules=self._form_create_rules)

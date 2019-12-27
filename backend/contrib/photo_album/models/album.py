@@ -3,6 +3,8 @@
 
 # Common Python library imports
 # Pip package imports
+from jinja2 import Markup
+
 # Internal package imports
 from backend.database import (
     Column,
@@ -14,6 +16,7 @@ from backend.database import (
 
 from .image import Image
 
+
 class Album(Model):
     title = Column(String(64))
     slug = Column(String(64))
@@ -23,6 +26,8 @@ class Album(Model):
 
     __repr_props__ = ('id', 'title')
 
+
+
     @classmethod
     def get_publics(cls):
         return cls.query \
@@ -31,5 +36,10 @@ class Album(Model):
 
     @classmethod
     def get_album_preview(cls, limit=4):
-        return cls.query(Image).join(Album).filter(Image.album_id == cls.id).limit(limit)
-
+        return Image.query.filter_by(album_id=cls.id).limit(limit).all()
+#        return cls.query(Image).join(Album).filter(Image.album_id == cls.id).limit(limit)
+    """
+    def __repr__(self):
+        return Markup("<img src=%s>" % self.get_album_preview(limit=1)[0].get_thumbnail())
+        #return Markup("<H1>Cioca")
+    """

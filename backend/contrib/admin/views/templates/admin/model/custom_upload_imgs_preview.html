@@ -14,6 +14,25 @@
 		float: left;
 		margin-bottom:10px;
 	}
+  /*
+  .img-name {
+    width: 70%;
+  }*/
+
+  .file-preview-table {
+    width: 100%;
+    margin: 20px;
+  }
+
+  .progress-bar-success {
+    background-image: linear-gradient(to bottom,#1ee333 0,#23a418 100%);
+  }
+
+  .progress-bar-failed {
+    background-image: linear-gradient(to bottom,#d71212 0,#b50b0b 100%);
+  }  
+
+
   </style>
 {% endblock %}
 
@@ -32,8 +51,10 @@
   {% block create_form %}
     {{ custom_lib.custom_render_form(form, return_url, extra(), form_opts) }}
   {% endblock %}
-  <div id="file-preview-list">
-  {# This section will be filled out by js  #}
+  <div>
+    <table id="file-preview-list" class="file-preview-table">
+      {# This section will be filled out by js  #}
+    </table>
   </div>
 {% endblock %}
 
@@ -41,36 +62,9 @@
   {{ super() }}
   {{ lib.form_js() }}
   <script>
+ 
     // File extension extract regex
     const getFileExtension = /(?:\.([^.]+))?$/;
-
-    /* Helper functions */
-    function renameFile(inFile, newName, button) {
-        var file = inFile.files[0];
-        const album = document.querySelector('select[name=album]')
-        var results = new FormData();
-        results.append(album.name, album.value)
-        results.append('csrf_token', getCookie("csrf_token"))
-        results.append(inFile.name, file, newName);
-        results.append(button.name, button.value);
-        return results;
-    }
-
-    function sendFile(url, formData) {
-        var request = new XMLHttpRequest();
-        request.onreadystatechange = function() {
-        if (request.readyState == XMLHttpRequest.DONE && request.status == 200) {
-          document.open();
-          document.write(request.responseText);
-          document.close();
-          }
-        }
-
-        request.open("POST", url);
-        //request.setRequestHeader('Upgrade-Insecure-Requests', 1);
-        console.log("Endpoint: " + url);
-        request.send(formData);
-    }
 
     function getCookie(cname) {
       var name = cname + "=";
@@ -88,13 +82,41 @@
       return "";
     }
 
+
+
+    function buildPreviewHtml(src, filename) {
+      var progressbar_div = $("<div>", { "class": "progress", "hidden": "", "style": "margin-bottom:0px" }).append(
+          $("<div>", { "class": "progress-bar", "role": "progressbar", "aria-valuenow": "0", "aria-valuemin": "0", "aria-valuemax": "100", "style": "width:0%" })
+        );
+      var table = $("<tr>", { "class" : "image-name-container", "style": "position:relative"});
+
+      table.append(
+          $("<td>", { "style": "width:30%" }).append(
+            "<img class=\"img-preview\" src=\"" + src + "\">"
+        ));
+
+      var input = $("<input>", { "class": "img-name", "type": "text", "placeholder": filename });
+      input.attr('size', input.attr('placeholder').length);
+
+      table.append(
+          $("<td>").append(
+            input
+      ));
+
+      table.append(
+          $("<td>", {"style": "width:200px"}).append(
+            progressbar_div
+        ));
+
+      return table
+    }
+
     var handleFileSelect = function(e) {
 
         if(!e.target.files || !window.FileReader) return;
 
-        var selDiv = document.querySelector("#file-preview-list");
         // Clear the previously added elements
-        selDiv.innerHTML = "";
+        $("#file-preview-list").html("");        
 
         var files = e.target.files;
         var filesArr = Array.prototype.slice.call(files);
@@ -105,35 +127,119 @@
 
             var reader = new FileReader();
             reader.onload = function (e) {
-                // Creating a DIV element
-                var divSection = document.createElement('div');
-                divSection.setAttribute("class", "image-name-container");
-
-                const imgHtml = "<img class=\"img-preview\" src=\"" + e.target.result + "\">";
-                const nameHtml = "<input class=\"img-name\" type=text placeholder=\"" + f.name + "\"  >" + "<br clear=\"left\"/>";
-
-                divSection.innerHTML = imgHtml + nameHtml;
-                selDiv.appendChild(divSection);
+                $("#file-preview-list").append(buildPreviewHtml(e.target.result, f.name));
             }
             reader.readAsDataURL(f);
         });
     }
 
+    prepareData = function (imgName, imgFile, filename, albumObj) {
+      var formData = new FormData();
+
+      formData.append(albumObj.name, albumObj.value);
+      formData.append('csrf_token', getCookie("csrf_token"));
+      formData.append(imgName, imgFile, filename);
+      //formData.append(button.name, button.value);
+
+      return formData;
+    }
+
+    sendForm = function (url, formData, progressElement) {
+      var request = $.ajax({
+            type: "POST",
+            url: url,
+            xhr: function () {
+              var myXhr = $.ajaxSettings.xhr();
+              if (myXhr.upload) {
+                myXhr.upload.addEventListener('progress', function(e) {
+                      var percent = 0;
+                      var position = event.loaded || event.position;
+                      var total = event.total;
+
+                      if (event.lengthComputable) {
+                          percent = Math.ceil(position / total * 100);
+                      }
+                      progressElement.attr("aria-valuenow", percent);
+                      progressElement.css("width", percent + '%');
+
+                }, false);
+              }
+              return myXhr;
+            },
+            async: true,
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            timeout: 60000
+          });
+      return request;
+    }
+
+
     var handleSubmit = function(e) {
         e.preventDefault();
-        const imgNameDiv = document.querySelector('#file-preview-list');
-        for (const imgDiv of imgNameDiv.querySelectorAll('.image-name-container')) {
-            const placeholder = imgDiv.querySelector('input').placeholder;
-            const userName = imgDiv.querySelector('input').value;
-            // If the user does not provided an extension, keep the original extension
-            const name = userName ? ((!getFileExtension.exec(userName)[1]) ? userName + '.' + getFileExtension.exec(placeholder)[1] : userName) : placeholder;
-            sendFile(this.action, renameFile(document.querySelector('input[type=file]'), name, e.explicitOriginalTarget));
-        }
+        const action = this.action;
+        const albumObj = $('select[name=album]')[0];
+        const imgElement = $('input[type=file]')[0];
+        const imgName = imgElement.name;
+        
+        $('#file-preview-list tr').each( function(index) {
+
+          const placeholder = $(this).find("input").attr('placeholder');
+          const userName = $(this).find('input').attr('value');
+
+          const name = userName ? ((!getFileExtension.exec(userName)[1]) ? userName + '.' + getFileExtension.exec(placeholder)[1] : userName) : placeholder;
+                
+          var progressElement = $(this).find('.progress-bar');
+          $(this).find(".progress").removeAttr('hidden');
+
+          var formData = prepareData(imgName, imgElement.files[index], name, albumObj);
+
+          var request = sendForm(action, formData, progressElement);
+          request.then(function(response) {
+            console.log(response);       
+            if (response.status == "success") {
+              progressElement.addClass('progress-bar-success');
+              progressElement.append("Success" );              
+            }
+            else {
+              progressElement.addClass('progress-bar-failed');
+              progressElement.append(response.error );               
+            }
+
+          });
+          request.catch(function(err) {
+            console.log(err);
+            progressElement.addClass('progress-bar-failed');
+          });
+
+        });
     }
+
+
+    function formatState (state) {
+      console.log(state);
+      if (!state.id) { return state.text; }
+      var $state = $(
+        '<span><img src="' + state.element.value + '" class="img-flag" /> ' + state.text + '</span>'
+     );
+     return $state;
+    };
+
 
     document.addEventListener("DOMContentLoaded", function(e) {
         document.querySelector('input[type=file]').addEventListener('change', handleFileSelect, false);
         document.querySelector('form').addEventListener('submit', handleSubmit, false);
+
+        $('select[name=album]').select2({});
+
+        $('select[name=album]').select2({
+          placeholder: "What currency do you use?", //placeholder
+          allowClear: true,
+          templateResult: formatState,
+          templateSelection: formatState
+        });
     });
 
   </script>

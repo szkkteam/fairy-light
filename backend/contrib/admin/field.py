@@ -13,6 +13,7 @@ except ImportError:
 from flask_admin.form import ImageUploadInput
 from flask_admin.babel import gettext
 from flask_admin._compat import urljoin, string_types
+from flask_admin.helpers import get_url
 
 from werkzeug.datastructures import FileStorage
 
@@ -28,34 +29,46 @@ class ImagePreviewField(Field):
         super(ImagePreviewField, self).__init__(*args, **kwargs)
 
 
-class MultipleImageUploadInput(ImageUploadInput):
-    """
-        Renders a image input chooser field.
-        You can customize `empty_template` and `data_template` members to customize
-        look and feel.
-    """
-    empty_template = ('<input %(file)s multiple>')
 
 
 class MediaManagerImageUploadField(fields.StringField):
 
+    class MultipleImageUploadInput(ImageUploadInput):
+        """
+            Renders a image input chooser field.
+            You can customize `empty_template` and `data_template` members to customize
+            look and feel.
+        """
+        empty_template = ('<input %(file)s multiple>')
+
+        def get_url(self, field):
+
+            if field.thumbnail_size:
+                filename = field.thumbnail_fn(field.data)
+            else:
+                filename = field.data
+
+            return field.storage.url(filename)
+            #return get_url(field.endpoint, mm=field.storage.name, filename=filename)
+
     widget = MultipleImageUploadInput()
 
     def __init__(self, label=None, validators=None, storage=None, **kwargs):
-        if not storage:
-            storage = mm.by_name()
-        assert isinstance(storage, mm.managers.BaseManager)
-        self.storage = storage
-        self.thumbnail_size = storage.thumbnail_size
-        self.thumbnail_fn = storage.generate_thumbnail_name
 
-        # fixme:
-        self.url_relative_path = None
-        self.endpoint = 'static'
+        assert isinstance(storage, mm.managers.BaseManager)
+        self.storage = mm.by_name() if not storage else storage
 
         self._should_delete = False
 
         super(MediaManagerImageUploadField, self).__init__(label, validators, **kwargs)
+
+    @property
+    def thumbnail_size(self):
+        return self.storage.thumbnail_size
+
+    @property
+    def thumbnail_fn(self):
+        return self.storage.generate_thumbnail_name
 
     def is_file_allowed(self, filename):
         """
@@ -123,9 +136,4 @@ class MediaManagerImageUploadField(fields.StringField):
             setattr(obj, name, filename)
 
     def generate_name(self, obj, file_data):
-        filename = self.namegen(obj, file_data)
-
-        if not self.storage.prefix:
-            return filename
-
-        return urljoin(self.storage.prefix, filename)
+        return self.namegen(obj, file_data)
