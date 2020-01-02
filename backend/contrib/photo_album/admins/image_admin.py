@@ -28,9 +28,6 @@ from backend.utils import string_to_bool
 from ..models import Image, Album
 from .. import photo_album_storage
 
-def _list_album(view, context, model, name):
-    print("Model: ", model)
-    return "Album test"
 
 from flask_admin.form import Select2Widget
 from flask_admin.contrib.sqla.fields import QuerySelectField
@@ -67,7 +64,6 @@ class ImageAdmin(ModelAdmin):
 
     column_formatters = {
         'preview': lambda view, context, model, name: model.get_thumbnail(),
-        'album': _list_album
     }
 
     form_extra_fields = {
@@ -75,50 +71,13 @@ class ImageAdmin(ModelAdmin):
     }
 
 
-    """
-    def create_model(self, form):
-        try:
-            model = self._manager.new_instance()
-            # TODO: We need a better way to create model instances and stay compatible with
-            # SQLAlchemy __init__() behavior
-            state = instance_state(model)
-            self._manager.dispatch.init(state, [], {})
-
-            form.populate_obj(model)
-            self.session.add(model)
-            self._on_model_change(form, model, True)
-            self.session.commit()
-        except Exception as ex:
-            if not self.handle_view_exception(ex):
-                flash(gettext('Failed to create record. %(error)s', error=str(ex)), 'error')
-                logger.exception('Failed to create record.')
-
-            self.session.rollback()
-
-            return False
-        else:
-            self.after_model_change(form, model, True)
-
-        return model
-    """
-
-    def edit_form(self, obj=None):
-        from flask_admin.helpers import (get_form_data, validate_form_on_submit,
-                                         get_redirect_target, flash_errors)
-        """
-            Instantiate model editing form and return it.
-            Override to implement custom behavior.
-        """
-        print("Object: ", obj, flush=True)
-        return self._edit_form_class(get_form_data(), obj=obj)
-
     @expose('/new/', methods=('GET', 'POST'))
     def create_view(self):
         from flask_admin.form import BaseForm, FormOpts, rules
         from flask_admin.helpers import is_form_submitted
         from flask import jsonify
         """
-            Create model view
+            Create model view with JSON response
         """
         return_url = get_redirect_target() or self.get_url('.index_view')
         print("Return URL: ", return_url, flush=True)

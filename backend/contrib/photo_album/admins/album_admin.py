@@ -25,6 +25,7 @@ class AlbumAdmin(ModelAdmin):
 
     column_formatters = {
         'email': macro('column_formatters.email'),
+        #'preview': lambda view, context, model, name: model.get_preview(),
     }
 
 
