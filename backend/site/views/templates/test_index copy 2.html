@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+    <link rel="stylesheet" href="index.css"> 
+    <link rel="stylesheet" href="theme-custom.css"> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <style>
+        .main-content__grid {
+            display: grid;
+            grid-template-columns: auto;
+            grid-template-rows: auto, auto, auto, auto;
+            grid-row-gap: 50px;            
+        }
+
+        .detailed-content {
+            position: relative;
+            left:15%;
+            width: 70%;
+            margin: 40px 0px;
+        }
+
+        .album-showcase {
+            display: grid;
+            justify-items: center;
+            justify-content: space-evenly;	/* This will set equal spaces between columns */
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            grid-column-gap: 30px;
+            grid-row-gap: 30px;
+        }
+
+        .album-showcase__item {
+            width: 80%;
+            margin: 10px;
+        }
+
+        .album-showcase__item a {
+            font-size: 15pt;
+            font-weight: bold;
+
+        }
+
+        .w3-card-4 {
+            box-shadow: none !important;
+        }
+
+        .w3-card--fixed-with {
+            width: 320px !important;
+            padding: 10px;
+        }
+
+        hr.text-seperator {
+            border: none;
+            height: 1px;
+            opacity: 0.5;
+        }
+
+        p.paragraph__content {
+            margin: 35px 0px;
+        }
+
+        .subscribe__container {
+            width: 400px;
+            text-align: center;
+            margin: 0px auto;
+        }
+
+        .subscribe__container--inner {
+            margin: auto;
+            width: 100%;
+            padding: 0px 15px;
+        }
+
+        .form-inline {
+            display: flex;
+            flex-flow: row wrap;
+            align-items: center;   
+        }
+
+        .form-inline label {
+            margin: 5px 10px 5px 0;
+        }
+
+        .form-inline input {
+            vertical-align: middle;
+            margin: 5px 10px 5px 0;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .form-inline button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            opacity: 0.9;
+            border: none;
+        }
+
+        .team-showcase {
+            display: grid;
+            justify-items: center;
+            justify-content: space-evenly;	/* This will set equal spaces between columns */
+            grid-template-columns: repeat(2, 1fr);
+            grid-column-gap: 30px;
+        }
+
+        .team-showcase__item {
+            text-align: center;
+            margin: 10px;
+        }
+
+        .team-showcase__item .title {
+            color: grey;
+        }
+
+        .team-showcase__item img {
+            border-radius: 50%;
+        }
+
+        .team-showcase__item button {
+            border: none;
+            outline: 0;
+            display: inline-block;
+            padding: 8px;
+            color: #000;
+            background-color: #fff;
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .team-showcase__item button:hover {
+            background-color: rgb(51, 50, 50);
+        }
+
+        .main-content__grid__team {
+            text-align: center;
+        }
+
+        .footer-links {
+            list-style-type: none;
+            overflow: hidden;
+            margin: 14px auto;
+        }
+
+        .footer-links ul {
+            padding: 0px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+        }
+
+        .footer-links li {
+            display: inline;
+            text-align: center;
+        }
+
+        .footer-links li:after{content:'\00B7';padding-right:5px;}
+        .footer-links .last:after{content:'' !important;}
+
+        .footer-row__collection {
+            margin: 0px 25px;
+        }
+
+        .w3-row .inline {
+            display: inline;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <div class="w3-row header-content font--nav d-theme-d4">
+            <div class="w3-col l4">
+                <ul class="nav-links anim--top-bottom-borders--out nav-links--slide-in">
+                    <li class="nav-link-element">
+                        <a href="#portfolio">Portfolio</a>
+                    </li>
+                    <li class="nav-link-element">
+                        <a href="#services">Services</a>
+                    </li>
+                </ul>       
+            </div>
+            <div class="w3-col l4 w3-center">
+                <div class="header-logo">
+                    <a href="#logo">
+                        <img src="https://picsum.photos/100/100?random=100">
+                    </a>
+                </div>
+            </div>
+            <div class="w3-col l4">
+                <ul class="nav-links anim--top-bottom-borders--out nav-links--slide-in">
+                    <li class="nav-link-element">
+                        <a href="#about_us">About Us</a>
+                    </li>
+                    <li class="nav-link-element">
+                        <a href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="w3-row-padding main-content">
+            <div id="main-div">
+                <!-- Slideshow -->
+                <section class="slideshow">
+                    <div class="slideshow-container">
+                        <div class="slideshow-container__collection">
+                            <div class="slideshow-numbertext">1 / 3</div>
+                            <!-- Photo Grid -->
+                            <div class="slideshow-grid">
+                                <figure class="slideshow-grid__item">
+                                    <img class="slideshow-grid__img" src="https://picsum.photos/300/200?random=1">
+                                </figure>
+                                <figure class="slideshow-grid__item">
+                                    <img class="slideshow-grid__img" src="https://picsum.photos/300/200?random=2">
+                                </figure>
+                                <figure class="slideshow-grid__item">
+                                    <img class="slideshow-grid__img" src="https://picsum.photos/300/200?random=3">
+                                </figure>
+                                <figure class="slideshow-grid__item">
+                                    <img class="slideshow-grid__img" src="https://picsum.photos/300/200?random=4">
+                                </figure>
+                            </div>       
+                            <div class="slideshow-title slideshow-title--slide-in">
+                                <h1 class="slideshow-title__head">Album</h1>
+                                <p class="slideshow-title__desc">Lorem ipsum dolor sit amet, an his etiam torquatos. Tollit soleat phaedrum te duo.</p>
+                            </div>         
+                        </div>
+                        <div class="slideshow-container__collection">
+                            <div class="slideshow-numbertext">2 / 3</div>
+                            <!-- Photo Grid -->
+                            <div class="slideshow-grid">
+                                <figure class="slideshow-grid__item">
+                                    <img class="slideshow-grid__img" src="https://picsum.photos/300/200?random=5">
+                                </figure>
+                                <figure class="slideshow-grid__item">
+                                        <img class="slideshow-grid__img" src="https://picsum.photos/300/200?random=6">
+                                </figure>
+                                <figure class="slideshow-grid__item">
+                                        <img class="slideshow-grid__img" src="https://picsum.photos/300/200?random=7">
+                                </figure>
+                                <figure class="slideshow-grid__item">
+                                        <img class="slideshow-grid__img" src="https://picsum.photos/300/200?random=8">
+                                </figure>
+                            </div>                      
+                            <div class="slideshow-title slideshow-title--slide-in">
+                                <h1 class="slideshow-title__head">Album</h1>
+                                <p class="slideshow-title__desc">Lorem ipsum dolor sit amet, an his etiam torquatos. Tollit soleat phaedrum te duo.</p>
+                            </div>         
+                        </div>
+                        <div class="slideshow-container__collection">
+                            <div class="slideshow-numbertext">3 / 3</div>
+                            <!-- Photo Grid -->
+                            <div class="slideshow-grid">
+                                <figure class="slideshow-grid__item">
+                                    <img class="slideshow-grid__img" src="https://picsum.photos/300/200?random=9">
+                                </figure>
+                                <figure class="slideshow-grid__item">
+                                        <img class="slideshow-grid__img" src="https://picsum.photos/300/200?random=10">
+                                </figure>
+                                <figure class="slideshow-grid__item">
+                                        <img class="slideshow-grid__img" src="https://picsum.photos/300/200?random=11">
+                                </figure>
+                                <figure class="slideshow-grid__item">
+                                        <img class="slideshow-grid__img" src="https://picsum.photos/300/200?random=12">
+                                </figure>
+                            </div>         
+                            <div class="slideshow-title slideshow-title--slide-in">
+                                <h1 class="slideshow-title__head">Album</h1>
+                                <p class="slideshow-title__desc">Lorem ipsum dolor sit amet, an his etiam torquatos. Tollit soleat phaedrum te duo.</p>
+                            </div>                    
+                        </div>
+                        <a class="slideshow-button__prev" onclick="plusSlides(-1)">&#10094;</a>
+                        <a class="slideshow-button__next" onclick="plusSlides(1)">&#10095;</a>
+                    </div>
+                    <div style="text-align:center">
+                        <span class="slideshow-button__dot" onclick="currentSlide(1)"></span> 
+                        <span class="slideshow-button__dot" onclick="currentSlide(2)"></span> 
+                        <span class="slideshow-button__dot" onclick="currentSlide(3)"></span> 
+                    </div>
+                </section>
+                <!-- Main content and Right content-->
+                <section class="detailed-content">
+                    <div class="main-content__grid">
+                        <div class="main-content__grid__text">
+                            <div class="d-theme-d2">
+                                <hr class="text-seperator d-theme-l5"/>
+                                <p class="paragraph__content d-theme-d2">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+                                </p>
+                                <hr class="text-seperator d-theme-l5"/>
+                            </div>
+                        </div>
+                        <div class="main-content__grid__albums">
+                            <!-- Album Showcases -->
+                            <div class="album-showcase d-theme-d2">
+                                <div class="album-showcase__item">
+                                    <div class="w3-card-4 w3-dark-grey w3-card--fixed-with">
+                                        <img src="https://picsum.photos/300/200?random=13">
+                                        <H1>
+                                            Album#1
+                                        </H1>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                        </p>
+                                        <div class="anim--underline--mid">
+                                            <a style="position: relative" href="#More">More ></a>      
+                                        </div>                                        
+                                    </div>                              
+                                </div>
+                                <div class="album-showcase__item">
+                                    <div class="w3-card-4 w3-dark-grey w3-card--fixed-with">
+                                        <img src="https://picsum.photos/300/200?random=14">
+                                        <H1>
+                                            Album#2
+                                        </H1>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                        </p>
+                                        <div class="anim--underline--mid">
+                                            <a style="position: relative" href="#More">More ></a>      
+                                        </div>       
+                                    </div>
+                                </div>
+                                <div class="album-showcase__item">
+                                    <div class="w3-card-4 w3-dark-grey w3-card--fixed-with">
+                                        <img src="https://picsum.photos/300/200?random=15">
+                                        <H1>
+                                            Album#3
+                                        </H1>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                        </p>
+                                        <div class="anim--underline--mid">
+                                            <a style="position: relative" href="#More">More ></a>      
+                                        </div>       
+                                    </div>
+                                </div>
+                                <div class="album-showcase__item">
+                                    <div class="w3-card-4 w3-dark-grey w3-card--fixed-with">
+                                        <img src="https://picsum.photos/300/200?random=16">
+                                        <H1>
+                                            Album#4
+                                        </H1>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                        </p>
+                                        <div class="anim--underline--mid">
+                                            <a style="position: relative" href="#More">More ></a>      
+                                        </div>       
+                                    </div>
+                                </div>
+                                <div class="album-showcase__item">
+                                    <div class="w3-card-4 w3-dark-grey w3-card--fixed-with">
+                                        <img src="https://picsum.photos/300/200?random=17">
+                                        <H1>
+                                            Album#5
+                                        </H1>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                        </p>
+                                        <div class="anim--underline--mid">
+                                            <a style="position: relative" href="#More">More ></a>      
+                                        </div>       
+                                    </div>
+                                </div>
+                                <div class="album-showcase__item">
+                                    <div class="w3-card-4 w3-dark-grey w3-card--fixed-with">
+                                        <img src="https://picsum.photos/300/200?random=18">
+                                        <H1>
+                                            Album#6
+                                        </H1>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                        </p>
+                                        <div class="anim--underline--mid">
+                                            <a style="position: relative" href="#More">More ></a>      
+                                        </div>       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="main-content__grid__subscribe">
+                            <div class="d-theme-d2">
+                                <hr class="text-seperator d-theme-l5"/>
+                                <div class="subscribe__container">
+                                    <div class="subscribe__container--inner">
+                                        <p class="paragraph__content d-theme-d2">
+                                        Keep in touch with us and subscribe below.
+                                        </p>
+                                        <form class="form-inline" action="/subscribe">
+                                            <input id="subscribe-email" type="email" class="input__box" placeholder="Enter Email" name="email" required>
+                                            <button type="submit">Subscribe</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <hr class="text-seperator d-theme-l5"/>
+                            </div>
+                        </div>
+                        <div class="main-content__grid__team">
+                            <div class="d-theme-d2">
+                                <H1>
+                                    Meet with the team
+                                </H1>
+                            </div>
+                        </div>
+                        <div class="main-content__grid__team">
+                            <div class="team-showcase d-theme-d2">
+                                <div class="team-showcase__item">
+                                    <div class="w3-card-4 w3-dark-grey w3-card--fixed-with">
+                                        <img style="border-radius: 50%;" src="https://picsum.photos/200/200?random=13">
+                                        <H1>
+                                            Anna Toth
+                                        </H1>
+                                        <H3 class="title">
+                                            Photographer
+                                        </H3>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                        </p>
+                                        <p><button class="button">Contact</button></p>                                    
+                                    </div>                              
+                                </div>
+                                <div class="team-showcase__item">
+                                    <div class="w3-card-4 w3-dark-grey w3-card--fixed-with">
+                                            <img style="border-radius: 50%;" src="https://picsum.photos/200/200?random=14">
+                                        <H1>
+                                            Anna Toth
+                                        </H1>
+                                        <H3 class="title">
+                                            Photographer
+                                        </H3>
+                                        <p>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                        </p>
+                                        <p><button class="button">Contact</button></p>
+                                    </div>                              
+                                </div>   
+                            </div>
+                        </div>
+                    </div>                
+                </section>
+
+            </div>
+        </div>
+        <div class="w3-row-padding footer-content d-theme-d2">
+            <footer>
+                <div class="w3-col l4">
+                    <div class="footer-row__collection">
+                        <div class="w3-row">
+                            <div class="footer-logo">
+                                <a href="#logo">
+                                    <img src="https://picsum.photos/100/100?random=100">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="w3-row">
+                            <div class="footer-links">
+                                <ul>
+                                    <li>
+                                        <a href="#portfolio">Portfolio</a>
+                                    </li>
+                                    <li>
+                                        <a href="#services">Services</a>
+                                    </li>
+                                    <li>
+                                        <a href="#about_us">About Us</a>
+                                    </li>
+                                    <li class="last">
+                                        <a href="#contact">Contact</a>
+                                    </li>
+                                </ul>       
+                            </div>            
+                        </div>
+                        <div class="w3-row">
+                            <p>
+                                FairyLight @ 2020
+                            </p>                    
+                        </div>
+                    </div>
+                </div>
+                <div class="w3-col l4">
+                    <div class="footer-row__collection">
+                        <div class="w3-row">
+                            <div class="w3-col s6" style="text-align: right; vertical-align: middle;">
+                                <i class="material-icons" style="font-size:30px">edit_location</i>
+                            </div>
+                            <div class="w3-col s6">
+                                <h6>
+                                    21 Revolution Street
+                                </h6>
+                                <h3>
+                                    Paris, France
+                                </h3>                                
+                            </div>
+                        </div>
+                        <div class="w3-row">
+                            Tel
+                        </div>
+                        <div class="w3-row">
+                            Mailto
+                        </div>
+                    </div>
+                </div>
+                <div class="w3-col l4">
+                    Share on social media
+                </div>
+            </footer>
+
+            Footer
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="http://ricostacruz.com/jquery.transit/jquery.transit.min.js"></script>
+
+    <script>
+       var slideShowIndex = 1;
+       
+
+       function plusSlides(index) {
+        slideShowIndex = showSlides(slideShowIndex, slideShowIndex += index );
+       }
+
+       function currentSlide(index) {
+        slideShowIndex = showSlides(slideShowIndex, index);
+       }
+
+       function showSlides(prevIndex, nextIndex) {
+           var slides = $(".slideshow-container__collection");
+           var dots = $(".slideshow-button__dot");
+
+           if (nextIndex > slides.length) {
+                nextIndex = 1;
+           }
+           if (nextIndex < 1) {
+                nextIndex = slides.length;
+           }
+           
+           if (prevIndex > 0) {
+               var prevItem = slides.eq(prevIndex - 1);
+               var nextItem = slides.eq(nextIndex - 1);
+
+                if (prevIndex < nextIndex) {
+                    /* Slide from right to left */
+                    prevItem.transition({ x: '-100%', opacity: 0 }, 1000, function() {
+                        prevItem.hide();
+                    });
+
+                    nextItem.css('x', '100%');
+                    nextItem.show();
+                    nextItem.transition({ x: '0%', opacity: 1 }, 1000);
+                }
+                else {
+                    /* Slide from left to right */
+                    prevItem.transition({ x: '100%', opacity: 0 }, 1000, function() {
+                        prevItem.hide();
+                    });
+                    nextItem.css('x', '-100%');
+                    nextItem.show();
+                    nextItem.transition({ x: '0%', opacity: 1 }, 1000);
+                }
+
+               dots.removeClass("slideshow-button__dot--active");
+               dots.eq(nextIndex - 1).addClass("slideshow-button__dot--active");
+           }
+           else {
+                /* Page loaded first time */
+                slides.hide()
+                slides.eq(nextIndex - 1).show();
+
+                dots.eq(nextIndex - 1).addClass("slideshow-button__dot--active");
+           }
+
+           return nextIndex;
+       }
+
+       $(document).ready(function () {
+            showSlides(-1, slideShowIndex);
+       });
+
+    </script>
+
+</body>
+</html>

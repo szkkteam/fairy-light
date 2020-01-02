@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css"> from: https://bootswatch.com/darkly/#top -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        
+        body {
+            height: 1500px; /* TODO: Just for testing*/
+        }
+
+        .gradient-fade {
+            -webkit-mask-image:-webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+        }
+
+        hr.header-separator {
+            border: 1px solid white;
+            border-radius: 5px;
+            opacity: 0.6;
+            margin: 0px;
+        }
+
+        h1.header-text {
+            font-size: 12px;
+            letter-spacing: 1px;
+            font-weight: bold;
+            margin: 0px;
+        }
+
+        .nav-link-icon i {
+            display: none;
+            vertical-align: middle;
+            padding: 8px;
+        }
+
+        /* Small devices (landscape phones, 544px and up) */
+        @media (min-width: 544px) {  
+            h1.header-text {
+                font-size: 10px;
+                letter-spacing: 10px;
+                margin: 2px 0px;
+            }
+        }
+
+        /* Medium devices (tablets, 768px and up) */
+        @media (min-width: 768px) {  
+            h1.header-text {
+                font-size: 16px;
+                letter-spacing: 16px;
+                margin: 4px 0px;
+            }
+
+            .nav-link-icon i {
+                display: inline-block;
+            }
+        }
+
+        /* Large devices (desktops, 992px and up) */
+        @media (min-width: 992px) { 
+            h1.header-text {
+                font-size: 25px;
+                letter-spacing: 25px;
+                margin: 8px 0px;
+            }
+
+            .nav-link-icon i {
+                display: inline-block;
+            }
+        }
+
+        /* Extra large devices (large desktops, 1200px and up) */
+        @media (min-width: 1200px) {  
+            h1.header-text {
+                font-size: 33px;
+                letter-spacing: 33px;
+                margin: 16px 0px;
+            }
+
+            .nav-link-icon i {
+                display: inline-block;
+            }
+        }
+
+        .anim--top-bottom-borders--out a {
+            position: relative;
+            text-decoration: none;
+        }
+
+        .anim--top-bottom-borders--out a:before, .anim--top-bottom-borders--out a:after {
+            position: absolute;
+            left: 0px;
+            width: 100%;
+            height: 2px;
+            background: #FFF;
+            content: "";
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .anim--top-bottom-borders--out a:after {
+            /* TODO: Change this width if dropdown menus will be used */
+            width: 100%;
+        }
+
+        .anim--top-bottom-borders--out a:before
+        {
+            top: 0px;
+            transform: translateY(10px);
+        }
+
+        .anim--top-bottom-borders--out a:after
+        {
+            bottom: 0px;
+            transform: translateY(-10px);
+        }
+
+        .anim--top-bottom-borders--out a:hover:before, .anim--top-bottom-borders--out a:hover:after
+        {
+            opacity: 1;
+            transform: translateY(0px);
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="card" style="width:100%">
+                <img class="card-img-top gradient-fade img-fluid" src="http://placehold.it/1140x350" alt="FairyLights" style="width:100%">
+                <div class="card-img-overlay h-100 d-flex flex-column justify-content-end align-items-center pb-0">
+                    <div class="row no-gutters w-100 justify-content-center align-items-center mb-3">
+                        <div class="col-5">                            
+                            <hr class="header-separator my-md-2"/>
+                            <div class="text-center">
+                                <h1 class="header-text resp-font">FAIRY</h1>
+                            </div>
+                            <hr class="header-separator my-md-2"/>
+                        </div>
+                        <div class="col-2">
+                            <div class="text-center">
+                                <img class="img-fluid" src="http://placehold.it/100x100" alt="FairyLightsLogo">
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <hr class="header-separator my-md-2"/>
+                            <div class="text-center">
+                                <h1 class="header-text resp-font">LIGHT</h1>
+                            </div>
+                            <hr class="header-separator my-md-2"/>
+                        </div>
+                    </div>                    
+                </div>
+            </div>        
+        </div>
+    </div>
+    <div class="navbar navbar-expand-md bg-dark navbar-dark sticky-top container">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav nav-justified w-100 nav-link-icon anim--top-bottom-borders--out">
+                <li class="nav-item">
+                    <a class="nav-link d-inline-block" href="#">PORTFOLIO</a>
+                </li>
+                <li class="nav-item">
+                    <i class="material-icons">label_important</i>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-inline-block" href="#">SERVICES</a>
+                </li>
+                <li class="nav-item">
+                    <i class="material-icons">label_important</i>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-inline-block" href="#">ABOUT</a>
+                </li>
+                <li class="nav-item">
+                    <i class="material-icons">label_important</i>
+                </li>    
+                <li class="nav-item">
+                    <a class="nav-link d-inline-block" href="#">CONTACT</a>
+                </li>    
+            </ul>
+        </div>  
+    </div>
+    <div class="container px-0 mb-5" >
+        <div class="row">
+            <div class="col">
+                <div class="w-50 mx-auto my-5">
+                    <hr class="header-separator my-3"/>
+                    <blockquote class="blockquote">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        <footer class="blockquote-footer mt-3">From WWF's website</footer>
+                    </blockquote>
+                    <hr class="header-separator my-3"/>
+                </div>
+            </div>
+            <div class="col">
+                <div id="demo" class="carousel slide" data-ride="carousel">
+        
+                    <!-- Indicators -->
+                    <ul class="carousel-indicators">
+                        <li data-target="#demo" data-slide-to="0" class="active"></li>
+                        <li data-target="#demo" data-slide-to="1"></li>
+                        <li data-target="#demo" data-slide-to="2"></li>
+                    </ul>
+                    
+                    <!-- The slideshow -->
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="d-flex flex-row img-fluid">
+                                <img src="http://placehold.it/285x200" alt="Los Angeles">
+                                <img src="http://placehold.it/285x200" alt="Los Angeles">
+                                <img src="http://placehold.it/285x200" alt="Los Angeles">
+                                <img src="http://placehold.it/285x200" alt="Los Angeles">
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="d-flex flex-row img-fluid">
+                                <img src="http://placehold.it/285x200" alt="Los Angeles">
+                                <img src="http://placehold.it/285x200" alt="Los Angeles">
+                                <img src="http://placehold.it/285x200" alt="Los Angeles">
+                                <img src="http://placehold.it/285x200" alt="Los Angeles">
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="d-flex flex-row img-fluid">
+                                <img src="http://placehold.it/285x200" alt="Los Angeles">
+                                <img src="http://placehold.it/285x200" alt="Los Angeles">
+                                <img src="http://placehold.it/285x200" alt="Los Angeles">
+                                <img src="http://placehold.it/285x200" alt="Los Angeles">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Left and right controls -->
+                    <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </a>
+                    <a class="carousel-control-next" href="#demo" data-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        Main content
+    </div>
+
+</body>
+</html>
