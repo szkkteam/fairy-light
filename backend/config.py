@@ -43,6 +43,8 @@ BUNDLES = [
     'backend.contrib.contact_submission',
     'backend.contrib.newsletter_subscribe',
     'backend.contrib.photo_album',
+    'backend.site',
+
     'backend.contrib.test_file',
     #'backend.site',
 ]
