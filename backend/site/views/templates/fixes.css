@@ -1,0 +1,76 @@
+hr.header-separator {
+    border: 1px solid white;
+    border-radius: 5px;
+    opacity: 0.6;
+    margin: 0px;
+}
+
+h1.header-text {
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    margin: 0px;
+}
+
+.nav-link-icon i {
+    vertical-align: middle;
+    padding: 8px;
+}
+
+.carousel-caption {
+    background: rgb(0, 0, 0); /* Fallback color */
+    background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
+    color: #f1f1f1;
+    text-align: left;
+    right: 50%; /* TODO: This should be somehow dynamic regarding text size + padding*/
+    left: 5px;
+    bottom: 5px;
+    padding: 5px 8px;
+    margin: 0px;
+}
+
+.carousel-control-prev {
+    top: -20% !important;
+    /* left: -5% !important; Buggy on small screen size */
+}
+
+.carousel-control-next {
+    top: -20% !important;
+    /* right: -5% !important; Buggy on small screen size */
+}
+
+
+.flex-img-fix img {
+    width: 100%;
+    height: 100%;
+}
+
+.section-title {
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 700;
+}
+
+.section-description {
+    text-align: center;
+}
+
+#services .service-item {
+    margin-bottom: 20px;
+}
+
+#services .service-pic {
+    float: left;        
+}
+
+#services .service-title {
+    margin-left: 80px;
+    font-weight: 700px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+#services .service-description {
+    margin-left: 80px;
+    line-height: 24px;
+}

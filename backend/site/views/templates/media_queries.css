@@ -1,0 +1,90 @@
+
+/* Define the smallest font sizes */
+h1 { font-size: 1rem; }
+h2 { font-size: 0.8rem; }
+h3 { font-size: 0.7rem; }
+h4 { font-size: 0.6rem; }
+h5 { font-size: 0.5rem; }
+h6 { font-size: 0.4rem; }
+p { font-size: 0.4rem; }
+.blockquote { font-size: 0.56rem; }
+.blockquote-footer { font-size: 0.4rem; }
+
+/* Small devices (landscape phones, 544px and up) */
+@media (min-width: 544px) {  
+    h1.header-text {
+        font-size: 10px;
+        letter-spacing: 10px;
+        margin: 2px 0px;
+    }
+
+    h1 { font-size: 1rem; }
+    h2 { font-size: 0.8rem; }
+    h3 { font-size: 0.7rem; }
+    h4 { font-size: 0.6rem; }
+    h5 { font-size: 0.5rem; }
+    h6 { font-size: 0.4rem; }
+    p { font-size: 0.4rem; }
+    .blockquote { font-size: 0.56rem; }
+    .blockquote-footer { font-size: 0.4rem; }
+    
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {  
+    h1.header-text {
+        font-size: 16px;
+        letter-spacing: 16px;
+        margin: 4px 0px;
+    }
+
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 2rem; }
+    h3 { font-size: 1.75rem; }
+    h4 { font-size: 1.5rem; }
+    h5 { font-size: 1.25rem; }
+    h6 { font-size: 1rem; }
+    p { font-size: 1rem; }
+    .blockquote { font-size: 1.17rem; }
+    .blockquote-footer { font-size: 1rem; }
+
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) { 
+    h1.header-text {
+        font-size: 25px;
+        letter-spacing: 25px;
+        margin: 8px 0px;
+    }
+
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 2rem; }
+    h3 { font-size: 1.75rem; }
+    h4 { font-size: 1.5rem; }
+    h5 { font-size: 1.25rem; }
+    h6 { font-size: 1rem; }
+    p { font-size: 1rem; }
+    .blockquote { font-size: 1.17rem; }
+    .blockquote-footer { font-size: 1rem; }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {  
+    h1.header-text {
+        font-size: 33px;
+        letter-spacing: 33px;
+        margin: 16px 0px;
+    }
+
+
+    h1 { font-size: 2.5rem; }
+    h2 { font-size: 2rem; }
+    h3 { font-size: 1.75rem; }
+    h4 { font-size: 1.5rem; }
+    h5 { font-size: 1.25rem; }
+    h6 { font-size: 1rem; }
+    p { font-size: 1rem; }
+    .blockquote { font-size: 1.17rem; }
+    .blockquote-footer { font-size: 1rem; }
+}
