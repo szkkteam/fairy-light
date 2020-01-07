@@ -67,6 +67,7 @@
             .nav-link-icon i {
                 display: inline-block;
             }
+
         }
 
         /* Large devices (desktops, 992px and up) */
@@ -134,6 +135,69 @@
             transform: translateY(0px);
         }
 
+		.carousel-caption {
+			background: rgb(0, 0, 0); /* Fallback color */
+			background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
+			color: #f1f1f1;
+			text-align: left;
+			right: 50%; /* TODO: This should be somehow dynamic regarding text size + padding*/
+			left: 5px;
+			bottom: 5px;
+			padding: 5px 8px;
+			margin: 0px;
+		}
+
+
+		.anim--carousel-caption--slide-in {
+			opacity: 0; /* Initial Opacity set to 0 */
+			animation: slide-in 0.8s forwards;
+			animation-timing-function: ease-out;   
+			-webkit-animation: slide-in 0.8s forwards;     
+			-webkit-animation-timing-function: ease-out;         
+			-moz-animation: slide-in 0.8s forwards;     
+			-moz-animation-timing-function: ease-out;         
+			animation-delay: 2s;
+			-webkit-animation-delay: 2s;
+			-moz-animation-delay: 2s;
+		}
+
+		@keyframes slide-in {
+			0% { transform: translateX(20%); opacity: 0; }
+			20% { opacity: 1;}
+			100% { transform: translateX(0%); opacity: 1; }
+		}
+
+		@-webkit-keyframes slide-in {
+			0% { -webkit-transform: translateX(20%); opacity: 0; }
+			20% { opacity: 1;}
+			100% { -webkit-transform: translateX(0%); opacity: 1; }
+		}
+
+		.carousel-control-prev {
+			top: -20% !important;
+			/* left: -5% !important; Buggy on small screen size */
+		}
+
+		.carousel-control-next {
+			top: -20% !important;
+			/* right: -5% !important; Buggy on small screen size */
+		}
+
+		
+		.flex-img-fix img {
+			width: 100%;
+			height: 100%;
+		}
+		
+		.test-resp-font h4 {
+			font-size: calc(7px + (26 - 7) * ((100vw - 300px) / (1600 - 300)));
+			line-height: calc(1.3em + (1.5 - 1.2) * ((100vw - 300px)/(1600 - 300)));
+		}
+		.test-resp-font p {
+			font-size: calc(4px + (16 - 4) * ((100vw - 300px) / (1600 - 300)));
+			line-height: calc(1.3em + (1.5 - 1.2) * ((100vw - 300px)/(1600 - 300)));				
+		}
+			
 
     </style>
 </head>
@@ -203,59 +267,104 @@
             <div class="col">
                 <div class="w-50 mx-auto my-5">
                     <hr class="header-separator my-3"/>
-                    <blockquote class="blockquote">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    <blockquote class="blockquote test-resp-font">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                         <footer class="blockquote-footer mt-3">From WWF's website</footer>
                     </blockquote>
                     <hr class="header-separator my-3"/>
                 </div>
             </div>
-            <div class="col">
-                <div id="demo" class="carousel slide" data-ride="carousel">
-        
-                    <!-- Indicators -->
-                    <ul class="carousel-indicators">
-                        <li data-target="#demo" data-slide-to="0" class="active"></li>
-                        <li data-target="#demo" data-slide-to="1"></li>
-                        <li data-target="#demo" data-slide-to="2"></li>
-                    </ul>
-                    
-                    <!-- The slideshow -->
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <div class="d-flex flex-row img-fluid">
-                                <img src="http://placehold.it/285x200" alt="Los Angeles">
-                                <img src="http://placehold.it/285x200" alt="Los Angeles">
-                                <img src="http://placehold.it/285x200" alt="Los Angeles">
-                                <img src="http://placehold.it/285x200" alt="Los Angeles">
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <div class="d-flex flex-row img-fluid">
-                                <img src="http://placehold.it/285x200" alt="Los Angeles">
-                                <img src="http://placehold.it/285x200" alt="Los Angeles">
-                                <img src="http://placehold.it/285x200" alt="Los Angeles">
-                                <img src="http://placehold.it/285x200" alt="Los Angeles">
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <div class="d-flex flex-row img-fluid">
-                                <img src="http://placehold.it/285x200" alt="Los Angeles">
-                                <img src="http://placehold.it/285x200" alt="Los Angeles">
-                                <img src="http://placehold.it/285x200" alt="Los Angeles">
-                                <img src="http://placehold.it/285x200" alt="Los Angeles">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Left and right controls -->
-                    <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                        <span class="carousel-control-prev-icon"></span>
-                    </a>
-                    <a class="carousel-control-next" href="#demo" data-slide="next">
-                        <span class="carousel-control-next-icon"></span>
-                    </a>
-                </div>
+		</div>
+		<div class="row justify-content-center align-items-center">
+            <div class="col px-0">
+				<!-- TODO: Remove data-interval="false" tag to enable automatic scrolling. Set time in [ms] to adjust the timing -->
+				<div id="demo" class="carousel slide" data-ride="carousel" data-interval=false>
+		
+					<!-- The slideshow -->
+					<div class="carousel-inner">
+						<div class="carousel-item active">
+							<div class="d-flex flex-row flex-img-fix">							
+								<div class="flex-fill">
+									<img src="http://placehold.it/285x200" alt="Los Angeles">
+								</div>
+								<div class="flex-fill">
+									<img src="http://placehold.it/285x200" alt="Los Angeles">
+								</div>
+								<div class="flex-fill">
+									<img class="d-none d-sm-block" src="http://placehold.it/285x200" alt="Los Angeles">
+								</div>
+								<div class="flex-fill">
+									<img class="d-none d-md-block" src="http://placehold.it/285x200" alt="Los Angeles">
+								</div>
+							</div>
+							<div class="carousel-caption anim--carousel-caption--slide-in">
+								<div class="px-2 test-resp-font">
+									<h4>Album</h4>
+									<p style="margin:0;">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+								</div>
+							</div>
+						</div>
+						<div class="carousel-item">							
+							<div class="d-flex flex-row flex-img-fix">							
+								<div class="flex-fill">
+									<img src="http://placehold.it/285x200" alt="Los Angeles">
+								</div>
+								<div class="flex-fill">
+									<img src="http://placehold.it/285x200" alt="Los Angeles">
+								</div>
+								<div class="flex-fill">
+									<img class="d-none d-sm-block" src="http://placehold.it/285x200" alt="Los Angeles">
+								</div>
+								<div class="flex-fill">
+									<img class="d-none d-md-block" src="http://placehold.it/285x200" alt="Los Angeles">
+								</div>
+							</div>
+							<div class="carousel-caption anim--carousel-caption--slide-in">
+								<div class="px-2 test-resp-font">
+									<h4>Album</h4>
+									<p style="margin:0;">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+								</div>
+							</div>
+						</div>
+						<div class="carousel-item">
+							<div class="d-flex flex-row flex-img-fix">							
+								<div class="flex-fill">
+									<img src="http://placehold.it/285x200" alt="Los Angeles">
+								</div>
+								<div class="flex-fill">
+									<img src="http://placehold.it/285x200" alt="Los Angeles">
+								</div>
+								<div class="flex-fill">
+									<img class="d-none d-sm-block" src="http://placehold.it/285x200" alt="Los Angeles">
+								</div>
+								<div class="flex-fill">
+									<img class="d-none d-md-block" src="http://placehold.it/285x200" alt="Los Angeles">
+								</div>
+							</div>
+							<div class="carousel-caption anim--carousel-caption--slide-in">
+								<div class="px-2 test-resp-font">
+									<h4>Album</h4>
+									<p style="margin:0;">Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Indicators -->
+					<ul class="carousel-indicators position-relative">
+						<li data-target="#demo" data-slide-to="0" class="active"></li>
+						<li data-target="#demo" data-slide-to="1"></li>
+						<li data-target="#demo" data-slide-to="2"></li>
+					</ul>
+									
+					<!-- Left and right controls -->
+					<a class="carousel-control-prev" href="#demo" data-slide="prev">
+						<span class="carousel-control-prev-icon"></span>
+					</a>
+					<a class="carousel-control-next" href="#demo" data-slide="next">
+						<span class="carousel-control-next-icon"></span>
+					</a>
+				</div>
             </div>
         </div>
         Main content
