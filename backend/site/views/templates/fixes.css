@@ -53,6 +53,13 @@ h1.header-text {
 
 .section-description {
     text-align: center;
+	
+}
+
+/* Service Section
+--------------------------------*/
+#services {
+	padding-bottom: 80px;
 }
 
 #services .service-item {
@@ -73,4 +80,57 @@ h1.header-text {
 #services .service-description {
     margin-left: 80px;
     line-height: 24px;
+}
+
+/* Subscribe Section
+--------------------------------*/
+#subscribe {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(http://placehold.it/600x260) fixed center center;
+  background-size: cover;
+  padding: 80px 0;
+}
+
+#subscribe .subscribe-title {
+	font-weight: 700;
+}
+
+#subscribe .subscribe-text {
+	
+}
+
+#subscribe .subscribe-btn-container {
+	text-align: center;
+	padding-top: 20px;
+}
+
+#subscribe .subscribe-btn {
+	text-transform: uppercase;
+	font-weight: 500;
+	font-size: 16px;
+	letter-spacing: 1px;
+	display: inline-block;
+	padding: 8px 20px;
+	border-radius: 2px;
+	margin: 10px;
+	border: 2px solid #fff;
+}
+
+/* Team Section
+--------------------------------*/
+#team {
+	padding: 80px;
+}
+
+#team .team-member {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+#team .team-pic {
+	margin-bottom: 15px;
+	height: 150px;
+}
+
+#team .team-social {
+	margin-top: 15px;
 }
