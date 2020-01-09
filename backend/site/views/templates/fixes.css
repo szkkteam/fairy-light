@@ -277,9 +277,10 @@ h1.header-text {
     padding: 10px 0;
 }
 
-#footer .footer-top .footer-links ul i{
-    padding-right: 8px;
-    color: #ddd;
+#footer .footer-top .footer-links ul li::before{
+    content: ">";
+	font-size: 16px;
+	padding-right: 5px;
 }
 
 #footer .footer-contact {
