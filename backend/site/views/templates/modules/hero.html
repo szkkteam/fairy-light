@@ -1,0 +1,36 @@
+{% macro hero_section(index_link, bg_img='http://placehold.it/1140x350', logo_img='http://placehold.it/100x100') %}
+    <section id="hero">
+        <div class="container">
+            <div class="row">
+                <div class="card" style="width:100%">
+                    <img class="card-img-top gradient-fade img-fluid" src="{{ bg_img }}" alt="Fairy Light" style="width:100%">
+                    <div class="card-img-overlay h-100 d-flex flex-column justify-content-end align-items-center pb-0">
+                        <div class="row no-gutters w-100 justify-content-center align-items-center mb-3">
+                            <div class="col-5">                            
+                                <hr class="header-separator my-md-2"/>
+                                <div class="text-center">
+                                    <h1 class="header-text resp-font">FAIRY</h1>
+                                </div>
+                                <hr class="header-separator my-md-2"/>
+                            </div>
+                            <div class="col-2">
+                                <div class="text-center">
+                                    <a href="{{ index_link }}">
+                                        <img class="img-fluid" src="{{ logo_img }}" alt="Fairy Light Logo">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <hr class="header-separator my-md-2"/>
+                                <div class="text-center">
+                                    <h1 class="header-text resp-font">LIGHT</h1>
+                                </div>
+                                <hr class="header-separator my-md-2"/>
+                            </div>
+                        </div>                    
+                    </div>
+                </div>        
+            </div>
+        </div>
+    </section>
+{%- endmacro %}
