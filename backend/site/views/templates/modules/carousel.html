@@ -1,0 +1,43 @@
+{% macro container(is_active=False) %}
+    <div class="carousel-item {{ 'active' if is_active }}">
+        <div class="d-flex flex-row flex-img-fix">							    
+            {{ caller() }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro item(img_link, is_reactive=False) %}
+    <div class="flex-fill">
+        <img class="{{ 'd-none d-md-block' if is_reactive }}" src="{{ img_link }}" alt="{{ img_link.rsplit('/')[-1].split('.')[0]}}">
+    </div>
+{% endmacro %}
+
+{% macro caption(title='', text='') %}
+    {% if title and text %}
+    <div class="carousel-caption anim--carousel-caption--slide-in">
+        <div class="px-2">
+            {% if title %}
+                <h4>{{ title }}</h4>
+            {% endif %}
+            {% if text %}
+                <p style="margin:0;">{{ text }}</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro item_4(img_link_array) %}				
+    {{ item(img_link_array[0]) }}
+    {{ item(img_link_array[1]) }}
+    {{ item(img_link_array[2], True) }}
+    {{ item(img_link_array[3], True) }}
+{% endmacro %}
+
+{% macro render_items(images, title, text, is_active) %}
+    {% call container( is_active ) %}
+        {{ item_4(images) }}
+        {{ caption(title, text) }}
+    {% endcall %}
+
+{% endmacro %}

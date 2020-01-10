@@ -1,0 +1,54 @@
+{% extends 'website/layout.html' %}
+{% from 'website/macros.html' import separator with context %}
+{% import 'modules/breadcrumb.html' as breadcrumb with context %}
+
+{% block custom_css %}
+    {{ super() }}
+    <link href="{{ site_static.url(filename='site/css/photos/style.css') }}" rel="stylesheet">
+
+{% endblock %}
+
+
+{% block header_nav_element_block %}
+    {{ super() }}
+    <li class="nav-item">
+        <a class="nav-link d-inline-block" href="#">
+            <span id="shopping-cart-items">0</span>
+            <i class="material-icons" style="padding:0 0 0 15px;font-size: 24px;">shopping_cart</i>
+        </a>
+    </li>    
+    {{ separator() }}
+{% endblock %}
+
+
+{% block main_block %}
+<section id="photonav">
+    <div class="container">
+        <div class="row no-gutters">
+            <div class="col-12 col-sm-11">
+                {% call breadcrumb.base() %}
+                    {{ breadcrumb.link('site.photos_index', 'Dog Photos') }}
+                    {{ breadcrumb.link('site.photos_index', 'Blackthorn 2019') }}
+                    {{ breadcrumb.link('site.photos_index', 'Dog #1') }}
+                {% endcall%}
+            </div>
+            <div class="col-12 col-sm-1">
+                <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#photonav-filter">Filter</button>
+            </div>					
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <hr class="header-separator"/>
+            </div>
+        </div>
+        <div id="photonav-filter" class="row collapse">
+            <div class="col-12">
+                <div style="height: 200px">
+                    I'm the filter - Placeholder
+                </div>					
+                <hr class="header-separator"/>
+            </div>
+        </div>
+    </div>
+</section>	
+{% endblock %}

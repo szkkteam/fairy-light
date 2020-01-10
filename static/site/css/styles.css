@@ -120,7 +120,8 @@ ul.nav-link-icon li:last-child i {
 
 #subscribe .subscribe-btn-container {
 	text-align: center;
-	padding-top: 20px;
+    padding-top: 20px;
+    cursor: pointer;
 }
 
 #subscribe .subscribe-btn {
@@ -133,6 +134,28 @@ ul.nav-link-icon li:last-child i {
 	border-radius: 2px;
 	margin: 10px;
 	border: 2px solid #fff;
+}
+
+#subscribe .modal-body input[type="email"] {
+    border: 0;
+    padding: 6px 8px;
+    width: 65%;
+}
+
+#subscribe .modal-body input[type="submit"] {
+    background-color: #18d26e;
+    border: 0;
+    width: 35%;
+    padding: 6px 0;
+    text-align: center;
+    color: #fff;
+    transition: 0.3s;
+    cursor: pointer;
+    float: right;
+}
+
+#subscribe .modal-body {
+    padding: 26px 1rem;
 }
 
 /* Team Section
@@ -333,80 +356,10 @@ ul.nav-link-icon li:last-child i {
     color: #fff;
     transition: 0.3s;
     cursor: pointer;
-    float: left;
+    float: right;
 }
 
 #footer .copyright {
     text-align: center;
     padding-top: 30px;
-}
-
-/* Photonav Section
---------------------------------*/
-#photonav {
-    margin-bottom: 80px;
-}
-
-#photonav .breadcrumb {
-    margin-bottom: 0;
-    background-color: inherit;
-}
-
-#photonav button[type="button"] {
-    width: 100%;
-    height: 100%;
-    border: 0px solid transparent;
-}
-
-/* Photos Section
---------------------------------*/
-#photos {
-    margin-bottom: 40px;
-}
-
-
-#photos .price-drop {
-    margin: 1em 0;
-}
-
-#photos .price-drop del {
-    color: rgba(199, 35, 35, 0.5);
-    text-decoration: none;
-    font-size: 15px;
-    position: relative;
-}
-
-#photos .price-drop del::before {
-      content: " ";
-      display: block;
-      width: 100%;
-      border-top: 2px solid rgba(255, 0, 0, 0.8);
-      height: 12px;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      transform: rotate(-7deg);
-}
-
-#photos .price-drop ins {
-    color: green;
-    font-weight: 400;
-    font-size: 18px;
-    text-decoration: none;
-}
-
-/* Page Navigation Section
---------------------------------*/
-
-#pagenav {
-    margin-bottom: 40px;
-}
-
-#pagenav .pagenav-links {
-    margin: 0 auto;
-    width: 50%;
-}
-
-#pagenav .pagination {
-    justify-content: center;
 }

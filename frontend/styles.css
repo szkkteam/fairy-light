@@ -76,6 +76,15 @@ ul.nav-link-icon li:last-child i {
     margin: 16px 0;
 }
 
+/* Hero Section
+--------------------------------*/
+#hero .header-title {
+    letter-spacing: 1px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+
 /* Service Section
 --------------------------------*/
 #services {
@@ -120,7 +129,8 @@ ul.nav-link-icon li:last-child i {
 
 #subscribe .subscribe-btn-container {
 	text-align: center;
-	padding-top: 20px;
+    padding-top: 20px;
+    cursor: pointer;
 }
 
 #subscribe .subscribe-btn {
@@ -133,6 +143,28 @@ ul.nav-link-icon li:last-child i {
 	border-radius: 2px;
 	margin: 10px;
 	border: 2px solid #fff;
+}
+
+#subscribe .modal-body input[type="email"] {
+    border: 0;
+    padding: 6px 8px;
+    width: 65%;
+}
+
+#subscribe .modal-body input[type="submit"] {
+    background-color: #18d26e;
+    border: 0;
+    width: 35%;
+    padding: 6px 0;
+    text-align: center;
+    color: #fff;
+    transition: 0.3s;
+    cursor: pointer;
+    float: right;
+}
+
+#subscribe .modal-body {
+    padding: 26px 1rem;
 }
 
 /* Team Section
@@ -333,7 +365,7 @@ ul.nav-link-icon li:last-child i {
     color: #fff;
     transition: 0.3s;
     cursor: pointer;
-    float: left;
+    float: right;
 }
 
 #footer .copyright {

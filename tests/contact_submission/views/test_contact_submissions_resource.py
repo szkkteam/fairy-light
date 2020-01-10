@@ -50,3 +50,4 @@ def test_contact_submission_validation_message_Wrong(api_client):
     assert r.status_code == 400
     print(r.errors)
     assert 'message' in r.json['errors'], 'email should be required'
+rrors'], 'email should be required'

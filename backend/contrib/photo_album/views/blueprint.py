@@ -7,4 +7,4 @@ from flask import Blueprint
 
 # Internal package imports
 
-photo_album = Blueprint('photo_album', __name__, template_folder='templates')
+photo_album = Blueprint('photo_album', __name__, template_folder='templates', url_prefix='/photos')

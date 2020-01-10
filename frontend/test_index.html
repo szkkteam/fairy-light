@@ -65,7 +65,12 @@
                                 </div>
                                 <hr class="header-separator my-md-2"/>
                             </div>
-                        </div>                    
+                        </div>     
+                        <div class="row">
+                            <div class="col-12">
+                                <h4 class="header-title">Event Photography</h4>
+                            </div>                            
+                        </div> 
                     </div>
                 </div>        
             </div>
@@ -324,7 +329,29 @@
                         </p>
                     </div>
                     <div class="col-md-4 subscribe-btn-container">
-                        <a class="subscribe-btn" href="#">Subscribe Now</a>						
+                        <a class="subscribe-btn" data-toggle="modal" data-target="#subscribe-modal">Subscribe Now</a>						
+                    </div>
+                    <div class="modal fade" id="subscribe-modal">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header text-center">
+                                    <h4 class="modal-title w-100">
+                                        Subscribe Now!
+                                    </h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>                                                                 
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action method="post">
+                                        <input type="email" name="email">
+                                        <input type="submit" value="Subscribe">
+                                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                        </div>
                     </div>
                 </div>
             </div>
@@ -504,10 +531,14 @@
                             Country
                             <br>
                             <strong>Phone:</strong>
-                            +36 11 1111 111
+                            <a href="tel:0036111111111">
+                                +36 11 1111 111
+                            </a>
                             <br>
                             <strong>Email:</strong>
-                            example@test.com
+                            <a href="mailto:example@test.com">
+                                example@test.com
+                            </a>
                             <br>
                         </p>
                         <div class="social-links">
@@ -532,6 +563,7 @@
                         <form action method="post">
                             <input type="email" name="email">
                             <input type="submit" value="Subscribe">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                         </form>
                     </div>
                 </div>

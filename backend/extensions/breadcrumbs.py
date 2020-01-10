@@ -3,6 +3,8 @@
 
 # Common Python library imports
 # Pip package imports
+from flask_breadcrumbs import Breadcrumbs
+
 # Internal package imports
-from .blueprint import site
-from .index import index
+
+breadcrumbs = Breadcrumbs()

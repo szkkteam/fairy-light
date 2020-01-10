@@ -1,0 +1,17 @@
+{% macro member(picture, name, role, facebook_link, instagram_link) %}
+    <div class="team-member">
+        <div class="team-pic">
+            <img class="rounded-circle" src="{{picture}}">
+        </div>
+        <h4>{{name}}</h4>
+        <span>{{role}}</span>
+        <div class="team-social">
+            <a href="{{facebook_link}}">
+                <i class="fa fa-instagram"></i>
+            </a>
+            <a href="{{instagram_link}}">
+                <i class="fa fa-facebook"></i>
+            </a>
+        </div>
+    </div>
+{% endmacro %}

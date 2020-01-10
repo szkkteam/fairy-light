@@ -62,6 +62,7 @@ EXTENSIONS = [
     'backend.extensions.security:security',     # must come after celery and mail
     'backend.extensions.debug:toolbar',
     'backend.extensions.mediamanager:storage',
+    'backend.extensions.breadcrumbs:breadcrumbs',
 ]
 
 # list of extensions to register after the bundles
@@ -138,6 +139,11 @@ class BaseConfig(object):
         os.environ.get('FLASK_MAIL_DEFAULT_SENDER_EMAIL',
                        f"noreply@{os.environ.get('FLASK_DOMAIN', 'localhost')}")
     )
+
+    ##########################################################################
+    # CSRF token lifetime                                                    #
+    ##########################################################################
+    WTF_CSRF_TIME_LIMIT = None
 
     ##########################################################################
     # security                                                               #

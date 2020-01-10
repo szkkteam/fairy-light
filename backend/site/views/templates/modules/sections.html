@@ -1,0 +1,13 @@
+{% macro header(title, text) %}
+    <div class="row">
+        <div class="col-12">
+            <h1 class="section-title">{{title}}</h1>
+            <div class="section-title-divider">
+                <hr/>
+            </div>
+            <p class="section-description">
+                {{text}}
+            </p>
+        </div>
+    </div>
+{% endmacro %}
