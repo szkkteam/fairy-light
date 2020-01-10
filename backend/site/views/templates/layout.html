@@ -1,0 +1,36 @@
+{% extends 'website/base.html' %}
+{% import 'website/static.html' as site_static with context %}
+{% import 'modules/hero.html' as hero_img with context %}
+{% import 'modules/navbar.html' as navigation with context %}
+{% from 'macros.html' import nav_link with context %}
+
+{% block head_css %}
+    {{ super() }}
+{% endblock %}
+
+{% block page_body %}
+	{% hero_block %}
+		{% if url_for(request.endpoint) == '/index' %}
+			{{ hero_img.hero_section( url_for('site.index') ) }}
+		{% endif %}    
+	{% endblock %}	
+	{% header_block %}
+		{% call navigation() %}
+			{{ nav_link('#'), 'PORTFOLIO' }}
+			{{ nav_link('#'), 'SERVICES' }}
+			{{ nav_link('#'), 'ABOUT' }}
+			{{ nav_link('#'), 'CONTACT' }}
+			{% header_nav_element_block %}
+					
+			{% endblock %}
+		{% endcall %}
+	{% endblock %}    
+	
+	{% main_block %}
+	
+	{% endblock %}    
+	
+	{% footer_block %}
+	
+	{% endblock %}    	
+{% endblock %}

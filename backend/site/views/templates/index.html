@@ -1,14 +1,1 @@
-{% extends 'website/base.html' %}
-{% import 'website/static.html' as site_static with context %}
-{% import 'modules/hero.html' as hero_img with context %}
-
-{% block head_css %}
-    {{ super() }}
-{% endblock %}
-
-{% block page_body %}
-    {% if url_for(request.endpoint) == '/index' %}
-        {{ hero_img.hero_section( url_for('site.index') ) }}
-    {% endif %}    
-    
-{% endblock %}
+{% extends 'layout.html' %}

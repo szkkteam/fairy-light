@@ -17,6 +17,10 @@ h1.header-text {
     padding: 8px;
 }
 
+ul.nav-link-icon li:last-child i {
+	display: none;
+}
+
 .carousel-caption {
     background: rgb(0, 0, 0); /* Fallback color */
     background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */

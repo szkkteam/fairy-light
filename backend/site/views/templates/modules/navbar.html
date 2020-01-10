@@ -1,0 +1,12 @@
+{% macro navbar() %}
+    <div class="navbar navbar-expand-md bg-dark navbar-dark sticky-top container">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav nav-justified w-100 nav-link-icon anim--top-bottom-borders--out">
+				{{ caller() }}
+            </ul>
+        </div>  
+    </div>
+{%- endmacro %}
