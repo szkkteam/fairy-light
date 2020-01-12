@@ -65,3 +65,10 @@
   {% set value = model[column] %}
   {{ value | striptags }}
 {% endmacro %}
+
+{% macro price(model, column) %}
+  {% set value = model[column] %}
+  {% if  value %}
+    <span>€{{value|round(2)}}</span>
+  {% endif %}
+{% endmacro %}

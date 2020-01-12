@@ -31,6 +31,9 @@ MANIFEST
 *.manifest
 *.spec
 
+# Flask static folder for uploaded images
+static/photo_album/
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt

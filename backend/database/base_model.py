@@ -65,6 +65,14 @@ class BaseModel(db.Model):
         return cls.query.filter_by(**kwargs).first()
 
     @classmethod
+    def get_all_by(cls, **kwargs):
+        """Get all model by keyword arguments.
+
+        :param kwargs: The model attribute values to filter by.
+        """
+        return cls.query.filter_by(**kwargs).all()
+
+    @classmethod
     def get_or_create(cls, commit=False, **kwargs):
         """Get or create model by keyword arguments.
 

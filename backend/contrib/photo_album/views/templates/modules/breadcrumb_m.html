@@ -6,10 +6,10 @@
 </nav>
 {% endmacro %}
 
-{% macro link(endpoint, name) %}
-    {% if request.endpoint.endswith(endpoint) %}
+{% macro link(endpoint, name, is_active=False) %}
+    {% if not is_active %}
         <li class="breadcrumb-item">
-            <a href="{{url_for(endpoint)}}">{{name}}</a>
+            <a href="{{endpoint}}">{{name}}</a>
         </li>
     {% else %}
         <li class="breadcrumb-item active" aria-current="page">{{name}}</li>

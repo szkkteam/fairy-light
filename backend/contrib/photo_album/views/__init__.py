@@ -5,4 +5,5 @@
 # Pip package imports
 # Internal package imports
 from .blueprint import photo_album
-from .photos import index
+from .listings import categories, events, albums, photos
+

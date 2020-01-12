@@ -53,16 +53,17 @@ class ImageAdmin(ModelAdmin):
     can_create = True
     can_edit = True
 
-    column_list = ('title', 'preview', 'album', 'created_at', )
+    column_list = ('title', 'preview', 'price', 'album', 'created_at', )
 
     column_labels = {'created_at': 'Date'}
     column_default_sort = ('created_at', True)
 
     column_details_list = ('title', 'album', 'created_at', 'updated_at')
 
-    form_columns = ('album', 'path')
+    form_columns = ('album', 'price', 'path')
 
     column_formatters = {
+        'price': macro('column_formatters.price'),
         'preview': lambda view, context, model, name: model.get_thumbnail(),
     }
 

@@ -27,6 +27,10 @@
     margin: 1em 0;
 }
 
+#photos .price-hidden {
+    visibility: hidden !important;
+}
+
 #photos .price-drop del {
     color: rgba(199, 35, 35, 0.5);
     text-decoration: none;

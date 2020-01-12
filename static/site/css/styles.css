@@ -17,8 +17,8 @@ h1.header-text {
     padding: 8px;
 }
 
-ul.nav-link-icon li:last-child i {
-	display: none;
+ul.nav-link-icon li:last-child {
+	display: none !important;
 }
 
 .carousel-caption {

@@ -13,8 +13,10 @@ from backend.database import (
     Column,
     Model,
     String,
+    Float,
     Boolean,
-    relationship
+    relationship,
+    foreign_key
 )
 
 from .image import Image
@@ -24,8 +26,12 @@ from .. import photo_album_storage
 class Album(Model):
     title = Column(String(64))
     is_public = Column(Boolean(name='is_public'), default=True)
+    price = Column(Float, nullable=True)
 
     images = relationship('Image', back_populates='album', cascade="all, delete, delete-orphan")
+
+    event_id = foreign_key('Event', nullable=True)
+    event = relationship('Event', back_populates='albums')
 
     __repr_props__ = ('id', 'title')
 

@@ -138,10 +138,11 @@
         });
     }
 
-    prepareData = function (imgName, imgFile, filename, albumObj) {
+    prepareData = function (imgName, imgFile, filename, albumObj, priceObj) {
       var formData = new FormData();
 
       formData.append(albumObj.name, albumObj.value);
+      formData.append(priceObj.name, priceObj.value);
       formData.append('csrf_token', getCookie("csrf_token"));
       formData.append(imgName, imgFile, filename);
       //formData.append(button.name, button.value);
@@ -186,6 +187,7 @@
         e.preventDefault();
         const action = this.action;
         const albumObj = $('select[name=album]')[0];
+        const priceObj = $('input[name=price]')[0];
         const imgElement = $('input[type=file]')[0];
         const imgName = imgElement.name;
         
@@ -199,7 +201,7 @@
           var progressElement = $(this).find('.progress-bar');
           $(this).find(".progress").removeAttr('hidden');
 
-          var formData = prepareData(imgName, imgElement.files[index], name, albumObj);
+          var formData = prepareData(imgName, imgElement.files[index], name, albumObj, priceObj);
 
           var request = sendForm(action, formData, progressElement);
           request.then(function(response) {

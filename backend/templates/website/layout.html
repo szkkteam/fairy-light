@@ -15,14 +15,14 @@
 {% block page_body %}
 	{{ super() }}
 	{% block hero_block %}
-		{%- if url_for(request.endpoint) == '/index' -%}
+		{%- if request.endpoint == 'site.index' -%}
 			{{ hero_img.hero_section( url_for('site.index') ) }}
 		{%- endif -%}    
 	{% endblock %}	
 	{% block header_block %}
 		{% call navigation.navbar() %}
 			{{ nav_link('site.index', 'Home'|upper) }}
-			{{ nav_link('photo_album.index', 'Photos'|upper) }}
+			{{ nav_link('photo_album.categories', 'Photos'|upper) }}
 			{{ nav_link('site.index', 'Services'|upper) }}
 			{{ nav_link('site.index', 'About'|upper) }}
 			{{ nav_link('site.index', 'Contact'|upper) }}

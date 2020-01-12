@@ -1,6 +1,7 @@
 {% extends 'website/layout.html' %}
 {% from 'website/macros.html' import separator with context %}
-{% import 'modules/breadcrumb.html' as breadcrumb with context %}
+{% import 'modules/breadcrumb_m.html' as breadcrumb_m with context %}
+{% import 'modules/cards.html' as card with context %}
 
 {% block custom_css %}
     {{ super() }}
@@ -26,11 +27,21 @@
     <div class="container">
         <div class="row no-gutters">
             <div class="col-12 col-sm-11">
-                {% call breadcrumb.base() %}
-                    {{ breadcrumb.link('site.photos_index', 'Dog Photos') }}
-                    {{ breadcrumb.link('site.photos_index', 'Blackthorn 2019') }}
-                    {{ breadcrumb.link('site.photos_index', 'Dog #1') }}
-                {% endcall%}
+                {% block breadcrumb_block %}
+                    {% call breadcrumb_m.base() %}
+                        {% for breadcrumb in breadcrumbs %}
+                            {% if breadcrumb.url != '#' %}
+                                {% if not loop.last %}
+                                    {{ breadcrumb_m.link(breadcrumb.url, breadcrumb.text) }}
+                                {% else %}
+                                    {{ breadcrumb_m.link(breadcrumb.url, breadcrumb.text, True) }}
+                                {% endif %}
+
+
+                            {% endif %}
+                        {% endfor %}
+                    {% endcall%}
+                {% endblock %}
             </div>
             <div class="col-12 col-sm-1">
                 <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#photonav-filter">Filter</button>
@@ -50,5 +61,14 @@
             </div>
         </div>
     </div>
-</section>	
+</section>
+<section id="photos">
+    <div class="container">
+        <div class="row">       
+            {% block photos_section %}     
+
+            {% endblock %}
+        </div>
+    </div>		
+</section>
 {% endblock %}

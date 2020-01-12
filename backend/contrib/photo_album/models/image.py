@@ -13,6 +13,7 @@ from backend.database import (
     Column,
     Model,
     String,
+    Float,
     relationship,
     ImageColumn,
     foreign_key
@@ -24,6 +25,7 @@ class Image(Model):
     #title = Column(String(64), unique=True, nullable=False)
     #photo = ImageColumn(thumbnail_size=(250, 250, True), size=(1024, 1024, True))
     path = Column(String(128), nullable=True)
+    price = Column(Float, nullable=True)
     #slug = Column(String(64))
 
     album_id = foreign_key('Album', nullable=True)
@@ -41,12 +43,29 @@ class Image(Model):
     def slug(self):
         return utils.slugify(self.title)
 
+    def get_thumbnail_path(self):
+        if not self.path:
+            return ''
+        return photo_album_storage().url(photo_album_storage().generate_thumbnail_name(self.path))
+
     def get_thumbnail(self):
         if not self.path:
             return ''
 
         return Markup(
-            '<img src="%s">' % photo_album_storage().url(photo_album_storage().generate_thumbnail_name(self.path)))
+            '<img src="%s">' % self.get_thumbnail_path())
+
+    def get_image_path(self):
+        if not self.path:
+            return ''
+        return photo_album_storage().url(self.path)
+
+    def get_image_markup(self):
+        if not self.path:
+            return ''
+
+        return Markup(
+            '<img src="%s">' % self.get_image_path())
 
 
 @listens_for(Image, 'after_delete')
