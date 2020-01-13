@@ -15,6 +15,7 @@ flask-sqlalchemy
 flask-debugtoolbar
 flask-breadcrumbs
 
+sqlalchemy-utils
 loguru
 appdirs
 bcrypt

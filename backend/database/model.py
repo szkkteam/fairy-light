@@ -3,6 +3,8 @@
 
 # Common Python library imports
 # Pip package imports
+from sqlalchemy import Index
+
 # Internal package imports
 from .base_model import BaseModel
 from .mixins import PrimaryKeyMixin, TimestampMixin
