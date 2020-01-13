@@ -36,7 +36,62 @@
 		body {
 			height: 1500px;
 		}
+		
+		#photos .card {
+			border: 1px solid rgba(255,255,255, 0.125);
+		}
+		
+		#photos .card-body {
+			/* padding: 0; */
+		}
+		
+		.like {
+			font-size: 1.5rem;
+		}
 
+		#photos .card-back {
+			position: relative;
+		}
+
+		#photos .card-back img {
+			/* opacity: 0.6; */
+		}
+		
+		#photos .card-flip > div {
+		  backface-visibility: hidden;
+		  transition: transform 300ms;
+		  transition-timing-function: linear;
+		  width: 100%;
+		  height: 100%;
+		  margin: 0;
+		  display: flex;
+		}
+
+		#photos .card-front {
+		  transform: rotateY(0deg);
+		}
+
+		#photos .card-back {
+		  transform: rotateY(180deg);
+		  position: absolute;
+		  top: 0;
+		}
+
+		#photos .card-flip:hover .card-front {
+		  transform: rotateY(-180deg);
+		}
+		  
+		#photos .card-flip:hover .card-back {
+		  transform: rotateY(0deg);
+		}
+		
+		#photos .photo-caption {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			top: 0px;
+			background-color: rgba(0,0,0, 0.7);
+		}
 
     </style>
 </head>
@@ -117,49 +172,61 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-6 col-sm-3">
-						<div class="card">
-							<div class="photos-photo">
-								<a href="#">
-									<img class="card-img-top" src="http://placehold.it/285x200">
-								</a>
+						<div class="card card-flip">
+							<div class="card-front text-white bg-dark">
+								<div class="card-body text-center">
+									<div class="photos-photo">
+										<a href="#">
+											<img class="card-img-top" src="http://placehold.it/285x200">
+										</a>
+									</div>	
+									<h4 class="photos-title">Album</h4>
+								</div>	
 							</div>
-							<div class="card-body text-center">
-								<h4 class="photos-title">Album</h4>
-								<div class="photos-price price-drop">
-									<del>
-										<span class="amount">€35,00</span>
-									</del>
-									<ins>
-										<span class="amount pl-md-2">€32,50</span>
-									</ins>
-								</div>								
-								<a href="#" class="btn btn-primary photos-buy-btn">										
-									Add to cart
-								</a>
-							</div>							
+							
+							<div class="card-back bg-dark">
+								<div class="card-body text-center">
+									<div class="photos-photo photo-background">
+										<a href="#">
+											<img class="card-img-top" src="http://placehold.it/285x200">
+										</a>
+									</div>	
+									<div class="photo-caption">
+										<div class="photos-price price-drop">
+											<del>
+												<span class="amount">€35,00</span>
+											</del>
+											<ins>
+												<span class="amount pl-md-2">€32,50</span>
+											</ins>
+										</div>								
+										<a href="#" class="btn btn-primary photos-buy-btn">										
+											Add to cart
+										</a>
+									</div>
+									<h4 class="photos-title">Album</h4>
+								</div>	
+							</div>										
 						</div>
 					</div>
 					<div class="col-6 col-md-3">
 						<div class="card">
-							<div class="photos-photo">
-								<a href="#">
-									<img class="card-img-top" src="http://placehold.it/285x200">
+							<img class="card-img" src="http://placehold.it/285x200">
+							<div class="card-img-overlay d-flex justify-content-end">
+								<a href="#" class="card-link text-danger like">
+									<i class="fas fa-heart"></i>
 								</a>
 							</div>
-							<div class="card-body text-center">
-								<h4 class="photos-title">Album</h4>
-								<div class="photos-price price-drop">
-									<del>
-										<span class="amount">€35,00</span>
-									</del>
-									<ins>
-										<span class="amount pl-md-2">€32,50</span>
-									</ins>
-								</div>								
-								<a href="#" class="btn btn-primary photos-buy-btn">										
-									Add to cart
-								</a>
-							</div>							
+							<div class="card-body">
+								<h4 class="card-title">Album</h4>
+								<h6 class="card-subtitle mb-2 text-muted">Style: VA33TXRJ5</h6>
+								<p class="card-text">...</p>								
+							</div>
+							<div class="buy d-flex justify-content-between align-items-center">
+							  <div class="price text-success"><h5 class="mt-4">$125</h5></div>
+							   <a href="#" class="btn btn-danger mt-3"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+							</div>
+						  </div>																	
 						</div>
 					</div>
 					<div class="col-6 col-md-3">
