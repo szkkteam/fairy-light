@@ -8,3 +8,4 @@ from .album import Album
 from .image import Image
 from .event import Event
 from .category import Category
+from .node import Node

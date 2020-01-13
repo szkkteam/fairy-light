@@ -7,8 +7,9 @@ import os
 # Pip package imports
 from sqlalchemy.orm import relationship, remote, foreign
 from sqlalchemy.event import listens_for
+from sqlalchemy import func
 from sqlalchemy import Index, Sequence
-from sqlalchemy_utils import LtreeType
+from sqlalchemy_utils import LtreeType, Ltree
 from jinja2 import Markup
 
 # Internal package imports
@@ -50,7 +51,7 @@ class Node(Model):
         self.path = ltree_id if parent is None else parent.path + ltree_id
 
     __table_args__ = (
-        Index('ix_nodes_path', path, postgresql_using="gist"))
+        Index('ix_nodes_path', path, postgresql_using="gist")),
 
     __repr_props__ = ('id', 'path')
 

@@ -134,6 +134,7 @@ def register_blueprints(app):
     # register blueprints
     for bundle in app.bundles:
         for blueprint in bundle.blueprints:
+            print("Blueprint: ", blueprint.name)
             # rstrip '/' off url_prefix because views should be declaring their
             # routes beginning with '/', and if url_prefix ends with '/', routes
             # will end up looking like '/prefix//endpoint', which is no good
