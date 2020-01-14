@@ -14,8 +14,6 @@ from flask_admin.base import expose
 from flask_admin.helpers import get_redirect_target
 from flask_admin.babel import gettext
 
-from flask_breadcrumbs import register_breadcrumb, current_breadcrumbs
-
 # Internal package imports
 from backend.contrib.admin import ModelAdmin, macro
 from backend.contrib.admin.views import admin
@@ -72,11 +70,65 @@ class NodeAdmin(ModelAdmin):
         'path': MediaManagerImageUploadField('Image(s)', storage=photo_album_storage()),
     }
 
-    @expose('/')
-    @register_breadcrumb(admin, '.', 'Home')
-    def index_view(self):
-        return super(NodeAdmin, self).index_view()
+    # Database-related API
+    def get_query(self):
+        """
+            Return a query for the model type.
+            This method can be used to set a "persistent filter" on an index_view.
+            Example::
+                class MyView(ModelView):
+                    def get_query(self):
+                        return super(MyView, self).get_query().filter(User.username == current_user.username)
+            If you override this method, don't forget to also override `get_count_query`, for displaying the correct
+            item count in the list view, and `get_one`, which is used when retrieving records for the edit view.
+        """
+        # Get the root Node Id from the request arg.
+        root_id = request.args.get('root', None)
+        if root_id is None:
+            return self.model.get_root().all()
+        return self.model.get_immediate_childrens(root_id).all()
 
+    def get_count_query(self):
+        """
+            Return a the count query for the model type
+            A ``query(self.model).count()`` approach produces an excessive
+            subquery, so ``query(func.count('*'))`` should be used instead.
+            See commit ``#45a2723`` for details.
+        """
+        # Get the root Node Id from the request arg.
+        root_id = request.args.get('root', None)
+        return self.session.query(func.count('*')).select_from(self.model.get_immediate_childrens(root_id))
+
+    def get_one(self, id):
+        """
+            Return a single model by its id.
+            Example::
+                def get_one(self, id):
+                    query = self.get_query()
+                    return query.filter(self.model.id == id).one()
+            Also see `get_query` for how to filter the list view.
+            :param id:
+                Model id
+        """
+        # Get the root Node Id from the request arg.
+        root_id = request.args.get('root', None)
+        return self.model.get(root_id)
+
+    def _get_breadcrumbs(self, root_id):
+        breadcrumbs = []
+        # Explicitly add the main root
+        breadcrumbs.append((url_for('admin.index_view', root_id=None), 'Home'))
+        if root_id is not None:
+            ascendent_list = self.model.get_all_parents(root_id).all()
+            for ascendent in ascendent_list:
+                breadcrumbs.append((url_for('admin.index_view', root_id=ascendent.id), ascendent.title))
+        return breadcrumbs
+
+    @expose('/')
+    def index_view(self):
+        root_id = request.args.get('root', None)
+        elf._template_args['breadcrumbs'] = self._get_breadcrumbs(root_id)
+        return super(NodeAdmin, self).index_view()
 
     @expose('/new/', methods=('GET', 'POST'))
     def create_view(self):
