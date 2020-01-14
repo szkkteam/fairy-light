@@ -1,3 +1,4 @@
+"""
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -14,32 +15,21 @@ from flask_admin.base import expose
 from flask_admin.helpers import get_redirect_target
 from flask_admin.babel import gettext
 
+from sqlalchemy import func
+
 # Internal package imports
 from backend.contrib.admin import ModelAdmin, macro
 from backend.contrib.admin.views import admin
 from backend.contrib.admin.field import MediaManagerImageUploadField
 from backend.utils import string_to_bool
 
-from ..models import Node
+from ..models import Folder
 from .. import photo_album_storage
 
 
-from flask_admin.form import Select2Widget
-from flask_admin.contrib.sqla.fields import QuerySelectField
-#from flask_admin.fields import QuerySelectField
 
-
-"""
-'album': QuerySelectField(
-    label='Album',
-    query_factory=lambda: Album.all(),
-    widget=Select2Widget
-)
-"""
-
-
-class NodeAdmin(ModelAdmin):
-    model = Node
+class FolderAdmin(ModelAdmin):
+    model = Folder
 
     menu_icon_value = 'glyphicon-picture'
 
@@ -72,16 +62,7 @@ class NodeAdmin(ModelAdmin):
 
     # Database-related API
     def get_query(self):
-        """
-            Return a query for the model type.
-            This method can be used to set a "persistent filter" on an index_view.
-            Example::
-                class MyView(ModelView):
-                    def get_query(self):
-                        return super(MyView, self).get_query().filter(User.username == current_user.username)
-            If you override this method, don't forget to also override `get_count_query`, for displaying the correct
-            item count in the list view, and `get_one`, which is used when retrieving records for the edit view.
-        """
+
         # Get the root Node Id from the request arg.
         root_id = request.args.get('root', None)
         if root_id is None:
@@ -89,30 +70,14 @@ class NodeAdmin(ModelAdmin):
         return self.model.get_immediate_childrens(root_id).all()
 
     def get_count_query(self):
-        """
-            Return a the count query for the model type
-            A ``query(self.model).count()`` approach produces an excessive
-            subquery, so ``query(func.count('*'))`` should be used instead.
-            See commit ``#45a2723`` for details.
-        """
         # Get the root Node Id from the request arg.
         root_id = request.args.get('root', None)
         return self.session.query(func.count('*')).select_from(self.model.get_immediate_childrens(root_id))
 
     def get_one(self, id):
-        """
-            Return a single model by its id.
-            Example::
-                def get_one(self, id):
-                    query = self.get_query()
-                    return query.filter(self.model.id == id).one()
-            Also see `get_query` for how to filter the list view.
-            :param id:
-                Model id
-        """
         # Get the root Node Id from the request arg.
-        root_id = request.args.get('root', None)
-        return self.model.get(root_id)
+        root_id = request.args.get('root', id)
+        return self.model.get(id)
 
     def _get_breadcrumbs(self, root_id):
         breadcrumbs = []
@@ -127,7 +92,7 @@ class NodeAdmin(ModelAdmin):
     @expose('/')
     def index_view(self):
         root_id = request.args.get('root', None)
-        elf._template_args['breadcrumbs'] = self._get_breadcrumbs(root_id)
+        self._template_args['breadcrumbs'] = self._get_breadcrumbs(root_id)
         return super(NodeAdmin, self).index_view()
 
     @expose('/new/', methods=('GET', 'POST'))
@@ -135,9 +100,7 @@ class NodeAdmin(ModelAdmin):
         from flask_admin.form import BaseForm, FormOpts, rules
         from flask_admin.helpers import is_form_submitted
         from flask import jsonify
-        """
-            Create model view with JSON response
-        """
+
         return_url = get_redirect_target() or self.get_url('.index_view')
         print("Return URL: ", return_url, flush=True)
 
@@ -174,3 +137,4 @@ class NodeAdmin(ModelAdmin):
                            form=form,
                            form_opts=form_opts,
                            return_url=return_url)
+"""

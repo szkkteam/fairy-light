@@ -16,7 +16,7 @@ from backend.database import (
     String,
     Float,
     relationship,
-    ImageColumn,
+    Boolean,
     foreign_key
 )
 from backend.extensions import db
@@ -25,8 +25,14 @@ from .. import photo_album_storage
 
 
 
-class Node(TreeModel):
+class PhotoNode(TreeModel):
     title = Column(String, nullable=True)
+
+    # Determine if Node can be only a leaf or it could contain other nodes
+    folder = Column(Boolean(name='folder'), default=False)
+
+    # Determine if Node is visible by users
+    public = Column(Boolean(name='public'), default=True)
 
     # Each node could have a price or an image.
     image = Column(String(128), nullable=True)

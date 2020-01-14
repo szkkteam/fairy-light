@@ -1,3 +1,4 @@
+"""
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -34,15 +35,6 @@ from flask_admin.contrib.sqla.fields import QuerySelectField
 #from flask_admin.fields import QuerySelectField
 
 
-"""
-'album': QuerySelectField(
-    label='Album',
-    query_factory=lambda: Album.all(),
-    widget=Select2Widget
-)
-"""
-
-
 class ImageAdmin(ModelAdmin):
     model = Image
 
@@ -77,9 +69,6 @@ class ImageAdmin(ModelAdmin):
         from flask_admin.form import BaseForm, FormOpts, rules
         from flask_admin.helpers import is_form_submitted
         from flask import jsonify
-        """
-            Create model view with JSON response
-        """
         return_url = get_redirect_target() or self.get_url('.index_view')
         print("Return URL: ", return_url, flush=True)
 
@@ -116,3 +105,4 @@ class ImageAdmin(ModelAdmin):
                            form=form,
                            form_opts=form_opts,
                            return_url=return_url)
+"""

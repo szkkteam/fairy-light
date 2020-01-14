@@ -1,17 +1,18 @@
-"""Test
+"""Node mixin added and PhotoNode reworked
 
-Revision ID: 00e8ab87692f
+Revision ID: 34e80cdcadd0
 Revises: 
-Create Date: 2019-12-08 17:48:48.274583
+Create Date: 2020-01-14 18:55:12.181356
 
 """
 from alembic import op
 import sqlalchemy as sa
+import sqlalchemy_utils
 import backend
 
 
 # revision identifiers, used by Alembic.
-revision = '00e8ab87692f'
+revision = '34e80cdcadd0'
 down_revision = None
 branch_labels = ('default',)
 depends_on = None
@@ -38,6 +39,18 @@ def upgrade():
     sa.PrimaryKeyConstraint('id', name=op.f('pk_newsletter_subscribe'))
     )
     op.create_index(op.f('ix_newsletter_subscribe_email'), 'newsletter_subscribe', ['email'], unique=True)
+    op.create_table('photo_node',
+    sa.Column('id', sa.BigInteger().with_variant(sa.INTEGER(), 'sqlite'), nullable=False),
+    sa.Column('path', sqlalchemy_utils.types.ltree.LtreeType(), nullable=False),
+    sa.Column('created_at', backend.database.types.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', backend.database.types.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
+    sa.Column('title', sa.String(), nullable=True),
+    sa.Column('folder', sa.Boolean(name='folder'), nullable=False),
+    sa.Column('public', sa.Boolean(name='public'), nullable=False),
+    sa.Column('image', sa.String(length=128), nullable=True),
+    sa.Column('price', sa.Float(), nullable=True),
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_photo_node'))
+    )
     op.create_table('role',
     sa.Column('id', sa.BigInteger().with_variant(sa.INTEGER(), 'sqlite'), nullable=False),
     sa.Column('created_at', backend.database.types.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
@@ -80,6 +93,7 @@ def downgrade():
     op.drop_table('user')
     op.drop_index(op.f('ix_role_name'), table_name='role')
     op.drop_table('role')
+    op.drop_table('photo_node')
     op.drop_index(op.f('ix_newsletter_subscribe_email'), table_name='newsletter_subscribe')
     op.drop_table('newsletter_subscribe')
     op.drop_index(op.f('ix_contact_submission_email'), table_name='contact_submission')

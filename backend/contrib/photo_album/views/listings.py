@@ -1,3 +1,4 @@
+"""
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -56,7 +57,6 @@ def view_album(*args, **kwargs):
 @photo_album.route('/categories')
 @register_breadcrumb(photo_album, '.', 'Home' )
 def categories():
-    """ Listing all the available categories with cover photo and num of images. """
     try:
         photos_model = get_prepare_models(lambda : Category.get_all_by(is_public=True),
                                           get_url=lambda model: url_for('photo_album.events', category=model.id))
@@ -70,7 +70,6 @@ def categories():
 @photo_album.route('/categories/<int:category>/events')
 @register_breadcrumb(photo_album, '.category', '', dynamic_list_constructor=view_category)
 def events(category):
-    """ Listing all the available events for that specific category with cover photo and num of images. """
     try:
         is_public = Category.get(category).is_public
         if not is_public:
@@ -88,9 +87,6 @@ def events(category):
 @photo_album.route('/categories/<int:category>/events/<int:event>/albums')
 @register_breadcrumb(photo_album, '.category.event', '', dynamic_list_constructor=view_event)
 def albums(category, event):
-    """ Listing all available albums for that specific event with cover photo and num of images.
-        If only 1 album exists redirect to that album immidiatly.
-    """
     try:
         is_public = Event.get(event).is_public
         if not is_public:
@@ -111,7 +107,6 @@ def albums(category, event):
 @photo_album.route('/categories/<int:category>/events/<int:event>/albums/<int:album>/photos')
 @register_breadcrumb(photo_album, '.category.event.album', '', dynamic_list_constructor=view_album)
 def photos(category, event, album):
-    """ Listing all the available photos in that individual """
     try:
         is_public = Album.get(album).is_public
         if not is_public:
@@ -125,3 +120,4 @@ def photos(category, event, album):
     except Exception as e:
         logger.error(e)
         return abort(404)
+"""
