@@ -19,7 +19,7 @@ from backend.database import (
     Boolean,
     foreign_key
 )
-from backend.extensions import db
+from backend.contrib.photo_album import photo_album_storage
 from backend import utils
 
 
@@ -28,6 +28,7 @@ class Image(Model):
     path = Column(String(128), nullable=True)
     price = Column(Float, nullable=True)
 
+    category_id = foreign_key('Category', nullable=True)
     category = relationship('Category', back_populates='images')
 
     __repr_props__ = ('id')

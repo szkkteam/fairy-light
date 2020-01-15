@@ -8,7 +8,7 @@ import os
 from flask import redirect, request, url_for, flash
 
 from sqlalchemy.orm.base import manager_of_class, instance_state
-from sqlalchemy import asc
+from sqlalchemy import asc, func
 
 from flask_admin import form
 from flask_admin.base import expose
@@ -32,7 +32,7 @@ from ..models import Category, Image
 from .. import photo_album_storage
 
 class InlineImageAdmin(InlineFormAdmin):
-    form_columns = ('price')
+    form_columns = ('price',)
 
     form_extra_fields = {
         'path': MediaManagerImageUploadField('Image(s)', storage=photo_album_storage()),
@@ -66,7 +66,9 @@ class PhotoAlbumAdmin(ModelAdmin):
     create_modal = True
     edit_modal = True
 
-    inline_models = (InlineImageAdmin(Image))
+    create_modal_template = 'admin/model/modals/c_create.html'
+
+    #inline_models = (InlineImageAdmin(Image),)
 
     form_columns = ( 'title', 'price')
 
@@ -78,7 +80,7 @@ class PhotoAlbumAdmin(ModelAdmin):
     #form_columns = ( 'title', 'price')
 
     # To format how should the images displayed in list view, try with this solution: https://stackoverflow.com/questions/54721958/flask-admin-format-the-way-relationships-are-displayed
-
+    """
     def get_query(self):
         root_id = request.args.get('root', None)
         if not root_id:
@@ -105,12 +107,15 @@ class PhotoAlbumAdmin(ModelAdmin):
             for ascendent in ascendent_list:
                 breadcrumbs.append((url_for('admin.index_view', root_id=ascendent.id), ascendent.title))
         return breadcrumbs
-
+    """
     @expose('/')
     def index_view(self):
         root_id = request.args.get('root', None)
-        self._template_args['breadcrumbs'] = self._get_breadcrumbs(root_id)
-        return super(NodeAdmin, self).index_view()
+        print("Root: ", root_id, flush=True)
+        #self._template_args['breadcrumbs'] = self._get_breadcrumbs(root_id)
+        self._template_args['breadcrumbs'] = 'Im the breadcrumb'
+        self._template_args['root_id'] = root_id
+        return super(PhotoAlbumAdmin, self).index_view()
 
     # Adding the JS file to handle multiple image upload
     def render(self, template, **kwargs):
@@ -119,7 +124,7 @@ class PhotoAlbumAdmin(ModelAdmin):
         url_for that itself requires an app context
         """
         self.extra_js = [url_for("static", filename="js/form_upload_imgs_preview.js")]
-        return super(MyModelView, self).render(template, **kwargs)
+        return super(PhotoAlbumAdmin, self).render(template, **kwargs)
 
     def create_model(self, form):
         """
@@ -132,9 +137,7 @@ class PhotoAlbumAdmin(ModelAdmin):
             state = instance_state(model)
             self._manager.dispatch.init(state, [], {})
 
-            print("Form parent: ", form.parent.data, flush=True)
             form.populate_obj(model)
-            print("Model parent: ", model.parent, flush=True)
             self.session.add(model)
             self._on_model_change(form, model, True)
             self.session.commit()
@@ -155,7 +158,10 @@ class PhotoAlbumAdmin(ModelAdmin):
         if not is_created:
             # Do not delete, just update the model
             pass
-        model.__init__(parent=form.parent.data)
+        root_id = request.args.get('root', None)
+        print("Root id: ", root_id, flush=True)
+        model.__init__(parent_id=root_id)
+        print("Model: ", model, flush=True)
 
     """
     create_template = 'admin/model/custom_upload_imgs_preview.html'
