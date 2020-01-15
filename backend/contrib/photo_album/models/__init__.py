@@ -4,4 +4,5 @@
 # Common Python library imports
 # Pip package imports
 # Internal package imports
-from .PhotoNode import PhotoNode
+from .Category import Category
+from .Image import Image

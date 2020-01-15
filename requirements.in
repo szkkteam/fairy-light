@@ -15,6 +15,7 @@ flask-sqlalchemy
 flask-debugtoolbar
 flask-breadcrumbs
 
+sqlalchemy-mptt
 sqlalchemy-utils
 loguru
 appdirs
