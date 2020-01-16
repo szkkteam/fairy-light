@@ -17,6 +17,7 @@ flask-breadcrumbs
 
 sqlalchemy-mptt
 sqlalchemy-utils
+requests
 loguru
 appdirs
 bcrypt

@@ -15,10 +15,13 @@ from flask_admin.base import expose
 from flask_admin.helpers import get_redirect_target
 from flask_admin.babel import gettext
 from flask_admin.model.form import InlineFormAdmin
+from flask_admin.form import FormOpts
 from flask_admin.helpers import (get_form_data, validate_form_on_submit,
                                  get_redirect_target, flash_errors)
 
 import flask_mm as mm
+
+from requests.models import PreparedRequest
 
 from loguru import logger
 
@@ -57,6 +60,17 @@ def format_images_field(view, context, model, name):
     return Markup(html_string)
 
 
+def get_root_id():
+    root_id = request.args.get('root', None)
+    if root_id is not None:
+        return int(root_id)
+    return root_id
+
+def format_category(view, context, model, name):
+    url = url_for('category.index_view', root=model.id)
+
+    return Markup('<a href="%s" >%s</a>' % (url, model.title))
+
 class PhotoAlbumAdmin(ModelAdmin):
     model = Category
 
@@ -69,10 +83,17 @@ class PhotoAlbumAdmin(ModelAdmin):
     edit_modal = True
 
     create_modal_template = 'admin/model/modals/c_create.html'
+    list_template = 'admin/model/c_list.html'
 
     #inline_models = (InlineImageAdmin(Image),)
 
+    column_list = { 'category', 'parent' }
+
     form_columns = ( 'title', 'price')
+
+    column_formatters = {
+        'category': format_category,
+    }
 
     column_formatters_detail = {
         # Format images solution 2nd
@@ -82,15 +103,15 @@ class PhotoAlbumAdmin(ModelAdmin):
     #form_columns = ( 'title', 'price')
 
     # To format how should the images displayed in list view, try with this solution: https://stackoverflow.com/questions/54721958/flask-admin-format-the-way-relationships-are-displayed
-    """
+
     def get_query(self):
-        root_id = request.args.get('root', None)
+        root_id = get_root_id()
         if not root_id:
             # Query Nodes which are root nodes (Default level = 1)
-            return self.model.query(self.model).filter(self.model.level() == self.model.get_default_level())
+            return self.session.query(self.model).filter(self.model.level == self.model.get_default_level())
         # Get all the childrens for that given Node.
-        return self.model.by(root_id).get_children(self.session)
-
+        return self.model.get(root_id).get_children(self.session)
+    """
     def get_count_query(self):
         root_id = request.args.get('root', None)
         if not root_id:
@@ -99,31 +120,34 @@ class PhotoAlbumAdmin(ModelAdmin):
 
     def get_one(self, id):
         return self.model.by(id)
+    """
 
     def _get_breadcrumbs(self, root_id):
         breadcrumbs = []
         # Explicitly add the main root
-        breadcrumbs.append((url_for('admin.tree_index_view', root_id=None), 'Home'))
+        #breadcrumbs.append( {'url': url_for('category.index_view', root=None), 'title': 'Home' })
         if root_id is not None:
-            ascendent_list = self.model.path_to_root(self.session).all(asc)
+            ascendent_list = self.model.get(root_id).path_to_root(self.session, asc).all()
+            print("ascendent_list: ", ascendent_list, flush=True)
             for ascendent in ascendent_list:
-                breadcrumbs.append((url_for('admin.tree_index_view', root_id=ascendent.id), ascendent.title))
+                breadcrumbs.append( {'url': url_for('category.index_view', root=ascendent.id), 'title': ascendent.title })
+
+        print("Breadcrumbs: ", breadcrumbs, flush=True)
         return breadcrumbs
-    """
+
     @expose('/')
     def index_view(self):
-        root_id = request.args.get('root', None)
+        root_id = get_root_id()
         print("Root: ", root_id, flush=True)
-        #self._template_args['breadcrumbs'] = self._get_breadcrumbs(root_id)
-        self._template_args['breadcrumbs'] = 'Im the breadcrumb'
+        self._template_args['breadcrumbs'] = self._get_breadcrumbs(root_id)
+        #self._template_args['breadcrumbs'] = 'Im the breadcrumb'
         self._template_args['root_id'] = root_id
         return super(PhotoAlbumAdmin, self).index_view()
 
     @expose('/new/', methods=('GET', 'POST'))
     def create_view(self):
-        root_id = request.args.get('root', None)
-
-        return_url = get_redirect_target(param_name='root') or self.get_url('.index_view', id=root_id)
+        root_id = get_root_id()
+        return_url = get_redirect_target() or self.get_url('.index_view')
 
         if not self.can_create:
             return redirect(return_url)
@@ -162,7 +186,8 @@ class PhotoAlbumAdmin(ModelAdmin):
         return self.render(template,
                            form=form,
                            form_opts=form_opts,
-                           return_url=return_url)
+                           return_url=return_url,
+                           root_id=root_id)
 
     # Adding the JS file to handle multiple image upload
     def render(self, template, **kwargs):
@@ -180,8 +205,11 @@ class PhotoAlbumAdmin(ModelAdmin):
                 Form instance
         """
         try:
-            root_id = request.args.get('root', None)
-            model = self.model(parent=root_id)
+            root_id = get_root_id()
+            parent = self.model.get(root_id) if root_id else None
+            print("Model create: root_id: ", root_id, flush=True)
+            model = self.model(parent=parent)
+            print("Model create: model: ", model, flush=True)
             form.populate_obj(model)
             self.session.add(model)
             self._on_model_change(form, model, True)

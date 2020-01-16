@@ -1,59 +1,103 @@
 {% extends 'admin/model/base_list.html' %}
 
-{% block body %}
-    {{ super() }}
 
-    {% block breadcrumbnav %}
+{% block model_menu_bar %}
 
-    {% endblock %}
-
-    {% block model_menu_bar %}
-        <ul class="nav nav-tabs actions-nav">
-            <li class="active">
-                <a href="javascript:void(0)">{{ _gettext('List') }}{% if count %} ({{ count }}){% endif %}</a>
-            </li>
-
-            {% if admin_view.can_create %}
+    {% block block_breadcrumb %}
+        <ul class="breadcrumb">
             <li>
-              {%- if admin_view.create_modal -%}
-                {{ lib.add_modal_button(url=get_url('.create_view', url=return_url, root=root_id, modal=True), title=_gettext('Create New Record'), content=_gettext('Create')) }}
-              {% else %}
-                <a href="{{ get_url('.create_view', root=root_id, url=return_url) }}" title="{{ _gettext('Create New Record') }}">{{ _gettext('Create') }}</a>
-              {%- endif -%}
+                <a href="{{ url_for('.index_view', path=None) }}">{{ _gettext('Home') }}</a>
             </li>
-            {% endif %}
-
-            {% if admin_view.can_export %}
-                {{ model_layout.export_options() }}
-            {% endif %}
-
-            {% block model_menu_bar_before_filters %}{% endblock %}
-
-            {% if filters %}
-            <li class="dropdown">
-                {{ model_layout.filter_options() }}
+            {% for breadcrumb in breadcrumbs %}
+            <li class="{{ 'active' if loop.last }}">
+                <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
             </li>
-            {% endif %}
-
-            {% if can_set_page_size %}
-            <li class="dropdown">
-                {{ model_layout.page_size_form(page_size_url) }}
-            </li>
-            {% endif %}
-
-            {% if actions %}
-            <li class="dropdown">
-                {{ actionlib.dropdown(actions) }}
-            </li>
-            {% endif %}
-
-            {% if search_supported %}
-            <li>
-                {{ model_layout.search_form() }}
-            </li>
-            {% endif %}
-            {% block model_menu_bar_after_filters %}{% endblock %}
+            {% endfor %}
         </ul>
     {% endblock %}
+
+    <ul class="nav nav-tabs actions-nav">
+        <li class="active">
+            <a href="javascript:void(0)">{{ _gettext('List') }}{% if count %} ({{ count }}){% endif %}</a>
+        </li>
+
+        {% if admin_view.can_create %}
+        <li>
+          {%- if admin_view.create_modal -%}
+            {{ lib.add_modal_button(url=get_url('.create_view', url=return_url, root=root_id, modal=True), title=_gettext('Create New Record'), content=_gettext('Create')) }}
+          {% else %}
+            <a href="{{ get_url('.create_view', root=root_id, url=return_url) }}" title="{{ _gettext('Create New Record') }}">{{ _gettext('Create') }}</a>
+          {%- endif -%}
+        </li>
+        {% endif %}
+
+        {% if admin_view.can_export %}
+            {{ model_layout.export_options() }}
+        {% endif %}
+
+        {% block model_menu_bar_before_filters %}{% endblock %}
+
+        {% if filters %}
+        <li class="dropdown">
+            {{ model_layout.filter_options() }}
+        </li>
+        {% endif %}
+
+        {% if can_set_page_size %}
+        <li class="dropdown">
+            {{ model_layout.page_size_form(page_size_url) }}
+        </li>
+        {% endif %}
+
+        {% if actions %}
+        <li class="dropdown">
+            {{ actionlib.dropdown(actions) }}
+        </li>
+        {% endif %}
+
+        {% if search_supported %}
+        <li>
+            {{ model_layout.search_form() }}
+        </li>
+        {% endif %}
+        {% block model_menu_bar_after_filters %}{% endblock %}
+    </ul>
+{% endblock %}
+
+{% block list_row scoped %}
+
+  {% if actions %}
+    <td>
+      <input type="checkbox" name="rowid" class="action-checkbox" value="{{ get_pk_value(row) }}"
+             title="{{ _gettext('Select record') }}"/>
+    </td>
+  {% endif %}
+
+  {% for c, name in list_columns %}
+    <td class="col-{{ c }}">
+      {% if admin_view.is_editable(c) %}
+        {% set form = list_forms[get_pk_value(row)] %}
+        {% if form.csrf_token %}
+          {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c), csrf=form.csrf_token._value()) }}
+        {% else %}
+          {{ form[c](pk=get_pk_value(row), display_value=get_value(row, c)) }}
+        {% endif %}
+      {% else %}
+        {{ get_value(row, c) }}
+      {% endif %}
+    </td>
+  {% endfor %}
+
+  {% block list_row_actions_column scoped %}
+    {%- if admin_view.column_display_actions -%}
+      <td class="list-buttons-column">
+        {% block list_row_actions scoped %}
+          {%- for action in list_row_actions -%}
+            {{ action.render_ctx(get_pk_value(row), row) }}{% if not loop.last %}&nbsp;{% endif %}
+          {%- endfor -%}
+        {% endblock %}
+      </td>
+    {%- endif -%}
+  {% endblock %}
 
 {% endblock %}
