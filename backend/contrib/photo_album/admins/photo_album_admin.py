@@ -15,6 +15,8 @@ from flask_admin.base import expose
 from flask_admin.helpers import get_redirect_target
 from flask_admin.babel import gettext
 from flask_admin.model.form import InlineFormAdmin
+from flask_admin.helpers import (get_form_data, validate_form_on_submit,
+                                 get_redirect_target, flash_errors)
 
 import flask_mm as mm
 
@@ -101,11 +103,11 @@ class PhotoAlbumAdmin(ModelAdmin):
     def _get_breadcrumbs(self, root_id):
         breadcrumbs = []
         # Explicitly add the main root
-        breadcrumbs.append((url_for('admin.index_view', root_id=None), 'Home'))
+        breadcrumbs.append((url_for('admin.tree_index_view', root_id=None), 'Home'))
         if root_id is not None:
             ascendent_list = self.model.path_to_root(self.session).all(asc)
             for ascendent in ascendent_list:
-                breadcrumbs.append((url_for('admin.index_view', root_id=ascendent.id), ascendent.title))
+                breadcrumbs.append((url_for('admin.tree_index_view', root_id=ascendent.id), ascendent.title))
         return breadcrumbs
     """
     @expose('/')
@@ -116,6 +118,51 @@ class PhotoAlbumAdmin(ModelAdmin):
         self._template_args['breadcrumbs'] = 'Im the breadcrumb'
         self._template_args['root_id'] = root_id
         return super(PhotoAlbumAdmin, self).index_view()
+
+    @expose('/new/', methods=('GET', 'POST'))
+    def create_view(self):
+        root_id = request.args.get('root', None)
+
+        return_url = get_redirect_target(param_name='root') or self.get_url('.index_view', id=root_id)
+
+        if not self.can_create:
+            return redirect(return_url)
+
+        form = self.create_form()
+        if not hasattr(form, '_validated_ruleset') or not form._validated_ruleset:
+            self._validate_form_instance(ruleset=self._form_create_rules, form=form)
+
+        if self.validate_form(form):
+            # in versions 1.1.0 and before, this returns a boolean
+            # in later versions, this is the model itself
+            model = self.create_model(form)
+            if model:
+                flash(gettext('Record was successfully created.'), 'success')
+                if '_add_another' in request.form:
+                    return redirect(request.url)
+                elif '_continue_editing' in request.form:
+                    # if we have a valid model, try to go to the edit view
+                    if model is not True:
+                        url = self.get_url('.edit_view', id=self.get_pk_value(model), url=return_url)
+                    else:
+                        url = return_url
+                    return redirect(url)
+                else:
+                    # save button
+                    return redirect(self.get_save_return_url(model, is_created=True))
+
+        form_opts = FormOpts(widget_args=self.form_widget_args,
+                             form_rules=self._form_create_rules)
+
+        if self.create_modal and request.args.get('modal'):
+            template = self.create_modal_template
+        else:
+            template = self.create_template
+
+        return self.render(template,
+                           form=form,
+                           form_opts=form_opts,
+                           return_url=return_url)
 
     # Adding the JS file to handle multiple image upload
     def render(self, template, **kwargs):
@@ -133,10 +180,8 @@ class PhotoAlbumAdmin(ModelAdmin):
                 Form instance
         """
         try:
-            model = self._manager.new_instance()
-            state = instance_state(model)
-            self._manager.dispatch.init(state, [], {})
-
+            root_id = request.args.get('root', None)
+            model = self.model(parent=root_id)
             form.populate_obj(model)
             self.session.add(model)
             self._on_model_change(form, model, True)
@@ -153,15 +198,6 @@ class PhotoAlbumAdmin(ModelAdmin):
             self.after_model_change(form, model, True)
 
         return model
-
-    def on_model_change(self, form, model, is_created=False):
-        if not is_created:
-            # Do not delete, just update the model
-            pass
-        root_id = request.args.get('root', None)
-        print("Root id: ", root_id, flush=True)
-        model.__init__(parent_id=root_id)
-        print("Model: ", model, flush=True)
 
     """
     create_template = 'admin/model/custom_upload_imgs_preview.html'

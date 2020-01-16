@@ -17,7 +17,7 @@
     {%- endif -%}
     {%- if admin_view.can_custom_export -%}
       <li>
-        {%- if admin_view.create_modal -%}
+        {%- if admin_view.custom_export_modal -%}
           {{ lib.add_modal_button(url=get_url('.custom_export_view', url=return_url, modal=True), title=_gettext('Export To File'), content=_gettext('Export')) }}
         {% else %}
           <a href="{{ get_url('.custom_export_view', url=return_url) }}" title="{{ _gettext('Export To File') }}">Export</a>
