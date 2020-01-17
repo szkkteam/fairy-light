@@ -9,8 +9,9 @@
     </form>
 {% endmacro %}
 
-{% macro custom_render_form(form, cancel_url, extra=None, form_opts=None, action=None, is_modal=False) -%}
+{% macro custom_render_form(form, cancel_url, extra=None, form_opts=None, action=None, is_modal=False, root=None) -%}
     {% call custom_form_tag(action=action) %}
+        <input type="hidden" name="id" value="{{ root }}"/>
         {{ lib.render_form_fields(form, form_opts=form_opts) }}
         {{ lib.render_form_buttons(cancel_url, extra, is_modal) }}
     {% endcall %}

@@ -22,7 +22,7 @@ from backend.database import (
 from backend.extensions import db
 from backend import utils
 
-from ..models import Image
+from .Image import Image
 
 
 class Category(Model, BaseNestedSets):
@@ -35,6 +35,6 @@ class Category(Model, BaseNestedSets):
 
     __repr_props__ = ('id', 'title')
 
-
-    def get_images(self):
-        return Category.query.join(Image).filter(self.id)
+    @classmethod
+    def get_images(cls, id):
+        return Image.query.join(Category).filter(Image.category_id == id)

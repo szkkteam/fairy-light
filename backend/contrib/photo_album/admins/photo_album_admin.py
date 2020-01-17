@@ -16,6 +16,7 @@ from flask_admin.helpers import get_redirect_target
 from flask_admin.babel import gettext
 from flask_admin.model.form import InlineFormAdmin
 from flask_admin.form import FormOpts
+from flask_admin.model import template
 from flask_admin.helpers import (get_form_data, validate_form_on_submit,
                                  get_redirect_target, flash_errors)
 
@@ -37,7 +38,7 @@ from ..models import Category, Image
 from .. import photo_album_storage
 
 class InlineImageAdmin(InlineFormAdmin):
-    form_columns = ('price',)
+    form_columns = ('id', 'price', 'path')
 
     form_extra_fields = {
         'path': MediaManagerImageUploadField('Image(s)', storage=photo_album_storage()),
@@ -51,13 +52,23 @@ def format_images_field(view, context, model, name):
         2) Put this formatter only into the column_formatter_details attribute, in this way when the Category is checked as 'details view' the images will be listed there only (Preferred)
      """
     # Get all the images related to this parent
-    images = model.get_images()
+    images = view.model.get_images(model.id).all()
     # Create a list item with thumbnails
-    html_string = '<ul class="category-list-images">'
+    print("Images: ", images, flush=True)
+    div_table_html = '<div class="table-responsive"> <table class="table table-stripped table-bordered table-hover model-list"> <thead> <tr> '
+    div_table_html += '<th class="column-header"> Preview </th> '
+    for column in ['Price', 'Title']:
+        div_table_html += '<th class="column-header"> {} </th> '.format(column)
+    div_table_html += '</tr> </thead> <tbody> '
     for image in images:
-        html_string += '<li> {} </li>'.format(image.get_thumbnail_markup())
-        html_string += '</ul>'
-    return Markup(html_string)
+        div_table_html += '<tr> '
+        div_table_html += '<td> {} </td>'.format(image.get_thumbnail_markup())
+        div_table_html += '<td> {} </td>'.format(image.price)
+        div_table_html += '<td> {} </td>'.format(image.title)
+        div_table_html += '</tr>'
+    div_table_html += '</tbody> </table> </div> '
+
+    return Markup(div_table_html)
 
 
 def get_root_id():
@@ -86,37 +97,38 @@ class PhotoAlbumAdmin(ModelAdmin):
 
     create_modal = True
     edit_modal = True
+    details_modal = True
+
 
     create_modal_template = 'admin/model/modals/c_create.html'
     list_template = 'admin/model/c_list.html'
 
-    #inline_models = (InlineImageAdmin(Image),)
+    inline_models = [InlineImageAdmin(Image) ]
 
-    column_list = { 'preview', 'price' }
+    column_list = ( 'folder', 'public', 'price' )
 
-    form_columns = ( 'title', 'price')
+    column_editable_list = ( 'title', 'public', 'price')
+
+    column_details_list = ('title', 'public', 'price', 'images')
+
+    form_columns = ( 'title', 'public', 'price', 'images')
+
+
 
     column_formatters = {
         # Two models will be passed for every formatter. Category and Image. Each formatter has to check for the model before returning a value
-        'preview': format_title,
+        'folder': format_preview,
 
     }
 
     column_formatters_detail = {
         # Format images solution 2nd
-        'image': format_images_field,
+        'images': format_images_field,
     }
 
     #form_columns = ( 'title', 'price')
 
     # To format how should the images displayed in list view, try with this solution: https://stackoverflow.com/questions/54721958/flask-admin-format-the-way-relationships-are-displayed
-
-    def get_model_images(self):
-        root_id = get_root_id()
-        if not root_id:
-            return []
-        return self.model.get(root_id).get_images()
-
 
     def get_query(self):
         root_id = get_root_id()
@@ -124,13 +136,11 @@ class PhotoAlbumAdmin(ModelAdmin):
             # Query Nodes which are root nodes (Default level = 1)
             return self.session.query(self.model).filter(self.model.level == self.model.get_default_level())
         else:
-            root_node = self.model.get(root_id)
             # Get all the childrens for that given Node.
-            category_list = root_node.get_children(self.session)
+            return self.model.get(root_id).get_children(self.session)
             # Get all images associated with that node
-            images_list = root_node.get_images()
-            # Return with a concatenated list
-            return category_list + images_list
+            #images_list = self.model.get_images(root_id)
+
 
     """
     def get_count_query(self):
@@ -209,14 +219,34 @@ class PhotoAlbumAdmin(ModelAdmin):
                            return_url=return_url,
                            root_id=root_id)
 
+    """    
     # Adding the JS file to handle multiple image upload
     def render(self, template, **kwargs):
-        """
-        using extra js in render method allow use
-        url_for that itself requires an app context
-        """
         self.extra_js = [url_for("static", filename="js/form_upload_imgs_preview.js")]
         return super(PhotoAlbumAdmin, self).render(template, **kwargs)
+    """
+
+    # Override to prevent accidently delete entry in row view.
+    def get_list_row_actions(self):
+        """
+            Return list of row action objects, each is instance of
+            :class:`~flask_admin.model.template.BaseListRowAction`
+        """
+        actions = []
+
+        if self.can_view_details:
+            if self.details_modal:
+                actions.append(template.ViewPopupRowAction())
+            else:
+                actions.append(template.ViewRowAction())
+
+        if self.can_edit:
+            if self.edit_modal:
+                actions.append(template.EditPopupRowAction())
+            else:
+                actions.append(template.EditRowAction())
+
+        return actions + (self.column_extra_row_actions or [])
 
     def create_model(self, form):
         """
@@ -246,28 +276,3 @@ class PhotoAlbumAdmin(ModelAdmin):
             self.after_model_change(form, model, True)
 
         return model
-
-    """
-    create_template = 'admin/model/custom_upload_imgs_preview.html'
-
-    can_create = True
-    can_edit = True
-
-    column_list = ('title', 'preview', 'price', 'album', 'created_at', )
-
-    column_labels = {'created_at': 'Date'}
-    column_default_sort = ('created_at', True)
-
-    column_details_list = ('title', 'album', 'created_at', 'updated_at')
-
-    form_columns = ('album', 'price', 'path')
-
-    column_formatters = {
-        'price': macro('column_formatters.price'),
-        'preview': lambda view, context, model, name: model.get_thumbnail(),
-    }
-
-    form_extra_fields = {
-        'path': MediaManagerImageUploadField('Image(s)', storage=photo_album_storage()),
-    }
-    """

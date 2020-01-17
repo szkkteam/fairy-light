@@ -33,6 +33,16 @@ class Image(Model):
 
     __repr_props__ = ('id')
 
+    @property
+    def title(self):
+        if self.path:
+            return os.path.basename(photo_album_storage().namegen.original_name(self.path))
+        return "No Image"
+
+    @property
+    def slug(self):
+        return utils.slugify(self.title)
+
     def get_thumbnail_path(self):
         if not self.path:
             return ''
