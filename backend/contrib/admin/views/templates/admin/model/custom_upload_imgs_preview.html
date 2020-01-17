@@ -230,27 +230,6 @@
         document.querySelector('input[type=file]').addEventListener('change', handleFileSelect, false);
         document.querySelector('form').addEventListener('submit', handleSubmit, false);        
 
-        /*
-        FIXME: Select2 templating is not working.
-        $('select[name=album]').select2({});
-
-
-        function formatState (state) {
-          console.log(state);
-          if (!state.id) { return state.text; }
-          var $state = $(
-            '<span><img src="' + state.element.value + '" class="img-flag" /> ' + state.text + '</span>'
-         );
-         return $state;
-        };
-
-        $('select[name=album]').select2({
-          placeholder: "What currency do you use?", //placeholder
-          allowClear: true,
-          templateResult: formatState,
-          templateSelection: formatState
-        });
-        */
     });
 
   </script>

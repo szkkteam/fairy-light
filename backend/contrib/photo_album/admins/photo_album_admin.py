@@ -66,10 +66,15 @@ def get_root_id():
         return int(root_id)
     return root_id
 
-def format_category(view, context, model, name):
-    url = url_for('category.index_view', root=model.id)
-
-    return Markup('<a href="%s" >%s</a>' % (url, model.title))
+def format_preview(view, context, model, name):
+    # If the given model is Category, return with a link
+    if isinstance(model, Category):
+        # TODO: should return with a predefined image which is clickable (Folder like image)
+        url = url_for('category.index_view', root=model.id)
+        return Markup('<a href="%s" >%s</a>' % (url, model.title))
+    # If the given model is Image, return with thumbnail
+    elif isinstance(model, Image):
+        return model.get_thumbnail_markup()
 
 class PhotoAlbumAdmin(ModelAdmin):
     model = Category
@@ -87,12 +92,14 @@ class PhotoAlbumAdmin(ModelAdmin):
 
     #inline_models = (InlineImageAdmin(Image),)
 
-    column_list = { 'category', 'parent' }
+    column_list = { 'preview', 'price' }
 
     form_columns = ( 'title', 'price')
 
     column_formatters = {
-        'category': format_category,
+        # Two models will be passed for every formatter. Category and Image. Each formatter has to check for the model before returning a value
+        'preview': format_title,
+
     }
 
     column_formatters_detail = {
@@ -104,13 +111,27 @@ class PhotoAlbumAdmin(ModelAdmin):
 
     # To format how should the images displayed in list view, try with this solution: https://stackoverflow.com/questions/54721958/flask-admin-format-the-way-relationships-are-displayed
 
+    def get_model_images(self):
+        root_id = get_root_id()
+        if not root_id:
+            return []
+        return self.model.get(root_id).get_images()
+
+
     def get_query(self):
         root_id = get_root_id()
         if not root_id:
             # Query Nodes which are root nodes (Default level = 1)
             return self.session.query(self.model).filter(self.model.level == self.model.get_default_level())
-        # Get all the childrens for that given Node.
-        return self.model.get(root_id).get_children(self.session)
+        else:
+            root_node = self.model.get(root_id)
+            # Get all the childrens for that given Node.
+            category_list = root_node.get_children(self.session)
+            # Get all images associated with that node
+            images_list = root_node.get_images()
+            # Return with a concatenated list
+            return category_list + images_list
+
     """
     def get_count_query(self):
         root_id = request.args.get('root', None)
@@ -119,7 +140,7 @@ class PhotoAlbumAdmin(ModelAdmin):
         return self.session.query(func.count('*')).select_from(self.model.by(root_id).get_children(self.session))
 
     def get_one(self, id):
-        return self.model.by(id)
+        return self.model.get(id)
     """
 
     def _get_breadcrumbs(self, root_id):
@@ -140,7 +161,6 @@ class PhotoAlbumAdmin(ModelAdmin):
         root_id = get_root_id()
         print("Root: ", root_id, flush=True)
         self._template_args['breadcrumbs'] = self._get_breadcrumbs(root_id)
-        #self._template_args['breadcrumbs'] = 'Im the breadcrumb'
         self._template_args['root_id'] = root_id
         return super(PhotoAlbumAdmin, self).index_view()
 

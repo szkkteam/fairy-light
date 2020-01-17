@@ -35,6 +35,6 @@ class Category(Model, BaseNestedSets):
 
     __repr_props__ = ('id', 'title')
 
-    @classmethod
-    def get_images(cls):
-        return Category.query.join(Image).filter(cls.id).all()
+
+    def get_images(self):
+        return Category.query.join(Image).filter(self.id)
