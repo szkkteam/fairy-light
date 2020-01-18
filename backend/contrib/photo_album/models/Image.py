@@ -55,6 +55,11 @@ class Image(Model):
         return Markup(
             '<img src="%s">' % self.get_thumbnail_path())
 
+    def get_path(self):
+        if not self.path:
+            return ''
+        return photo_album_storage().url(self.path)
+
 @listens_for(Image, 'after_delete')
 def del_image(mapper, connection, target):
     if target.path:

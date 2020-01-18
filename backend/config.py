@@ -191,7 +191,7 @@ class BaseConfig(object):
         'PREFIX': '/photo',
         'STORAGE': 'local',
         'MANAGER': 'image',
-        'THUMBNAIL_SIZE': (150,150,False),
+        'THUMBNAIL_SIZE': (253,220,True),
     }
 
 class ProdConfig(BaseConfig):

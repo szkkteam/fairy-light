@@ -1,0 +1,14 @@
+{% import 'modules/cart.html' as cart with context %}
+
+{% call cart.table() %}
+    {% for key, item in cart_items.items() %}
+        {{ cart.row(item['id'], loop.index, image=item['thumb'], price=item['price']) }}
+    {% endfor %}
+    <tr>
+        <td></td>
+        <td colspan="2">Total:</td>
+        <td>100</td>
+        <td></td>
+    </tr>
+{% endcall %}
+

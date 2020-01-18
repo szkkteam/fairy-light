@@ -21,7 +21,12 @@
 #photos {
     margin-bottom: 40px;
 }
-
+/*
+#photos .photos-img-size {
+    max-width: 285px !important;
+    max-height: 200px !important;
+}
+*/
 
 #photos .price-drop {
     margin: 1em 0;
@@ -71,4 +76,40 @@
 
 #pagenav .pagination {
     justify-content: center;
+}
+
+/* Shopping Cart Section
+--------------------------------*/
+/*
+#shopping-cart-wrapper .shopping-cart-container {
+    max-width: 400px !important;
+    position: fixed !important;
+}
+*/
+
+.popover {
+    /* It's kind of hacking. */
+    width: 400px !important;
+    left: -130px !important;    
+    max-width: 400px !important;
+    /*position: inherit !important;*/
+}
+
+.popover-header {
+    text-align: center;
+}
+/*
+.popover-body {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+*/
+
+table.cart-table thead, tr, tbody, th, td {
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+table.cart-table {
+    margin-bottom: 5px !important;
 }

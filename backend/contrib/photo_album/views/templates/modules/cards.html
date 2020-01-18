@@ -1,8 +1,10 @@
-{% macro thumbnail(endpoint, image, title, price=None) %}
-    <div class="card">
+{% import 'website/static.html' as site_static with context %}
+
+{% macro render(id, type, endpoint, cart='#', image=None, title=None, price=None) %}
+    <div class="card photos-buy-card" data-id="{{id}}" data-type="{{type}}">
         <div class="photos-photo">
             <a href="{{endpoint}}">
-                <img class="card-img-top" src="{{image}}">
+                <img class="card-img-top photos-img-size" src="{{image if image else site_static.url(filename='site/img/category_default.jpg')}}">
             </a>
         </div>
         <div class="card-body text-center">
@@ -27,7 +29,7 @@
                     {% endif %}
                 </ins>
             </div>								
-            <a id="buy" href="#" class="btn btn-primary photos-buy-btn">										
+            <a href="{{ cart }}" class="btn btn-primary photos-add-btn">										
                 Add to cart
             </a>
         </div>							

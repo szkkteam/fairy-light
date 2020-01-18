@@ -1,9 +1,9 @@
 {% extends 'photos_index.html' %}
 
 {% block photos_section %}     
-    {% for photo in photos %}
+    {% for element in data %}
     <div class="col-6 col-md-3">
-        {{ card.thumbnail(photo.endpoint, photo.img, None, photo.price) }}                
+        {{ card.render(element.id, 'image', element.get_path(), url_for('photo_album.add_item_to_cart'), element.get_thumbnail_path(), None, element.price) }}
     </div>    
     {% endfor %}
 {% endblock %}

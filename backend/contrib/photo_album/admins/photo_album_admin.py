@@ -41,7 +41,7 @@ class InlineImageAdmin(InlineFormAdmin):
     form_columns = ('id', 'price', 'path')
 
     form_extra_fields = {
-        'path': MediaManagerImageUploadField('Image(s)', storage=photo_album_storage()),
+        'path': MediaManagerImageUploadField('Image', storage=photo_album_storage()),
     }
 
 def format_images_field(view, context, model, name):
@@ -109,21 +109,23 @@ class PhotoAlbumAdmin(ModelAdmin):
 
     column_editable_list = ( 'title', 'public', 'price')
 
-    column_details_list = ('title', 'public', 'price', 'images')
+    column_details_list = ('title', 'public', 'price', 'cover', 'images')
 
-    form_columns = ( 'title', 'public', 'price', 'images')
+    form_columns = ( 'title', 'public', 'price', 'cover', 'images')
 
-
+    form_extra_fields = {
+        'cover': MediaManagerImageUploadField('Cover Photo', storage=photo_album_storage()),
+    }
 
     column_formatters = {
         # Two models will be passed for every formatter. Category and Image. Each formatter has to check for the model before returning a value
         'folder': format_preview,
-
     }
 
     column_formatters_detail = {
         # Format images solution 2nd
         'images': format_images_field,
+        'cover': lambda v, c, m, n: m.get_thumbnail_markup()
     }
 
     #form_columns = ( 'title', 'price')
@@ -132,15 +134,7 @@ class PhotoAlbumAdmin(ModelAdmin):
 
     def get_query(self):
         root_id = get_root_id()
-        if not root_id:
-            # Query Nodes which are root nodes (Default level = 1)
-            return self.session.query(self.model).filter(self.model.level == self.model.get_default_level())
-        else:
-            # Get all the childrens for that given Node.
-            return self.model.get(root_id).get_children(self.session)
-            # Get all images associated with that node
-            #images_list = self.model.get_images(root_id)
-
+        return self.model.get_list_from_root(root_id)
 
     """
     def get_count_query(self):
@@ -148,10 +142,10 @@ class PhotoAlbumAdmin(ModelAdmin):
         if not root_id:
             return self.session.query(func.count('*')).select_from(self.model.query(self.model).filter(self.model.level() == self.model.get_default_level()))
         return self.session.query(func.count('*')).select_from(self.model.by(root_id).get_children(self.session))
-
+    """
     def get_one(self, id):
         return self.model.get(id)
-    """
+
 
     def _get_breadcrumbs(self, root_id):
         breadcrumbs = []
@@ -159,17 +153,14 @@ class PhotoAlbumAdmin(ModelAdmin):
         #breadcrumbs.append( {'url': url_for('category.index_view', root=None), 'title': 'Home' })
         if root_id is not None:
             ascendent_list = self.model.get(root_id).path_to_root(self.session, asc).all()
-            print("ascendent_list: ", ascendent_list, flush=True)
             for ascendent in ascendent_list:
                 breadcrumbs.append( {'url': url_for('category.index_view', root=ascendent.id), 'title': ascendent.title })
 
-        print("Breadcrumbs: ", breadcrumbs, flush=True)
         return breadcrumbs
 
     @expose('/')
     def index_view(self):
         root_id = get_root_id()
-        print("Root: ", root_id, flush=True)
         self._template_args['breadcrumbs'] = self._get_breadcrumbs(root_id)
         self._template_args['root_id'] = root_id
         return super(PhotoAlbumAdmin, self).index_view()
@@ -227,11 +218,8 @@ class PhotoAlbumAdmin(ModelAdmin):
     """
 
     # Override to prevent accidently delete entry in row view.
+    """
     def get_list_row_actions(self):
-        """
-            Return list of row action objects, each is instance of
-            :class:`~flask_admin.model.template.BaseListRowAction`
-        """
         actions = []
 
         if self.can_view_details:
@@ -247,6 +235,7 @@ class PhotoAlbumAdmin(ModelAdmin):
                 actions.append(template.EditRowAction())
 
         return actions + (self.column_extra_row_actions or [])
+        """
 
     def create_model(self, form):
         """

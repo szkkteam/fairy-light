@@ -1,0 +1,28 @@
+{% macro table() %}
+    <table class="cart-table table w-100">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Photo</th>
+                <th scope="col">Price</th>
+                <th scope="col">Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ caller() }}
+        </tbody>
+    </table>
+{% endmacro %}
+
+{% macro row(id, iter, image, price, delete_url) %}    
+    <tr data-id="{{id}}">
+        <td scope="row">{{iter}}</td>
+        <td >
+            <img class="cart-details-img" width="70px;" src="{{ image }}">
+        </td>
+        <td>{{prcie}}</td>
+        <td>
+            <a href="{{delete_url}}" class="btn btn-primary" id="shopping-cart-clear">Remove</a>
+        </td>
+    </tr>
+{% endmacro %}

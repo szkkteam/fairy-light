@@ -19,7 +19,7 @@ function getCookie(cname) {
     return "";
     }
 
-/* Subscribe form submit */
+
 $(document).ready( function(){
 
     /* Query all the subscribe forms */
