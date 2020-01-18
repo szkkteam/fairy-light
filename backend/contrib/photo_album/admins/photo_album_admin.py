@@ -100,8 +100,8 @@ class PhotoAlbumAdmin(ModelAdmin):
     details_modal = True
 
 
-    create_modal_template = 'admin/model/modals/c_create.html'
-    list_template = 'admin/model/c_list.html'
+    create_modal_template = 'admin/model/modals/category_create.html'
+    list_template = 'admin/model/category_list.html'
 
     inline_models = [InlineImageAdmin(Image) ]
 

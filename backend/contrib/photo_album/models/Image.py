@@ -5,7 +5,7 @@
 import os
 
 # Pip package imports
-from sqlalchemy.orm import relationship, remote, foreign
+from sqlalchemy.event import listens_for
 
 from jinja2 import Markup
 
@@ -54,3 +54,12 @@ class Image(Model):
 
         return Markup(
             '<img src="%s">' % self.get_thumbnail_path())
+
+@listens_for(Image, 'after_delete')
+def del_image(mapper, connection, target):
+    if target.path:
+        # Delete image
+        try:
+            photo_album_storage().delete(target.path)
+        except OSError:
+            pass
