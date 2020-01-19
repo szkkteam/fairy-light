@@ -80,13 +80,38 @@ def add_item_to_cart():
         logger.error(traceback.format_exc())
         return abort(500)
 
-@photo_album.route('/cart/remove', methods=['DELETE'])
+@photo_album.route('/cart/remove', methods=['POST'])
 def remove_item_from_cart():
-    pass
+    try:
+        if request.method == 'POST':
+            try:
+                json_data = request.get_json(silent=False)
+            except BadRequest as e:
+                logger.error(e)
+                return abort(400)
+            else:
+                _id = int(json_data.get('id'))
+                session.modified = True
+                items = session.pop('cart_items', {})
+                deleted_item = items.pop(_id, None)
+                print("Items: ", items, flush=True)
+                print("deleted_item: ", deleted_item, flush=True)
+                session['cart_items'] = items
+
+                print("Cart: ", session['cart_items'], flush=True)
+
+                return jsonify({'shopItems': get_cart_num_of_items()})
+
+        return abort(404)
+    except Exception as err:
+        logger.error(traceback.format_exc())
+        return abort(500)
 
 @photo_album.route('/cart', methods=['GET'])
 def get_cart_content():
-    pass
+    return render_template('cart_details.html',
+                           cart_items=get_cart(),
+                           )
 
 @photo_album.route('/cart/clear', methods=['POST'])
 def clear_cart():

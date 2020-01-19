@@ -2,7 +2,7 @@
 
 {% call cart.table() %}
     {% for key, item in cart_items.items() %}
-        {{ cart.row(item['id'], loop.index, image=item['thumb'], price=item['price']) }}
+        {{ cart.row(item['id'], loop.index, image=item['thumb'], price=item['price'], delete_url=url_for('photo_album.remove_item_from_cart')) }}
     {% endfor %}
     <tr>
         <td></td>
@@ -11,4 +11,13 @@
         <td></td>
     </tr>
 {% endcall %}
+<hr class="header-separator"/>
+<div class="row text-center my-3">
+    <div class="col">
+        <a href="#" class="btn btn-primary" id="shopping-cart-checkout">Check Out</a>
+    </div>
+    <div class="col">
+        <a href="#" class="btn btn-primary" id="shopping-cart-clear">Clear</a>
+    </div>
+</div>
 

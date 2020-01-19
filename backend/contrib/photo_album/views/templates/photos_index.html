@@ -13,7 +13,7 @@
 {% block header_nav_element_block %}
     {{ super() }}
     <li class="nav-item">
-        <a id="shopping-cart" href="#" class="nav-link d-inline-block" data-toggle="popover" data-container=".navbar" data-popover-content="#shopping-cart-wrapper" data-placement="bottom">
+        <a id="shopping-cart" href="#" class="nav-link d-inline-block" data-toggle="popover"  data-container="#navbar" data-popover-content="#shopping-cart-wrapper" data-placement="bottom">
             <span id="shopping-cart-items">
                 {{ cart_num_of_items }}
             </span>
@@ -31,16 +31,7 @@
             Shopping Cart
         </div>        
         <div class="popover-body shopping-cart-details">
-                {% include 'cart_details.html' %}
-            <hr class="header-separator"/>
-            <div class="row text-center my-3">
-                <div class="col">
-                    <a href="#" class="btn btn-primary" id="shopping-cart-checkout">Check Out</a>
-                </div>
-                <div class="col">
-                    <a href="#" class="btn btn-primary" id="shopping-cart-clear">Clear</a>
-                </div>
-            </div>
+            {% include 'cart_details.html' %}            
         </div>
     </div>
 </section>
@@ -104,7 +95,7 @@
     $(document).ready( function() {
         $(function() {
             $.fn.popover.Constructor.Default.whiteList.table = [];
-            $.fn.popover.Constructor.Default.whiteList.tr = [];
+            $.fn.popover.Constructor.Default.whiteList.tr = ['data-id'];
             $.fn.popover.Constructor.Default.whiteList.td = [];
             $.fn.popover.Constructor.Default.whiteList.th = [];
             $.fn.popover.Constructor.Default.whiteList.div = [];
@@ -119,7 +110,21 @@
                 //container: '.navbar',
                 content: function() {
                     var content = $(this).attr("data-popover-content");
-                    return $(content).children(".popover-body").html();
+                    //return $(content).children(".popover-body").html();
+                    $.ajax({
+                        type: 'GET',
+                        url: '/photos/cart',
+                        dataType: 'html',
+                        success: function (data) {
+                            console.log(data);
+                            $('.popover .popover-body').html(data);
+                            //popover.$tip.addClass(popover.options.placement);
+                        },
+                        error: function (data) {
+                            console.log(data.responseJSON);
+                        }
+                    }); 
+                    return "Loading ..."
                 },
                 title: function() {
                     var title = $(this).attr("data-popover-content");

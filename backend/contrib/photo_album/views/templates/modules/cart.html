@@ -14,7 +14,7 @@
     </table>
 {% endmacro %}
 
-{% macro row(id, iter, image, price, delete_url) %}    
+{% macro row(id, iter, image, price, delete_url="") %}    
     <tr data-id="{{id}}">
         <td scope="row">{{iter}}</td>
         <td >
@@ -22,7 +22,7 @@
         </td>
         <td>{{prcie}}</td>
         <td>
-            <a href="{{delete_url}}" class="btn btn-primary" id="shopping-cart-clear">Remove</a>
+            <a href="{{delete_url}}" class="btn btn-primary shopping-cart-clear">Remove</a>
         </td>
     </tr>
 {% endmacro %}
