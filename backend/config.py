@@ -44,6 +44,7 @@ BUNDLES = [
     'backend.contrib.newsletter_subscribe',
     'backend.contrib.photo_album',
     'backend.site',
+    'backend.payment',
 
     'backend.contrib.test_file',
     #'backend.site',
@@ -62,7 +63,7 @@ EXTENSIONS = [
     'backend.extensions.security:security',     # must come after celery and mail
     'backend.extensions.debug:toolbar',
     'backend.extensions.mediamanager:storage',
-    'backend.extensions.breadcrumbs:breadcrumbs',
+    'backend.extensions.stripe:stripe',
 ]
 
 # list of extensions to register after the bundles
@@ -183,7 +184,7 @@ class BaseConfig(object):
     DEBUG_TB_INTERCEPT_REDIRECTS = False
 
     ##########################################################################
-    # Flask NN - MediaManager                                            #
+    # Flask MM - MediaManager                                            #
     ##########################################################################
     # The global local storage root.
     MM_PHOTO_ALBUM = {
@@ -193,6 +194,12 @@ class BaseConfig(object):
         'MANAGER': 'image',
         'THUMBNAIL_SIZE': (253,220,True),
     }
+
+    ##########################################################################
+    # Stripe - Payment                                                       #
+    ##########################################################################
+    STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
+    STRIPE_PUBLISHABLE_KEY = os.environ['STRIPE_PUBLISHABLE_KEY']
 
 class ProdConfig(BaseConfig):
     ##########################################################################

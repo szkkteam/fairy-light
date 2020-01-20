@@ -3,8 +3,5 @@
 
 # Common Python library imports
 # Pip package imports
-from flask_breadcrumbs import Breadcrumbs
-
 # Internal package imports
-
-breadcrumbs = Breadcrumbs()
+from .stripe_user import StripeUser
