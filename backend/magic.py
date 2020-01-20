@@ -57,6 +57,9 @@ def get_extensions(import_names):
 def is_blueprint(obj):
     return isinstance(obj, flask.Blueprint)
 
+def is_filter(obj):
+    return inspect.ismethod(obj)
+
 def is_click_command(obj):
     return isinstance(obj, click.Command) and not isinstance(obj, click.Group)
 
@@ -220,6 +223,7 @@ class Bundle(object):
     _serializers_module_name = 'serializers'
     _views_module_name = 'views'
     _blueprint_names = sentinel
+    _filter_names = 'filters'
 
     def __init__(self, module_name,
                  config_name=sentinel,
@@ -232,6 +236,7 @@ class Bundle(object):
                  serializers_module_name=sentinel,
                  views_module_name=sentinel,
                  blueprint_names=sentinel,
+                 filter_names=sentinel,
                  ):
         self.module_name = module_name
 
@@ -260,6 +265,9 @@ class Bundle(object):
             self._views_module_name = self._normalize_module_name(views_module_name)
 
         self._blueprint_names = blueprint_names
+
+        if filter_names != sentinel:
+            self._filter_names = self.filter_names
 
 
     @property
@@ -326,6 +334,25 @@ class Bundle(object):
         if self._blueprint_names != sentinel:
             return self._blueprint_names
         return [self._name]
+
+    @@property
+    def filter_module_name(self):
+        return self._get_full_module_name(self._filter_names)
+
+    @@property
+    def has_filters(self):
+        if not self.filter_module_name:
+            return False
+        return bool(safe_import_module(self.filter_module_name))
+
+    @@property
+    def filters(self):
+        if not self.has_filters:
+            return
+        module = safe_import_module(self.filter_module_name)
+        filters = dict(inspect.getmembers(module, is_filter))
+        for key, val in filters.items():
+            yield ( self._name + '.' + key, val )
 
     @property
     def has_blueprints(self):

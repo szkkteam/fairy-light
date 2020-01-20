@@ -68,7 +68,6 @@
 
         /* Register common shopping cart functionality */
         function loadCartData ( ) {
-            var popover = $('#shopping-cart').data('bs.popover');
             $.ajax({
                 type: 'GET',
                 url: '/photos/cart',

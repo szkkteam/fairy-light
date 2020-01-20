@@ -16,7 +16,7 @@ from .blueprint import photo_album
 from ..models import Category
 from ..models import Image
 
-from .cart_management import get_cart, get_cart_num_of_items
+from .cart_management import get_cart, get_cart_num_of_items, get_total_price
 
 def get_breadcrumbs(root_id):
     breadcrumbs = []
@@ -52,6 +52,7 @@ def index_view(root=None):
                                # Shopping cart
                                cart_items=get_cart(),
                                cart_num_of_items=get_cart_num_of_items(),
+                               total_price = get_total_price(),
 
                                # Datamodel
                                data=data)
@@ -68,6 +69,7 @@ def index_view(root=None):
                                # Shopping cart
                                cart_items=get_cart(),
                                cart_num_of_items=get_cart_num_of_items(),
+                               total_price=get_total_price(),
 
                                # Datamodel
                                data=data)

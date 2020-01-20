@@ -103,7 +103,7 @@ class BaseConfig(object):
     # SECURITY_TOKEN_MAX_AGE is fixed from time of token generation;
     # it does not update on refresh like a session timeout would. for that,
     # we set (the ironically named) PERMANENT_SESSION_LIFETIME
-    PERMANENT_SESSION_LIFETIME = timedelta(minutes=60)
+    PERMANENT_SESSION_LIFETIME = timedelta(days=2)
 
     ##########################################################################
     # database                                                               #

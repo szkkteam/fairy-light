@@ -22,10 +22,15 @@ def get_cart():
         return session['cart_items']
     return {}
 
-def add_photo_item(id):
-    data = Image.get(id)
-    if data is not None:
+def get_total_price():
+    total = 0
+    items = get_cart()
+    for key, item in items.items():
+        total += item['price']
+    return total
 
+def add_photo_item(data):
+    if data is not None:
         item = {data.id: {'id': data.id, 'thumb': data.get_thumbnail_path(), 'price': data.price if data.price else 0 }}
         session.modified = True
         if 'cart_items' in session:
@@ -66,11 +71,12 @@ def add_item_to_cart():
                         items = {}
                         images = Category.get_images(_id).all()
                         for image in images:
-                            items = {**items, **add_photo_item(image.id)}
+                            add_photo_item(image)
                         return jsonify({'shopItems': get_cart_num_of_items()})
 
                 elif _type and _type == 'image':
-                    item = add_photo_item(_id)
+                    data = Image.get(_id)
+                    add_photo_item(data)
                     return jsonify({'shopItems': get_cart_num_of_items()})
                 else:
                     pass
@@ -111,9 +117,20 @@ def remove_item_from_cart():
 def get_cart_content():
     return render_template('cart_details.html',
                            cart_items=get_cart(),
+                           total_price = get_total_price()
                            )
+
 
 @photo_album.route('/cart/clear', methods=['POST'])
 def clear_cart():
-    pass
+    try:
+        if request.method == 'POST':
+            session.modified = True
+            items = session.pop('cart_items', {})
+            return jsonify({'shopItems': get_cart_num_of_items()})
+
+        return abort(404)
+    except Exception as err:
+        logger.error(traceback.format_exc())
+        return abort(500)
 

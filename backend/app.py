@@ -125,6 +125,15 @@ def register_extensions(app, extensions):
     for extension in extensions.values():
             extension.init_app(app)
 
+def register_filters(app):
+    """Register bundle filters."""
+    # register filters
+    for bundle in app.bundles:
+        # To prevent name collosion, the filter calling name is made like:
+        # <bundle_name>.<filter_name>
+        for name, filter in bundle.filters:
+            app.jinja_env.filters[name] = filter
+
 def register_blueprints(app):
     """Register bundle views."""
     # disable strict_slashes on all routes by default
