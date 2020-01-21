@@ -5,9 +5,7 @@
 import os
 
 # Pip package imports
-from sqlalchemy.event import listens_for
-
-from jinja2 import Markup
+from flask_security.utils import hash_password as security_hash_password
 
 # Internal package imports
 from backend.database import (
@@ -25,7 +23,15 @@ from backend import utils
 
 class StripeUser(Model):
 
-    token = Column(String(128), nullable=True)
     email = Column(String(50), unique=True, index=True)
+    name = Column(String(128))
+    password = Column(String, nullable=True)
+    stripe_token = Column(String(128), nullable=True)
+    stripe_customer_id = Column(String(255), nullable=True)
 
     __repr_props__ = ('id')
+
+    def __init__(self, hash_password=True, **kwargs):
+        super().__init__(**kwargs)
+        if 'password' in kwargs and hash_password:
+            self.password = security_hash_password(kwargs['password'])

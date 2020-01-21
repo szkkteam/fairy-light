@@ -199,6 +199,7 @@ class BaseConfig(object):
     # Stripe - Payment                                                       #
     ##########################################################################
     STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
+    STRIPE_WEBHOOK_SECRET = os.environ['STRIPE_WEBOOK_SECRET']
     STRIPE_PUBLISHABLE_KEY = os.environ['STRIPE_PUBLISHABLE_KEY']
 
 class ProdConfig(BaseConfig):

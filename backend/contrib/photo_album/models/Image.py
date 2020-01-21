@@ -60,6 +60,12 @@ class Image(Model):
             return ''
         return photo_album_storage().url(self.path)
 
+    @classtmethod
+    def get_all_by_ids(cls, list_of_ids):
+        return db.session.query(Image).filter(Image.id.in_(list_of_ids)).all()
+
+
+
 @listens_for(Image, 'after_delete')
 def del_image(mapper, connection, target):
     if target.path:
