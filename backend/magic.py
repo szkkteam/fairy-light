@@ -335,17 +335,17 @@ class Bundle(object):
             return self._blueprint_names
         return [self._name]
 
-    @@property
+    @property
     def filter_module_name(self):
         return self._get_full_module_name(self._filter_names)
 
-    @@property
+    @property
     def has_filters(self):
         if not self.filter_module_name:
             return False
         return bool(safe_import_module(self.filter_module_name))
 
-    @@property
+    @property
     def filters(self):
         if not self.has_filters:
             return
