@@ -4,16 +4,16 @@
 # Common Python library imports
 import random
 import string
+import traceback
+import sys
 
 # Pip package imports
-from flask import current_app, render_template
+from flask import current_app, render_template, url_for, request, redirect, jsonify, abort
 
 from flask_wtf import FlaskForm
-from wtform import StringField, SubmitField, PasswordField, validators
+from wtforms import StringField, SubmitField, PasswordField, validators
 
 from loguru import logger
-
-from flask_wtf import csrf
 
 import stripe
 
@@ -23,6 +23,7 @@ from ..models import StripeUser
 
 from backend.contrib.photo_album.views.cart_management import get_total_price, get_cart
 from backend.contrib.photo_album.models import Image
+from backend.extensions import csrf
 
 def generate_password(size=8):
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(size))
@@ -85,7 +86,7 @@ class RegisterStripeUserForm(FlaskForm):
 
     def get_or_create(self):
         user = StripeUser.get_by(email=self.email.data)
-        if user in none:
+        if user in None:
             return self._create_user()
         return user
 
@@ -104,16 +105,23 @@ class RegisterStripeUserForm(FlaskForm):
         return user
 
 
-@payment.route('/')
-@payment.route('/checkout')
+#@payment.route('/')
+@payment.route('/checkout', methods=['GET', 'POST'])
+@csrf.exempt
 def checkout():
     # If the cart's total price is 0 it means the customer selected only free products.
     # 1) Skipp the stripe payment process and redirect to the final page (Pro: Fast and customers don't has to provide card details. Cont: No tracking and billing receipes)
     # 2) Still use the stripe payment process, but charge it with 0. (Pro: We have track, and they have receipe. Cont: It's a bit strange to put card details to something which is free)
     form = RegisterStripeUserForm()
+
+    print("Request data: ", request.form, flush=True)
+
     if form.validate_on_submit():
+
+        print("Form data: ", form, flush=True)
+
         # TODO: Create the customer, based on from data
-        user = form.get_or_create()
+        #user = form.get_or_create()
 
         # Get the cart content
         cart_content = get_cart()
@@ -122,25 +130,36 @@ def checkout():
         stripe_line_items = cart_to_stripe_items(cart_content)
         # Create the stripe session object
         session = stripe.checkout.Session.create(
-            customer=user.stripe_customer_id,
+            #customer=user.stripe_customer_id,
+            customer="cica_user",
             payment_method_types=['card'],
             line_items=stripe_line_items,
             success_url=url_for('payment.checkout_success', session_id='{CHECKOUT_SESSION_ID}'),
             cancel_url=url_for('payment.checkout_cancel')
         )
+
+        print("Session: ", session, flush=True)
+
         return render_template('checkout.html',
                                form=form,
+                               redirect=True,
                                session_id=session['id'],
                                public_key=get_stripe_public_key(),
                                price_amount=get_total_price())
-    return redirect(url_for('payment.checkout'))
+
+    return render_template('checkout.html',
+                           form=form,
+                           #session_id=session['id'],
+                           public_key=get_stripe_public_key(),
+                           price_amount=get_total_price())
+    #return redirect(url_for('payment.checkout'))
 
 @payment.route('/checkout-webhook', methods=['POST'])
 @csrf.exempt
 def checkout_webhook():
     try:
         # The payment status should be checked here. If it's success, initiate the email sending with the digital product.
-        request_data = json.loads(request.data)
+        request_data = request.get_json()
         # Get the secret key
         webhook_secret = current_app.config.get('STRIPE_WEBHOOK_SECRET')
         if webhook_secret:

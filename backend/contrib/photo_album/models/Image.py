@@ -19,6 +19,7 @@ from backend.database import (
     Boolean,
     foreign_key
 )
+from backend.extensions import db
 from backend.contrib.photo_album import photo_album_storage
 from backend import utils
 
@@ -60,7 +61,7 @@ class Image(Model):
             return ''
         return photo_album_storage().url(self.path)
 
-    @classtmethod
+    @classmethod
     def get_all_by_ids(cls, list_of_ids):
         return db.session.query(Image).filter(Image.id.in_(list_of_ids)).all()
 

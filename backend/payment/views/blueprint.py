@@ -7,5 +7,5 @@ from flask import Blueprint
 
 # Internal package imports
 
-payment = Blueprint('payment', url_prefix='/payment',
+payment = Blueprint('payment', __name__, url_prefix='/payment',
                      template_folder='templates')
