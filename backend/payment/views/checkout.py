@@ -8,7 +8,7 @@ import traceback
 import sys
 
 # Pip package imports
-from flask import current_app, render_template, url_for, request, redirect, jsonify, abort
+from flask import current_app, render_template, url_for, request, redirect, jsonify, abort, session
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, validators
@@ -74,8 +74,6 @@ class RegisterStripeUserForm(FlaskForm):
         # FIXME: email and username is not validated. Hopefully we can match the user by hand.
 
     def register_to_stripe(self, user):
-        stripe.api_key = current_app.config.get('STRIPE_SECRET_KEY')
-
         customer = stripe.Customer.create(
             description=self.name.data,
             source=self.stripeToken.data,
@@ -122,34 +120,46 @@ def checkout():
 
         # TODO: Create the customer, based on from data
         #user = form.get_or_create()
-
         # Get the cart content
         cart_content = get_cart()
-        # Calculate the charge amount
-        charge_amount = get_charge_amount(cart_content)
-        stripe_line_items = cart_to_stripe_items(cart_content)
-        # Create the stripe session object
-        session = stripe.checkout.Session.create(
-            #customer=user.stripe_customer_id,
-            customer="cica_user",
-            payment_method_types=['card'],
-            line_items=stripe_line_items,
-            success_url=url_for('payment.checkout_success', session_id='{CHECKOUT_SESSION_ID}'),
-            cancel_url=url_for('payment.checkout_cancel')
-        )
+        # Calculate the charge amount. The currency in the smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency).
+        charge_amount = get_charge_amount(cart_content) * 100
+
+        # TODO: Create an order model and assign the ID to the intent object
+
+        # TODO: Implement imdopotency key to prevent double charges.
+        # Eg: Put the Create function into a fallback retry with auto generated idempotency_key. So each time it will generate
+        # a new key and retries it a few time.
+
+        # Get or Create a PaymentIntent
+        if 'intent_id' in session:
+            intent_obj= stripe.PaymentIntent.retrieve(session['intent_id'])
+        else:
+            intent_obj = stripe.PaymentIntent.create(
+                amount=charge_amount,
+                currency='eur',
+                # TODO: Check if this will be alway less than 22 char
+                description="Fairy Light ord. %d" % 9999,
+                receipt_email=user.email,
+                customer=user.stripe_customer_id,
+                payment_method_types=['card'],
+                # TODO: Create an order model
+                metadata={ 'user_id': user.id, 'order_id': 9999 },
+            )
+            session['intent_id'] = intent_obj['id']
+
+        client_secret = intent_obj['client_secret']
 
         print("Session: ", session, flush=True)
 
         return render_template('checkout.html',
                                form=form,
-                               redirect=True,
-                               session_id=session['id'],
+                               session_id=client_secret,
                                public_key=get_stripe_public_key(),
                                price_amount=get_total_price())
 
     return render_template('checkout.html',
                            form=form,
-                           #session_id=session['id'],
                            public_key=get_stripe_public_key(),
                            price_amount=get_total_price())
     #return redirect(url_for('payment.checkout'))

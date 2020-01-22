@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+
+    
+    <title>
+
+    </title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.12/js/bootstrap-select.min.js"></script>
+		<script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.12/css/bootstrap-select.css">
+        
+		<style>
+			#register-form .field-border {
+				border-radius: 0.25rem;
+				border: 1px solid #666;
+				padding-left: 25px;
+				padding-right: 25px;
+				padding-top: 2px;
+				padding-bottom: 10px;		
+			}
+
+			#register-form .field-border legend {
+				text-align: center;
+				font-size: 1rem;
+			}
+		
+			#shipping-billing {
+				margin-bottom: 30px;
+			}
+			
+
+			
+		</style>
+		
+    </head>
+    <body>
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col">
+								<h1>Header Logo</h1>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<div class="col-8 max-auto">
+								<div class="card">
+									<div class="card-header">
+										Payment
+									</div>
+									<div class="card-body">
+										<form id="register-form" method="post">
+											<fieldset id="shipping-billing" class="field-border">
+												<legend>Shipping & Billing information.</legend>
+												<div class="form-group">
+													<span>Name</span>
+													<input type="text" name="name" class="form-control" placeholder="Name" autofocus required>
+													<div class="form-errors" role="alert">
+													</div>										
+												</div>		
+												<div class="form-group">
+													<span>Email</span>
+													<input type"email" name="email" class="form-control" placeholder="Email" required>
+													<div class="form-errors" role="alert">
+													</div>																			
+												</div>
+											</fieldset>
+											<fieldset id="payment-information" class="field-border">
+												<legend>Card Details.</legend>
+												<div class="form-group">
+													<span>Card</span>
+													<div id="card-element" class="form-control">
+														<!-- A strip Element will be inserted here. -->
+													</div>										
+												</div>
+											</fieldset>
+											<div class="form-group">
+												<button type="submit" class="btn btn-primary">Register</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-4">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col">
+								<h4>Order Summary</h1>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<table class="table">
+									<thead>
+										<tr>
+											<th scope="col">#</th>
+											<th scope="col">Preview</th>
+											<th scope="col">Price</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th class="align-middle" scope="row">1</th>
+											<td>
+												<img class="cart-details-img" width="70px;" src="http://placehold.it/285x200">
+											</td>
+											<td class="align-middle">10$</td>
+										</tr>
+										<tr>
+											<th class="align-middle" scope="row">2</th>
+											<td>
+												<img class="cart-details-img" width="70px;" src="http://placehold.it/285x200">
+											</td>
+											<td class="align-middle">10$</td>
+										</tr>
+										<tr>
+											<th class="align-middle" scope="row">3</th>
+											<td>
+												<img class="cart-details-img" width="70px;" src="http://placehold.it/285x200">
+											</td>
+											<td class="align-middle">10$</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<hr/>
+						</div>
+						<div class="row">
+							<div class="col">
+								<hr/>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<h6>Subtotal:</h4>
+							</div>
+							<div class="col-4">
+								<span>100$</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<h6>Shipping:</h4>
+							</div>
+							<div class="col-4">
+								<span>Free</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<hr/>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<h4>Total:</h4>
+							</div>
+							<div class="col-4">
+								<span>100$</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+		</div>
+		
+		<script>
+		
+			var stripe = Stripe('pk_test_6pRNASCoBOKtIshFeQd4XMUh');
+			var elements = stripe.elements();
+			
+			// Custom styling can be passed to options when creating an Element.
+			// (Note that this demo uses a wider set of styles than the guide below.)
+			var style = {
+			  base: {
+				lineHeight: '1.429'
+			  },
+			  invalid: {
+				color: '#fa755a',
+				iconColor: '#fa755a'
+			  }
+			};
+
+			// Create an instance of the card Element.
+			var card = elements.create('card', {
+				style: style,
+				hidePostalCode : false,
+			});
+
+			// Add an instance of the card Element into the `card-element` <div>.
+			card.mount('#card-element');
+		
+		</script>
+	
+		<form action="/payment/checkout" method="post" id="form_checkout">
+			<input type="hidden" name="cart_checkout" id="checkout_info" >
+			<script
+				src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+				data-key=""
+				data-name="Company Name"
+				data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+				data-description="A description of the product or service being purchased"
+				data-amount="999"
+				data-shipping-address="true"
+				data-zip-code="true"
+				data-allow-remember-me="true"
+				data-panel-label="Pay"
+				data-label="Checkout"
+				data-locale="auto">
+		  </script>
+		  </form>
+
+    </body>
+</html>
