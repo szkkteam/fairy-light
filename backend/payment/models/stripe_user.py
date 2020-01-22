@@ -29,6 +29,8 @@ class StripeUser(Model):
     stripe_token = Column(String(128), nullable=True)
     stripe_customer_id = Column(String(255), nullable=True)
 
+    orders = relationship('Order', back_populates='user')
+
     __repr_props__ = ('id')
 
     def __init__(self, hash_password=True, **kwargs):

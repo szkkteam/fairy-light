@@ -1,0 +1,24 @@
+{% macro table() %}
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Preview</th>
+        <th scope="col">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ caller() }}
+    </tbody>
+  </table>
+{% endmacro %}
+
+{% macro row(id, image, price) %}
+    <tr>
+        <th class="align-middle" scope="row">{{id}}</th>
+        <td>
+        <img class="cart-details-img" width="70px;" src="{{image}}">
+        </td>
+        <td class="align-middle">{{price}}</td>
+    </tr>
+{% endmacro %}

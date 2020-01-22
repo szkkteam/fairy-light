@@ -19,7 +19,7 @@ import stripe
 
 # Internal package imports
 from .blueprint import payment
-from ..models import StripeUser
+from ..models import StripeUser, Order
 
 from backend.contrib.photo_album.views.cart_management import get_total_price, get_cart
 from backend.contrib.photo_album.models import Image
@@ -44,7 +44,7 @@ def get_products_total_price(cart):
     ids = cart.keys()
     models = Image.get_all_by_ids(ids)
     for m in models:
-        price += m.price
+        price += m.price if m.price is not None else 0
     return price
 
 def cart_to_stripe_items(cart):
@@ -60,13 +60,23 @@ def cart_to_stripe_items(cart):
         )
     return stripe_line_items
 
+def get_or_modify_intent(**kwargs):
+    print("KWARGS: ", kwargs, flush=True)
+    # Get or Create a PaymentIntent
+    if 'intent_id' in session:
+        intent_obj = stripe.PaymentIntent.retrieve(session['intent_id'])
+        stripe.PaymentIntent.modify(intent_obj['id'],
+            **kwargs)
+    else:
+        intent_obj = stripe.PaymentIntent.create(**kwargs)
+        session['intent_id'] = intent_obj['id']
+    return intent_obj
+
 class RegisterStripeUserForm(FlaskForm):
     name = StringField('Name', validators=[validators.DataRequired(), validators.Length(min=1, max=64)])
     #firstName = StringField('Name', validators=[validators.Length(min=1, max=64)])
     #lastName = StringField('Name', validators=[validators.Length(min=1, max=64)])
     email = StringField('Email', validators=[validators.DataRequired(), validators.Email(), validators.Length(min=1, max=50)])
-    # This will be filled out automatically by stripe
-    stripeToken = PasswordField('Stripe Token', validators=[validators.DataRequired()])
 
     def validate(self):
         # Validate the form.
@@ -76,7 +86,6 @@ class RegisterStripeUserForm(FlaskForm):
     def register_to_stripe(self, user):
         customer = stripe.Customer.create(
             description=self.name.data,
-            source=self.stripeToken.data,
             metadata={"customer_code": user.id}
         )
         # TODO: Shall we create a subsription or anything?
@@ -94,8 +103,7 @@ class RegisterStripeUserForm(FlaskForm):
         user = StripeUser(
             name=self.name.data,
             email=self.email.data,
-            password=password,
-            stripe_token=self.stripeToken.data)
+            password=password)
         customer = self.register_to_stripe(user)
         user.stripe_customer_id = customer.id
 
@@ -114,55 +122,47 @@ def checkout():
 
     print("Request data: ", request.form, flush=True)
 
+    # Get the cart content
+    cart_content = get_cart()
+    # Calculate the charge amount. The currency in the smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency).
+    charge_amount = int(get_charge_amount(cart_content) * 100)
+
     if form.validate_on_submit():
 
         print("Form data: ", form, flush=True)
 
         # TODO: Create the customer, based on from data
-        #user = form.get_or_create()
-        # Get the cart content
-        cart_content = get_cart()
-        # Calculate the charge amount. The currency in the smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency).
-        charge_amount = get_charge_amount(cart_content) * 100
-
+        user = form.get_or_create()
         # TODO: Create an order model and assign the ID to the intent object
 
         # TODO: Implement imdopotency key to prevent double charges.
         # Eg: Put the Create function into a fallback retry with auto generated idempotency_key. So each time it will generate
         # a new key and retries it a few time.
+        intent_obj = get_or_modify_intent(
+            amount=charge_amount,
+            currency='eur',
+            # TODO: Check if this will be always less than 22 char
+            description="Fairy Light ord. %d" % 9999,
+            receipt_email=user.email,
+            customer=user.stripe_customer_id,
+            payment_method_types=['card'],
+            metadata={'user_id': user.id, 'order_id': 9999},
+        )
+    else:
+        intent_obj = get_or_modify_intent(
+            amount=charge_amount,
+            currency='eur',
+            payment_method_types=['card'],
+        )
 
-        # Get or Create a PaymentIntent
-        if 'intent_id' in session:
-            intent_obj= stripe.PaymentIntent.retrieve(session['intent_id'])
-        else:
-            intent_obj = stripe.PaymentIntent.create(
-                amount=charge_amount,
-                currency='eur',
-                # TODO: Check if this will be alway less than 22 char
-                description="Fairy Light ord. %d" % 9999,
-                receipt_email=user.email,
-                customer=user.stripe_customer_id,
-                payment_method_types=['card'],
-                # TODO: Create an order model
-                metadata={ 'user_id': user.id, 'order_id': 9999 },
-            )
-            session['intent_id'] = intent_obj['id']
-
-        client_secret = intent_obj['client_secret']
-
-        print("Session: ", session, flush=True)
-
-        return render_template('checkout.html',
-                               form=form,
-                               session_id=client_secret,
-                               public_key=get_stripe_public_key(),
-                               price_amount=get_total_price())
+    client_secret = intent_obj['client_secret']
 
     return render_template('checkout.html',
                            form=form,
+                           cart_items=cart_content,
+                           client_secret=client_secret,
                            public_key=get_stripe_public_key(),
                            price_amount=get_total_price())
-    #return redirect(url_for('payment.checkout'))
 
 @payment.route('/checkout-webhook', methods=['POST'])
 @csrf.exempt

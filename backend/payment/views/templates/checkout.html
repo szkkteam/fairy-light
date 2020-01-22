@@ -1,30 +1,150 @@
 {% extends 'website/base.html' %}
+{% import 'modules/checkout_cart.html' as cart with context %}
 
 {% block head_css %}
     {{ super() }}
     <!-- The required Stripe lib -->
     <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+
+    <style>
+        #register-form .field-border {
+          border-radius: 0.25rem;
+          border: 1px solid #666;
+          padding-left: 25px;
+          padding-right: 25px;
+          padding-top: 2px;
+          padding-bottom: 10px;		
+        }
+  
+        #register-form .field-border legend {
+          text-align: center;
+          font-size: 1rem;
+        }
+      
+        #shipping-billing {
+          margin-bottom: 30px;
+        }
+                  
+    </style>
 {% endblock %}
 
 {% block page_body %}
 
-  <form action="/payment/checkout" method="post" id="form_checkout">
-    <input type="hidden" name="cart_checkout" id="checkout_info" >
-    <script
-        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-        data-key="{{ public_key }}"
-        data-name="Company Name"
-        data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-        data-description="A description of the product or service being purchased"
-        data-amount="999"
-        data-shipping-address="true"
-        data-zip-code="true"
-        data-allow-remember-me="true"
-        data-panel-label="Pay"
-        data-label="Checkout"
-        data-locale="auto">
-  </script>
-  </form>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col">
+              <h1>Header Logo</h1>
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <div class="col-8 max-auto">
+              <div class="card">
+                <div class="card-header">
+                  Payment
+                </div>
+                <div class="card-body">
+                  <form id="register-form" method="post" action="{{url_for('payment.checkout')}}">
+                    {{form.csrf_token}}
+                    <fieldset id="shipping-billing" class="field-border">
+                      <legend>Shipping & Billing information.</legend>
+                      <div class="form-group">
+                        <span>Name</span>
+                        <input type="text" name="name" class="form-control" placeholder="Name" autofocus required value="{{form.data.name or ''}}">
+                        {% if form.errors and 'name' in form.errors %}
+                          <div class="form-errors" role="alert">
+                            {{form.errors.name[0]}}
+                          </div>										
+                        {% endif %}
+                      </div>		
+                      <div class="form-group">
+                        <span>Email</span>
+                        <input type="email" name="email" class="form-control" placeholder="Email" required value="{{form.data.email or ''}}">
+                        {% if form.errors and 'email' in form.errors %}
+                          <div class="form-errors" role="alert">
+                            {{form.errors.email[0]}}
+                          </div>										
+                        {% endif %}																	
+                      </div>
+                    </fieldset>
+                    <fieldset id="payment-information" class="field-border">
+                      <legend>Card Details.</legend>
+                      <div class="form-group">
+                        <span>Card</span>
+                        <div id="card-element" class="form-control">
+                          <!-- A strip Element will be inserted here. -->
+                        </div>							
+                        <div id="card-errors" role="alert"></div>
+                      </div>
+                    </fieldset>
+                    <div class="form-group">
+                      <button id="submit-btn" type="submit" class="btn btn-primary">Register</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col">
+              <h4>Order Summary</h1>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+                {% call cart.table() %}
+                  {% for key, item in cart_items.items() %}
+                    {{cart.row(loop.index, image=item['thumb'], price=item['price'])}}
+                  {% endfor %}
+                {% endcall %}              
+            </div>
+            <hr/>
+          </div>
+          <div class="row">
+            <div class="col">
+              <hr/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <h6>Subtotal:</h4>
+            </div>
+            <div class="col-4">
+              <span>{{price_amount}}</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <h6>Shipping:</h4>
+            </div>
+            <div class="col-4">
+              <span>Free</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <hr/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <h4>Total:</h4>
+            </div>
+            <div class="col-4">
+              <span>{{price_amount}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 
 {% endblock %}
 
@@ -34,19 +154,62 @@
     <script type="text/javascript">
         var stripe = Stripe("{{public_key}}");
         
-        {% if redirect %}
-        stripe.redirectToCheckout({
-          // Make the id field from the Checkout Session creation API response
-          // available to this file, so you can provide it as parameter here
-          // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
-          sessionId: '{{CHECKOUT_SESSION_ID}}'
-        }).then(function (result) {
-          // If `redirectToCheckout` fails due to a browser or network
-          // error, display the localized error message to your customer
-          // using `result.error.message`.
-        });
-        {% endif %}
+        var elements = stripe.elements();
+        
+        // Custom styling can be passed to options when creating an Element.
+        // (Note that this demo uses a wider set of styles than the guide below.)
+        var style = {
+          base: {
+          lineHeight: '1.429'
+          },
+          invalid: {
+          color: '#fa755a',
+          iconColor: '#fa755a'
+          }
+        };
 
+        // Create an instance of the card Element.
+        var card = elements.create('card', {
+          style: style,
+          hidePostalCode : false,
+        });
+
+        // Add an instance of the card Element into the `card-element` <div>.
+        card.mount('#card-element');
+
+        var submitButton = document.getElementById('submit-btn');
+
+          /* TODO:
+          stripe.confirmCardPayment may take several seconds to complete.
+          During that time, disable your form from being resubmitted and show a waiting indicator like a spinner.
+          If you receive an error, show it to the customer, re-enable the form, and hide the waiting indicator.
+          */
+
+        submitButton.addEventListener('click', function(ev) {
+          stripe.confirmCardPayment('{{client_secret}}', {
+            payment_method: {
+              card: card,
+              billing_details: {
+                name: 'Jenny Rosen'
+              }
+            }
+          }).then(function(result) {
+            if (result.error) {
+              // Show error to your customer (e.g., insufficient funds)
+              console.log(result.error.message);
+            } else {
+              // The payment has been processed!
+              console.log(result);
+              if (result.paymentIntent.status === 'succeeded') {
+                // Show a success message to your customer
+                // There's a risk of the customer closing the window before callback
+                // execution. Set up a webhook or plugin to listen for the
+                // payment_intent.succeeded event that handles any business critical
+                // post-payment actions.
+              }
+            }
+          });
+        });
 
     </script>
 

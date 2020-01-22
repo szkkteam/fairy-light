@@ -25,8 +25,9 @@ def get_cart():
 def get_total_price():
     total = 0
     items = get_cart()
-    for key, item in items.items():
-        total += item['price']
+    if items is not None:
+        for key, item in items.items():
+            total += item['price']
     return total
 
 def clear_cart():
