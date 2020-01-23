@@ -40,7 +40,7 @@
         });
 
                     
-        $(document.body).on('click', '.shopping-cart-clear', function(e) {
+        $(document.body).on('click', '.clear-item', function(e) {
             e.preventDefault();
             const cardId = $(this).parent().parent().attr('data-id');
 
@@ -61,6 +61,26 @@
                 }
             });    
         });
+
+        $(document.body).on('click', '#shopping-cart-clear', function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('href'),
+                contentType: 'application/json;charset=UTF-8',
+                success: function (data) {
+                    /* Update the counter at the shopping cart. */
+                    updateItemsCounter(data.shopItems);
+                    /* Update the shopping cart details */
+                    loadCartData();
+                    console.log(data.shopItems)
+                },
+                error: function (data) {
+                    console.log(data.responseJSON);
+                }
+            });    
+        })
 
         function updateItemsCounter(numOfItems) {
             $(opts.numOfItemsIndicatorFilter).html(numOfItems);

@@ -23,6 +23,7 @@ from ..models import StripeUser, Order
 
 from backend.contrib.photo_album.views.cart_management import get_total_price, get_cart
 from backend.contrib.photo_album.models import Image
+from backend.extensions import db
 from backend.extensions import csrf
 
 def generate_password(size=8):
@@ -71,6 +72,16 @@ def get_or_modify_intent(**kwargs):
         intent_obj = stripe.PaymentIntent.create(**kwargs)
         session['intent_id'] = intent_obj['id']
     return intent_obj
+
+def get_or_create_order(**kwargs):
+    if 'order_id' in session:
+        return Order.get(session['order_id'])
+    else:
+        order = Order.create(commit=False, **kwargs)
+        db.session.add(order)
+        db.session.commit()
+
+        return order
 
 class RegisterStripeUserForm(FlaskForm):
     name = StringField('Name', validators=[validators.DataRequired(), validators.Length(min=1, max=64)])
@@ -126,34 +137,17 @@ def checkout():
     cart_content = get_cart()
     # Calculate the charge amount. The currency in the smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency).
     charge_amount = int(get_charge_amount(cart_content) * 100)
+    product_ids = list(cart_content.keys())
 
-    if form.validate_on_submit():
+    order = get_or_create_order(products=product_ids)
 
-        print("Form data: ", form, flush=True)
-
-        # TODO: Create the customer, based on from data
-        user = form.get_or_create()
-        # TODO: Create an order model and assign the ID to the intent object
-
-        # TODO: Implement imdopotency key to prevent double charges.
-        # Eg: Put the Create function into a fallback retry with auto generated idempotency_key. So each time it will generate
-        # a new key and retries it a few time.
-        intent_obj = get_or_modify_intent(
-            amount=charge_amount,
-            currency='eur',
-            # TODO: Check if this will be always less than 22 char
-            description="Fairy Light ord. %d" % 9999,
-            receipt_email=user.email,
-            customer=user.stripe_customer_id,
-            payment_method_types=['card'],
-            metadata={'user_id': user.id, 'order_id': 9999},
-        )
-    else:
-        intent_obj = get_or_modify_intent(
-            amount=charge_amount,
-            currency='eur',
-            payment_method_types=['card'],
-        )
+    intent_obj = get_or_modify_intent(
+        amount=charge_amount,
+        description="Fairy Light ord. %d" % order.id,
+        currency='eur',
+        payment_method_types=['card'],
+        metadata={'order_id': order.id},
+    )
 
     client_secret = intent_obj['client_secret']
 
@@ -187,22 +181,117 @@ def checkout_webhook():
             data = request_data['data']
             event_type = request_data['type']
         data_object = data['object']
+
+        print("data_object: ", data_object, flush=True)
         # If the user completed the checkout
         if event_type == 'checkout.session.completed':
+            print("Success", flush=True)
             # data['object'] should contain the customer if it was created before
-            customer_id = data['object']['customer']
-            user = StripeUser.get_by(stripe_customer_id=customer_id)
-            if user is None:
-                # TODO: Send some error to somewhere if the user does not exists.
-                pass
-            email = user.email
-            # TODO: Set the async task to create the zip file and send it to the customers. Also create a DB object??
+            print("Event data: ", data['object'], flush=True)
 
         return jsonify({'status': 'success'})
 
     except Exception as err:
         logger.error(traceback.format_exc())
         return abort(500)
+
+"""
+{
+  "id": "ch_1G4CFiAbsp6t6e9Sh5JB5vOS",
+  "object": "charge",
+  "livemode": "",
+  "payment_intent": "pi_1G4CExAbsp6t6e9SxO0arCha",
+  "status": "succeeded",
+  "amount": 2000,
+  "amount_refunded": "",
+  "application": "",
+  "application_fee": "",
+  "application_fee_amount": "",
+  "balance_transaction": "txn_1G4CFjAbsp6t6e9SRmk2Jcs6",
+  "billing_details": {
+    "address": {
+      "city": null,
+      "country": null,
+      "line1": null,
+      "line2": null,
+      "postal_code": "22222",
+      "state": null
+    },
+    "email": "asd@asd.com",
+    "name": "Mica",
+    "phone": null
+  },
+  "captured": true,
+  "created": 1579811170,
+  "currency": "eur",
+  "customer": "",
+  "description": "Fairy Light ord. 12",
+  "destination": "",
+  "dispute": "",
+  "disputed": "",
+  "failure_code": "",
+  "failure_message": "",
+  "fraud_details": {
+  },
+  "invoice": "",
+  "metadata": {
+    "order_id": "12"
+  },
+  "on_behalf_of": "",
+  "order": "",
+  "outcome": {
+    "network_status": "approved_by_network",
+    "reason": null,
+    "risk_level": "normal",
+    "risk_score": 62,
+    "seller_message": "Payment complete.",
+    "type": "authorized"
+  },
+  "paid": true,
+  "payment_method": "pm_1G4CFiAbsp6t6e9SGJ3InuVa",
+  "payment_method_details": {
+    "card": {
+      "brand": "visa",
+      "checks": {
+        "address_line1_check": null,
+        "address_postal_code_check": "pass",
+        "cvc_check": "pass"
+      },
+      "country": "US",
+      "exp_month": 2,
+      "exp_year": 2022,
+      "fingerprint": "s8Si8AUJ9BviRhgd",
+      "funding": "credit",
+      "installments": null,
+      "last4": "4242",
+      "network": "visa",
+      "three_d_secure": null,
+      "wallet": null
+    },
+    "type": "card"
+  },
+  "receipt_email": "",
+  "receipt_number": "",
+  "receipt_url": "https://pay.stripe.com/receipts/acct_1G3PV0Absp6t6e9S/ch_1G4CFiAbsp6t6e9Sh5JB5vOS/rcpt_GbP3j8mQAnleY82xlA9CJ9p2BzgeQYp",
+  "refunded": "",
+  "refunds": {
+    "object": "list",
+    "data": [
+    ],
+    "has_more": false,
+    "total_count": 0,
+    "url": "/v1/charges/ch_1G4CFiAbsp6t6e9Sh5JB5vOS/refunds"
+  },
+  "review": "",
+  "shipping": "",
+  "source": "",
+  "source_transfer": "",
+  "statement_descriptor": "",
+  "statement_descriptor_suffix": "",
+  "transfer_data": "",
+  "transfer_group": ""
+}
+"""
 
 @payment.route('/checkout-success', methods=['GET'])
 def checkout_success():

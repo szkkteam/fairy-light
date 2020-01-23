@@ -30,9 +30,11 @@ def get_total_price():
             total += item['price']
     return total
 
-def clear_cart():
+def clear_cart_items():
     session.modified = True
     items = session.pop('cart_items', {})
+    intent_id = session.pop('intent_id', {})
+    order_id = session.pop('order_id', {})
 
 def add_photo_item(data):
     if data is not None:
@@ -130,7 +132,7 @@ def get_cart_content():
 def clear_cart():
     try:
         if request.method == 'POST':
-            clear_cart()
+            clear_cart_items()
             return jsonify({'shopItems': get_cart_num_of_items()})
 
         return abort(404)

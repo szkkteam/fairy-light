@@ -10,7 +10,7 @@ from flask_security.utils import hash_password as security_hash_password
 # Internal package imports
 from backend.database import (
     Column,
-    Model,
+    BaseModel,
     String,
     Float,
     relationship,
@@ -19,7 +19,7 @@ from backend.database import (
 )
 
 
-class OrderProduct(Model):
+class OrderProduct(BaseModel):
 
     product_id = foreign_key('Image', primary_key=True)
     product = relationship('Image') # Don't use backpopulate, because the image dosent have product_id column.

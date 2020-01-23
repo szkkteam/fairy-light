@@ -46,27 +46,20 @@
                   Payment
                 </div>
                 <div class="card-body">
-                  <form id="register-form" method="post" action="{{url_for('payment.checkout')}}">
-                    {{form.csrf_token}}
+                  <form id="register-form" method="post">
                     <fieldset id="shipping-billing" class="field-border">
                       <legend>Shipping & Billing information.</legend>
                       <div class="form-group">
                         <span>Name</span>
-                        <input type="text" name="name" class="form-control" placeholder="Name" autofocus required value="{{form.data.name or ''}}">
-                        {% if form.errors and 'name' in form.errors %}
+                        <input type="text" name="name" class="form-control" placeholder="Name" autofocus required>
                           <div class="form-errors" role="alert">
-                            {{form.errors.name[0]}}
                           </div>										
-                        {% endif %}
                       </div>		
                       <div class="form-group">
                         <span>Email</span>
-                        <input type="email" name="email" class="form-control" placeholder="Email" required value="{{form.data.email or ''}}">
-                        {% if form.errors and 'email' in form.errors %}
+                        <input type="email" name="email" class="form-control" placeholder="Email" required >
                           <div class="form-errors" role="alert">
-                            {{form.errors.email[0]}}
                           </div>										
-                        {% endif %}																	
                       </div>
                     </fieldset>
                     <fieldset id="payment-information" class="field-border">
@@ -186,11 +179,17 @@
           */
 
         submitButton.addEventListener('click', function(ev) {
+          ev.preventDefault();
+
+          const name = $('input[name=name]').val();
+          const email = $('input[name=email]').val();
+
           stripe.confirmCardPayment('{{client_secret}}', {
             payment_method: {
               card: card,
               billing_details: {
-                name: 'Jenny Rosen'
+                name: name,
+                email: email,
               }
             }
           }).then(function(result) {

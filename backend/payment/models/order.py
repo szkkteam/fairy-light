@@ -20,6 +20,7 @@ from backend.database import (
 )
 
 from .order_product import OrderProduct
+from backend.contrib.photo_album.models import Image
 
 class OrderStatus(enum.Enum):
     created = 1             # Default status when the object is created.
@@ -53,10 +54,13 @@ class Order(Model):
     def __init__(self, **kwargs):
         #products_ids = kwargs.pop('products_ids', None)
         self.status = OrderStatus.created
-        self.download_cnt = 0
+        #self.download_cnt = 0
         products = kwargs.pop('products', None)
         if products:
             if isinstance(products, list):
+                products = [ Image.get(id) for id in products]
                 self.product.extend(products)
             else:
-                self.product.append(products)
+                self.product.append(Image.get(products))
+
+        super(Order, self).__init__(**kwargs)
