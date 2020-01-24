@@ -25,9 +25,9 @@ class StripeUser(Model):
 
     email = Column(String(50), unique=True, index=True)
     name = Column(String(128))
-    password = Column(String, nullable=True)
-    stripe_token = Column(String(128), nullable=True)
-    stripe_customer_id = Column(String(255), nullable=True)
+    #password = Column(String, nullable=True)
+    #stripe_token = Column(String(128), nullable=True)
+    #stripe_customer_id = Column(String(255), nullable=True)
 
     orders = relationship('Order', back_populates='user')
 

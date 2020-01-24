@@ -27,14 +27,15 @@ class OrderStatus(enum.Enum):
     payment_requested = 2   # Payment requested by stripe. Confirmation is ongoing.
     payment_confirmed = 3   # Payment confirmed by stripe
     payment_error = 4       # Payment failed
-    delivery_queued = 5     # Products are queued for delivery
-    delivery_ongoing = 6    # Delivery is in progress
-    delivery_succeed = 7    # Delivery successful.
-    delivery_failed = 8     # Delivery failed
-    ready_to_download = 9   # Product is ready for the user to download
-    download_in_progress = 10 # User started the download procedure
-    download_succeed = 11   # The download procedure finished successfully
-    download_failed = 12    # The download procedure failed.
+    #payment_cancelled = 5  # Payment failed
+    delivery_queued = 6     # Products are queued for delivery
+    delivery_ongoing = 7    # Delivery is in progress
+    delivery_succeed = 8    # Delivery successful.
+    delivery_failed = 9     # Delivery failed
+    ready_to_download = 10   # Product is ready for the user to download
+    download_in_progress = 11 # User started the download procedure
+    download_succeed = 12   # The download procedure finished successfully
+    download_failed = 13    # The download procedure failed.
 
 class Order(Model):
 

@@ -19,7 +19,7 @@ import stripe
 
 # Internal package imports
 from .blueprint import payment
-from ..models import StripeUser, Order
+from ..models import StripeUser, Order, OrderStatus
 
 from backend.contrib.photo_album.views.cart_management import get_total_price, get_cart
 from backend.contrib.photo_album.models import Image
@@ -82,6 +82,15 @@ def get_or_create_order(**kwargs):
         db.session.commit()
 
         return order
+
+def get_or_create_user(**kwargs):
+    email = kwargs.get('email', None)
+    name = kwargs.get('name', 'Guest')
+    user = StripeUser.get_by(email=email)
+    if user in None:
+        user = StripeUser(email=email,
+                          name=name)
+    return user
 
 class RegisterStripeUserForm(FlaskForm):
     name = StringField('Name', validators=[validators.DataRequired(), validators.Length(min=1, max=64)])
@@ -182,18 +191,76 @@ def checkout_webhook():
             event_type = request_data['type']
         data_object = data['object']
 
-        print("data_object: ", data_object, flush=True)
-        # If the user completed the checkout
-        if event_type == 'checkout.session.completed':
-            print("Success", flush=True)
-            # data['object'] should contain the customer if it was created before
-            print("Event data: ", data['object'], flush=True)
+        # Monitor payment_intent.succeeded & payment_intent.payment_failed events.
+        if data_object['object'] == 'payment_intent':
+            payment_intent = data_object
+            # Create or get the user for this payment
+            user = get_or_create_user(**payment_intent['billing_details'])
+            # Get the pending order
+            order = Order.get(payment_intent['metadata']['order_id'])
+            # Add the order to the user
+            user.orders.append(order)
+            # Set the order status to payment pending
+            order.status = OrderStatus.payment_requested
 
-        return jsonify({'status': 'success'})
+            if event_type == 'payment_intent.succeeded':
+                # Update the payment status to confirmed
+                order.status = OrderStatus.payment_confirmed
+
+                # Trigger the asynchronous task
+
+
+                # TODO: Check if this is required. I guess no
+                db.session.add(user)
+                db.session.commit()
+
+                # TODO: Schedule the async task for delivering products
+
+                print('🔔  Webhook received! Payment for PaymentIntent ' +
+                      payment_intent['id'] + ' succeeded')
+            elif event_type == 'payment_intent.payment_failed':
+                # Update the payment status to failed
+                order.status = OrderStatus.payment_error
+
+                if 'payment_method' in payment_intent['last_payment_error']:
+                    payment_source_or_method = payment_intent['last_payment_error']['payment_method']
+                else:
+                    payment_source_or_method = payment_intent['last_payment_error']['source']
+
+                    # TODO: something went wrong
+
+                print('🔔  Webhook received! Payment on ' + payment_source_or_method['object'] + ' '
+                      + payment_source_or_method['id'] + ' for PaymentIntent ' + payment_intent['id'] + ' failed.')
+
+        # Monitor `source.chargeable` events.
+        if data_object['object'] == 'source' \
+                and data_object['status'] == 'chargeable' \
+                and 'paymentIntent' in data_object['metadata']:
+            source = data_object
+            print(f'🔔  Webhook received! The source {source["id"]} is chargeable')
+
+            # Find the corresponding PaymentIntent this Source is for by looking in its metadata.
+            payment_intent = stripe.PaymentIntent.retrieve(
+                source['metadata']['paymentIntent'])
+
+            # Verify that this PaymentIntent actually needs to be paid.
+            if payment_intent['status'] != 'requires_payment_method':
+                return jsonify({'error': f'PaymentIntent already has a status of {payment_intent["status"]}'}), 403
+
+            # Confirm the PaymentIntent with the chargeable source.
+            payment_intent.confirm(source=source['id'])
+
+        # Monitor `source.failed` and `source.canceled` events.
+        if data_object['object'] == 'source' and data_object['status'] in ['failed', 'canceled']:
+            # Cancel the PaymentIntent.
+            source = data_object
+            intent = stripe.PaymentIntent.retrieve(
+                source['metadata']['paymentIntent'])
+            intent.cancel()
 
     except Exception as err:
-        logger.error(traceback.format_exc())
-        return abort(500)
+            logger.error(traceback.format_exc())
+            return abort(500)
 
 """
 {

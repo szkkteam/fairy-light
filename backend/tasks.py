@@ -21,3 +21,7 @@ def send_mail_async_task(msg):
         msg.body = re.sub(r'\n\n+', '\n\n', plain_text).strip()
 
     mail.send(msg)
+
+@celery.task(serializer='picke')
+def prepare_product_async_task():
+    pass

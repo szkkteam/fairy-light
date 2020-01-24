@@ -191,6 +191,10 @@
                 name: name,
                 email: email,
               }
+            },
+            receipt_email: email,
+            metadata = {
+              paymentIntent: {{client_secret}}
             }
           }).then(function(result) {
             if (result.error) {
