@@ -10,22 +10,36 @@ import sys
 # Pip package imports
 from flask import current_app, render_template, url_for, request, redirect, jsonify, abort, session
 
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, validators
-
 from loguru import logger
 
 import stripe
 
 # Internal package imports
+from backend.extensions import db
+from backend.extensions import csrf
+
 from .blueprint import shop
 from ..models import StripeUser, Order, PaymentStatus
 from ..webhook import StripeEvents, StripeWebhook
 
 from ..inventory import ProductInventory
 from ..models import Image
-from backend.extensions import db
-from backend.extensions import csrf
+
+def is_intent_success():
+    intent_id = ProductInventory.get_intent_id()
+    if intent_id is not None:
+        intent_obj = stripe.PaymentIntent.retrieve(intent_id)
+        if 'charges' in intent_obj:
+            return bool(intent_obj['charges']['data'][0]['status'] == 'succeeded')
+    return False
+
+def is_order_success():
+    order_id = ProductInventory.get_order_id()
+    if order_id is not None:
+        order = Order.get(order_id)
+        return bool(order.payment_status == PaymentStatus.confirmed)
+    return False
+
 
 def generate_password(size=8):
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(size))
@@ -49,39 +63,33 @@ def get_products_total_price(cart):
         price += m.price if m.price is not None else 0
     return price
 
-def cart_to_stripe_items(cart):
-    stripe_line_items = []
-    for key, item in cart.items():
-        stripe_line_items.append({
-                'name': 'photo', # TOOD: Represent the photo image with some name.
-                'description': 'Maximum quality digital photo.',
-                'image': [item['thumb']],
-                'amount': item['price'],
-                'currency': 'eur',
-                'quantity': 1}
-        )
-    return stripe_line_items
-
 def get_or_modify_intent(**kwargs):
     # Get or Create a PaymentIntent
-    if 'intent_id' in session:
-        intent_obj = stripe.PaymentIntent.retrieve(session['intent_id'])
+    intent_id = ProductInventory.get_intent_id()
+    if intent_id is not None:
+        intent_obj = stripe.PaymentIntent.retrieve(intent_id)
+        print(intent_obj, flush=True)
         stripe.PaymentIntent.modify(intent_obj['id'],
             **kwargs)
     else:
         intent_obj = stripe.PaymentIntent.create(**kwargs)
-        session['intent_id'] = intent_obj['id']
+        ProductInventory.set_intent_id(intent_obj['id'])
+        logger.debug("Payment Intent: \'{id}\' created.".format(id=intent_obj['id']))
     return intent_obj
 
 def get_or_create_order(**kwargs):
-    if 'order_id' in session:
-        return Order.get(session['order_id'])
+
+    order_id = ProductInventory.get_order_id()
+    if order_id is not None:
+        return Order.get(order_id)
     else:
         order = Order.create(commit=False, **kwargs)
+        # Must commit immidiatly because we need the assigned ID
         db.session.add(order)
         db.session.commit()
 
-        session['order_id'] = order.id
+        ProductInventory.set_order_id(order.id)
+        logger.debug("Order: \'{id}\' created.".format(id=order.id))
 
         return order
 
@@ -90,48 +98,9 @@ def get_or_create_user(**kwargs):
     name = kwargs.get('name', 'Guest')
     user = StripeUser.get_by(email=email)
     if user is None:
-        user = StripeUser(email=email,
-                          name=name)
+        user = StripeUser(email=email, name=name)
+        logger.debug("User: \'{user}\' created.".format(user=user))
     return user
-
-class RegisterStripeUserForm(FlaskForm):
-    name = StringField('Name', validators=[validators.DataRequired(), validators.Length(min=1, max=64)])
-    #firstName = StringField('Name', validators=[validators.Length(min=1, max=64)])
-    #lastName = StringField('Name', validators=[validators.Length(min=1, max=64)])
-    email = StringField('Email', validators=[validators.DataRequired(), validators.Email(), validators.Length(min=1, max=50)])
-
-    def validate(self):
-        # Validate the form.
-        super(RegisterStripeUserForm, self).validate()
-        # FIXME: email and username is not validated. Hopefully we can match the user by hand.
-
-    def register_to_stripe(self, user):
-        customer = stripe.Customer.create(
-            description=self.name.data,
-            metadata={"customer_code": user.id}
-        )
-        # TODO: Shall we create a subsription or anything?
-        return customer
-
-    def get_or_create(self):
-        user = StripeUser.get_by(email=self.email.data)
-        if user in None:
-            return self._create_user()
-        return user
-
-    def _create_user(self):
-        # TODO: Generate password. Should be 8 char long
-        password = generate_password()
-        user = StripeUser(
-            name=self.name.data,
-            email=self.email.data,
-            password=password)
-        customer = self.register_to_stripe(user)
-        user.stripe_customer_id = customer.id
-
-        user.save()
-        return user
-
 
 #@payment.route('/')
 @shop.route('/checkout', methods=['GET', 'POST'])
@@ -139,10 +108,7 @@ class RegisterStripeUserForm(FlaskForm):
 def checkout():
     # If the cart's total price is 0 it means the customer selected only free products.
     # 1) Skipp the stripe payment process and redirect to the final page (Pro: Fast and customers don't has to provide card details. Cont: No tracking and billing receipes)
-    # 2) Still use the stripe payment process, but charge it with 0. (Pro: We have track, and they have receipe. Cont: It's a bit strange to put card details to something which is free)
-    form = RegisterStripeUserForm()
-
-    print("Request data: ", request.form, flush=True)
+    # 2) NOT WORKING Still use the stripe payment process, but charge it with 0. (Pro: We have track, and they have receipe. Cont: It's a bit strange to put card details to something which is free)
 
     # Get the cart content
     cart_content = ProductInventory.get_content()
@@ -163,7 +129,6 @@ def checkout():
     client_secret = intent_obj['client_secret']
 
     return render_template('checkout.html',
-                           form=form,
                            cart_items=cart_content,
                            client_secret=client_secret,
                            public_key=get_stripe_public_key(),
@@ -177,6 +142,7 @@ class PaymentWebhook(StripeWebhook):
     def handle_payment_intent_created(self, data):
         order = self._get_order(data)
         order.set_payment_status(PaymentStatus.requested)
+        logger.debug("Payment Intent status: requested.")
         return self.return_success()
 
     def handle_payment_intent_succeeded(self, data):
@@ -196,20 +162,26 @@ class PaymentWebhook(StripeWebhook):
             return self.return_error('Billing details is missing.', 400)
 
         user.orders.append(order)
-        order.set_payment_status(PaymentStatus.confirmed)
+        order.set_payment_status(PaymentStatus.confirmed, commit=False)
 
+        logger.debug("Payment Intent status: confirmed.")
+
+        db.session.add(user)
+        db.session.add(order)
+        db.session.commit()
         # TODO: Start the async process
         return self.return_success()
 
     def handle_payment_intent_failed(self, data):
         order = self._get_order(data)
         order.set_payment_status(PaymentStatus.error)
-        logger.error('Payment Intent failed')
+        logger.debug("Payment Intent status: failed.")
         return self.return_success()
 
     def handle_charge_succeeded(self, data):
         order = self._get_order(data)
-        order.set_payment_status(PaymentStatus.confirmed)
+        order.set_payment_status(PaymentStatus.confirmed, commit=False)
+        logger.debug("Payment Charge status: confirmed.")
 
         try:
             name = data['billing_details']['name']
@@ -219,12 +191,17 @@ class PaymentWebhook(StripeWebhook):
         else:
             user = get_or_create_user(name=name, email=email)
             user.orders.append(order)
+            db.session.add(user)
+
+        db.session.add(order)
+        db.session.commit()
 
         return self.return_success()
 
     def handle_charge_failed(self, data):
         order = self._get_order(data)
         order.set_payment_status(PaymentStatus.error)
+        logger.debug("Payment Charge status: failed.")
         return self.return_success()
 
 

@@ -27,4 +27,4 @@ class StripeUser(Model):
 
     orders = relationship('Order', back_populates='user')
 
-    __repr_props__ = ('id')
+    __repr_props__ = ('id', 'email')

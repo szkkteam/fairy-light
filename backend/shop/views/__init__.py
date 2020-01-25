@@ -6,7 +6,7 @@
 # Internal package imports
 from .blueprint import shop
 
-from .categories import (
+from .list import (
     index_view
 )
 

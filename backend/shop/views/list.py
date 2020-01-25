@@ -12,14 +12,13 @@ from loguru import logger
 from backend.extensions import db
 
 from .blueprint import shop
-from ..models import Category
+from ..models import Category, Order, PaymentStatus
 from ..inventory import ProductInventory
-#from .cart_management import get_cart, get_cart_num_of_items, get_total_price, reset_session
+from .checkout import is_intent_success, is_order_success
+
 
 def get_breadcrumbs(root_id):
     breadcrumbs = []
-    # Explicitly add the main root
-    #breadcrumbs.append( {'url': url_for('category.index_view', root=None), 'title': 'Home' })
     if root_id is not None:
         ascendent_list = Category.get(root_id).path_to_root(db.session, asc).all()
         print("ascendent_list: ", ascendent_list, flush=True)
@@ -35,7 +34,16 @@ def get_breadcrumbs(root_id):
 def index_view(root=None):
     # Calculate the breadcrumbs relative to the current view
     breadcrumbs = get_breadcrumbs(root)
-    #reset_session()
+
+    # TODO: There must be a better way, how to close the session cart
+    order_id = ProductInventory.get_order_id()
+    if order_id is not None:
+        order = Order.get(order_id)
+        if order.payment_status == PaymentStatus.confirmed:
+            ProductInventory.reset()
+    if is_intent_success() or is_order_success():
+        ProductInventory.reset()
+
     # Query the models at given level.
     data = Category.get_list_from_root(root, only_public=True).all()
 

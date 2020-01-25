@@ -121,6 +121,31 @@ class ProductInventory(object):
         return cls.storage['shoppingCart']['items']
 
     @classmethod
+    def get_order_id(cls):
+        cls._prepare_layout()
+        if 'orderId' in cls.storage['shoppingCart']['tracking']:
+            return cls.storage['shoppingCart']['tracking']['orderId']
+        return None
+
+    @classmethod
+    def get_intent_id(cls):
+        cls._prepare_layout()
+        if 'intentId' in cls.storage['shoppingCart']['tracking']:
+            return cls.storage['shoppingCart']['tracking']['intentId']
+        return None
+
+    @classmethod
     def is_empty(cls):
         return (cls.get_num_of_items() == 0)
+
+    @classmethod
+    def set_order_id(cls, id):
+        cls._prepare_layout()
+        cls.storage['shoppingCart']['tracking']['orderId'] = id
+
+    @classmethod
+    def set_intent_id(cls, id):
+        cls._prepare_layout()
+        cls.storage['shoppingCart']['tracking']['intentId'] = id
+
 

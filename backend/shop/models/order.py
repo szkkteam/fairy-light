@@ -72,10 +72,10 @@ class Order(Model):
 
         super(Order, self).__init__(**kwargs)
 
-    def set_shipping_status(self, status, commit=False):
+    def set_shipping_status(self, status, commit=True):
         self.shipping_status = status
         self.save(commit)
 
-    def set_payment_status(self, status, commit=False):
+    def set_payment_status(self, status, commit=True):
         self.payment_status = status
         self.save(commit)
