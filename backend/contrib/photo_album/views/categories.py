@@ -16,7 +16,7 @@ from .blueprint import photo_album
 from ..models import Category
 from ..models import Image
 
-from .cart_management import get_cart, get_cart_num_of_items, get_total_price
+from .cart_management import get_cart, get_cart_num_of_items, get_total_price, reset_session
 
 def get_breadcrumbs(root_id):
     breadcrumbs = []
@@ -37,7 +37,7 @@ def get_breadcrumbs(root_id):
 def index_view(root=None):
     # Calculate the breadcrumbs relative to the current view
     breadcrumbs = get_breadcrumbs(root)
-
+    reset_session()
     # Query the models at given level.
     data = Category.get_list_from_root(root, only_public=True).all()
 

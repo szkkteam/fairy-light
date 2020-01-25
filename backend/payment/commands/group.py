@@ -3,9 +3,10 @@
 
 # Common Python library imports
 # Pip package imports
+import click
+
 # Internal package imports
-from .blueprint import payment
-from .checkout import (
-    checkout
-)
-from .webhook import *
+
+@click.group()
+def payment():
+    """Payment bundle commands."""

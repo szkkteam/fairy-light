@@ -14,6 +14,7 @@ from loguru import logger
 from backend.extensions import db
 from backend.contrib.photo_album.models import Category
 from backend.contrib.photo_album.models import Image
+from backend.payment.models import Order, OrderStatus
 
 from .blueprint import photo_album
 
@@ -58,6 +59,16 @@ def get_cart_num_of_items():
         return len(session['cart_items'].keys())
     return 0
 
+def reset_session():
+    order_id = session.get('order_id', None)
+    print("order_id: ", order_id, flush=True)
+    if order_id is not None:
+        order = Order.get(order_id)
+        print("Order status: ", order.status, flush=True)
+        print("Status val: %s | Confirm val: %s" % (order.status.value, OrderStatus.payment_confirmed.value), flush=True)
+        if order.status.value >= OrderStatus.payment_confirmed.value:
+            print("Clearing items.", flush=True)
+            clear_cart_items()
 
 @photo_album.route('/cart/add', methods=['POST'])
 def add_item_to_cart():

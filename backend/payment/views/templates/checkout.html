@@ -192,10 +192,7 @@
                 email: email,
               }
             },
-            receipt_email: email,
-            metadata = {
-              paymentIntent: {{client_secret}}
-            }
+            receipt_email: email
           }).then(function(result) {
             if (result.error) {
               // Show error to your customer (e.g., insufficient funds)

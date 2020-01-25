@@ -4,8 +4,5 @@
 # Common Python library imports
 # Pip package imports
 # Internal package imports
-from .blueprint import payment
-from .checkout import (
-    checkout
-)
-from .webhook import *
+from .group import payment
+from .product import deliver

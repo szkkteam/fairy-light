@@ -30,7 +30,6 @@
                         updateItemsCounter(data.shopItems);
                         /* Update the shopping cart details */
                         loadCartData();
-                        console.log(data.shopItems)
                     },
                     error: function (data) {
                         console.log(data.responseJSON);
@@ -54,7 +53,6 @@
                     updateItemsCounter(data.shopItems);
                     /* Update the shopping cart details */
                     loadCartData();
-                    console.log(data.shopItems)
                 },
                 error: function (data) {
                     console.log(data.responseJSON);
@@ -74,7 +72,6 @@
                     updateItemsCounter(data.shopItems);
                     /* Update the shopping cart details */
                     loadCartData();
-                    console.log(data.shopItems)
                 },
                 error: function (data) {
                     console.log(data.responseJSON);
@@ -93,9 +90,7 @@
                 url: '/photos/cart',
                 dataType: 'html',
                 success: function (data) {
-                    console.log(data);
                     $('.popover .popover-body').html(data);
-                    //popover.$tip.addClass(popover.options.placement);
                 },
                 error: function (data) {
                     console.log(data.responseJSON);

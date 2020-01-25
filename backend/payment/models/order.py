@@ -16,13 +16,15 @@ from backend.database import (
     Enum,
     relationship,
     association_proxy,
-    foreign_key
+    foreign_key,
+    String
 )
 
 from .order_product import OrderProduct
 from backend.contrib.photo_album.models import Image
 
 class OrderStatus(enum.Enum):
+
     created = 1             # Default status when the object is created.
     payment_requested = 2   # Payment requested by stripe. Confirmation is ongoing.
     payment_confirmed = 3   # Payment confirmed by stripe
@@ -46,6 +48,8 @@ class Order(Model):
     product = association_proxy('order_product', 'product',
                                creator=lambda product: OrderProduct(product=product))
 
+    path = Column(String(128), nullable=True)
+
     user_id = foreign_key('StripeUser', nullable=True)
     user = relationship('StripeUser', back_populates='orders')
 
@@ -65,3 +69,7 @@ class Order(Model):
                 self.product.append(Image.get(products))
 
         super(Order, self).__init__(**kwargs)
+
+    def set_status(self, status):
+        self.status = status
+        self.save(True)

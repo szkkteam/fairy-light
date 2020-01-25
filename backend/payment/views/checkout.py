@@ -20,6 +20,7 @@ import stripe
 # Internal package imports
 from .blueprint import payment
 from ..models import StripeUser, Order, OrderStatus
+from .webhook import StripeEvents, StripeWebhook
 
 from backend.contrib.photo_album.views.cart_management import get_total_price, get_cart
 from backend.contrib.photo_album.models import Image
@@ -62,7 +63,6 @@ def cart_to_stripe_items(cart):
     return stripe_line_items
 
 def get_or_modify_intent(**kwargs):
-    print("KWARGS: ", kwargs, flush=True)
     # Get or Create a PaymentIntent
     if 'intent_id' in session:
         intent_obj = stripe.PaymentIntent.retrieve(session['intent_id'])
@@ -81,13 +81,15 @@ def get_or_create_order(**kwargs):
         db.session.add(order)
         db.session.commit()
 
+        session['order_id'] = order.id
+
         return order
 
 def get_or_create_user(**kwargs):
     email = kwargs.get('email', None)
     name = kwargs.get('name', 'Guest')
     user = StripeUser.get_by(email=email)
-    if user in None:
+    if user is None:
         user = StripeUser(email=email,
                           name=name)
     return user
@@ -167,205 +169,73 @@ def checkout():
                            public_key=get_stripe_public_key(),
                            price_amount=get_total_price())
 
-@payment.route('/checkout-webhook', methods=['POST'])
-@csrf.exempt
-def checkout_webhook():
-    try:
-        # The payment status should be checked here. If it's success, initiate the email sending with the digital product.
-        request_data = request.get_json()
-        # Get the secret key
-        webhook_secret = current_app.config.get('STRIPE_WEBHOOK_SECRET')
-        if webhook_secret:
-            # Retrieve the event by verifying the signature using the raw body and secret if webhook signing is configured.
-            signature = request.headers.get('stripe-signature')
-            try:
-                event = stripe.Webhook.construct_event(
-                    payload=request.data, sig_header=signature, secret=webhook_secret)
-                data = event['data']
-            except Exception as e:
-                return e
-            # Get the type of webhook event sent - used to check the status of PaymentIntents.
-            event_type = event['type']
+class PaymentWebhook(StripeWebhook):
+
+    def _get_order(self, data):
+        return Order.get(data['metadata']['order_id'])
+
+    def handle_payment_intent_created(self, data):
+        order = self._get_order(data)
+        order.set_status(OrderStatus.payment_requested)
+        return self.return_success()
+
+    def handle_payment_intent_succeeded(self, data):
+        order = self._get_order(data)
+        user = None
+        try:
+            # print(data['charges']['data'], flush=True)
+            name = data['charges']['data'][0]['billing_details']['name']
+            email = data['charges']['data'][0]['billing_details']['email']
+        except Exception as e:
+            logger.error(e)
         else:
-            data = request_data['data']
-            event_type = request_data['type']
-        data_object = data['object']
+            user = get_or_create_user(name=name, email=email)
 
-        # Monitor payment_intent.succeeded & payment_intent.payment_failed events.
-        if data_object['object'] == 'payment_intent':
-            payment_intent = data_object
-            # Create or get the user for this payment
-            user = get_or_create_user(**payment_intent['billing_details'])
-            # Get the pending order
-            order = Order.get(payment_intent['metadata']['order_id'])
-            # Add the order to the user
+        if user is None:
+            logger.error('Billing details is missing.')
+            return self.return_error('Billing details is missing.', 400)
+
+        user.orders.append(order)
+        order.set_status(OrderStatus.payment_confirmed)
+
+        # TODO: Start the async process
+        return self.return_success()
+
+    def handle_payment_intent_failed(self, data):
+        order = self._get_order(data)
+        order.set_status(OrderStatus.payment_error)
+        logger.error('Payment Intent failed')
+        return self.return_success()
+
+    def handle_charge_succeeded(self, data):
+        order = self._get_order(data)
+        order.set_status(OrderStatus.payment_confirmed)
+
+        try:
+            name = data['billing_details']['name']
+            email = data['billing_details']['email']
+        except KeyError as err:
+            logger.error(err)
+        else:
+            user = get_or_create_user(name=name, email=email)
             user.orders.append(order)
-            # Set the order status to payment pending
-            order.status = OrderStatus.payment_requested
 
-            if event_type == 'payment_intent.succeeded':
-                # Update the payment status to confirmed
-                order.status = OrderStatus.payment_confirmed
+        return self.return_success()
 
-                # Trigger the asynchronous task
+    def handle_charge_failed(self, data):
+        order = self._get_order(data)
+        order.set_status(OrderStatus.payment_error)
+        return self.return_success()
 
-
-                # TODO: Check if this is required. I guess no
-                db.session.add(user)
-                db.session.commit()
-
-                # TODO: Schedule the async task for delivering products
-
-                print('🔔  Webhook received! Payment for PaymentIntent ' +
-                      payment_intent['id'] + ' succeeded')
-            elif event_type == 'payment_intent.payment_failed':
-                # Update the payment status to failed
-                order.status = OrderStatus.payment_error
-
-                if 'payment_method' in payment_intent['last_payment_error']:
-                    payment_source_or_method = payment_intent['last_payment_error']['payment_method']
-                else:
-                    payment_source_or_method = payment_intent['last_payment_error']['source']
-
-                    # TODO: something went wrong
-
-                print('🔔  Webhook received! Payment on ' + payment_source_or_method['object'] + ' '
-                      + payment_source_or_method['id'] + ' for PaymentIntent ' + payment_intent['id'] + ' failed.')
-
-        # Monitor `source.chargeable` events.
-        if data_object['object'] == 'source' \
-                and data_object['status'] == 'chargeable' \
-                and 'paymentIntent' in data_object['metadata']:
-            source = data_object
-            print(f'🔔  Webhook received! The source {source["id"]} is chargeable')
-
-            # Find the corresponding PaymentIntent this Source is for by looking in its metadata.
-            payment_intent = stripe.PaymentIntent.retrieve(
-                source['metadata']['paymentIntent'])
-
-            # Verify that this PaymentIntent actually needs to be paid.
-            if payment_intent['status'] != 'requires_payment_method':
-                return jsonify({'error': f'PaymentIntent already has a status of {payment_intent["status"]}'}), 403
-
-            # Confirm the PaymentIntent with the chargeable source.
-            payment_intent.confirm(source=source['id'])
-
-        # Monitor `source.failed` and `source.canceled` events.
-        if data_object['object'] == 'source' and data_object['status'] in ['failed', 'canceled']:
-            # Cancel the PaymentIntent.
-            source = data_object
-            intent = stripe.PaymentIntent.retrieve(
-                source['metadata']['paymentIntent'])
-            intent.cancel()
-
-    except Exception as err:
-            logger.error(traceback.format_exc())
-            return abort(500)
-
-"""
-{
-  "id": "ch_1G4CFiAbsp6t6e9Sh5JB5vOS",
-  "object": "charge",
-  "livemode": "",
-  "payment_intent": "pi_1G4CExAbsp6t6e9SxO0arCha",
-  "status": "succeeded",
-  "amount": 2000,
-  "amount_refunded": "",
-  "application": "",
-  "application_fee": "",
-  "application_fee_amount": "",
-  "balance_transaction": "txn_1G4CFjAbsp6t6e9SRmk2Jcs6",
-  "billing_details": {
-    "address": {
-      "city": null,
-      "country": null,
-      "line1": null,
-      "line2": null,
-      "postal_code": "22222",
-      "state": null
-    },
-    "email": "asd@asd.com",
-    "name": "Mica",
-    "phone": null
-  },
-  "captured": true,
-  "created": 1579811170,
-  "currency": "eur",
-  "customer": "",
-  "description": "Fairy Light ord. 12",
-  "destination": "",
-  "dispute": "",
-  "disputed": "",
-  "failure_code": "",
-  "failure_message": "",
-  "fraud_details": {
-  },
-  "invoice": "",
-  "metadata": {
-    "order_id": "12"
-  },
-  "on_behalf_of": "",
-  "order": "",
-  "outcome": {
-    "network_status": "approved_by_network",
-    "reason": null,
-    "risk_level": "normal",
-    "risk_score": 62,
-    "seller_message": "Payment complete.",
-    "type": "authorized"
-  },
-  "paid": true,
-  "payment_method": "pm_1G4CFiAbsp6t6e9SGJ3InuVa",
-  "payment_method_details": {
-    "card": {
-      "brand": "visa",
-      "checks": {
-        "address_line1_check": null,
-        "address_postal_code_check": "pass",
-        "cvc_check": "pass"
-      },
-      "country": "US",
-      "exp_month": 2,
-      "exp_year": 2022,
-      "fingerprint": "s8Si8AUJ9BviRhgd",
-      "funding": "credit",
-      "installments": null,
-      "last4": "4242",
-      "network": "visa",
-      "three_d_secure": null,
-      "wallet": null
-    },
-    "type": "card"
-  },
-  "receipt_email": "",
-  "receipt_number": "",
-  "receipt_url": "https://pay.stripe.com/receipts/acct_1G3PV0Absp6t6e9S/ch_1G4CFiAbsp6t6e9Sh5JB5vOS/rcpt_GbP3j8mQAnleY82xlA9CJ9p2BzgeQYp",
-  "refunded": "",
-  "refunds": {
-    "object": "list",
-    "data": [
-    ],
-    "has_more": false,
-    "total_count": 0,
-    "url": "/v1/charges/ch_1G4CFiAbsp6t6e9Sh5JB5vOS/refunds"
-  },
-  "review": "",
-  "shipping": "",
-  "source": "",
-  "source_transfer": "",
-  "statement_descriptor": "",
-  "statement_descriptor_suffix": "",
-  "transfer_data": "",
-  "transfer_group": ""
-}
-"""
 
 @payment.route('/checkout-success', methods=['GET'])
 def checkout_success():
     # Display the "Success" page
-    pass
+    return render_template('checkout_success.html')
 
 @payment.route('/checkout-cancel', methods=['GET'])
 def checkout_cancel():
     # Display the "Cancel" page
     pass
+
+payment.add_url_rule('/checkout-webhook', view_func=PaymentWebhook.as_view('checkout_webhook'))

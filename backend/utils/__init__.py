@@ -38,4 +38,9 @@ def string_to_bool(s):
             return True
         elif s.lower() in [ 'false', 'no', 'n', '0', 'f' ]:
             return False
-    return s
+    return
+
+def listify(obj):
+    if not isinstance(obj, (tuple, list)):
+        return [obj]
+    return obj
