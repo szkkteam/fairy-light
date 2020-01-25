@@ -1,0 +1,141 @@
+{% extends 'website/layout.html' %}
+{% from 'website/macros.html' import separator with context %}
+{% import 'modules/breadcrumb_m.html' as breadcrumb_m with context %}
+{% import 'modules/cards.html' as card with context %}
+
+{% block custom_css %}
+    {{ super() }}
+    <link href="{{ site_static.url(filename='site/css/photos/style.css') }}" rel="stylesheet">
+
+{% endblock %}
+
+
+{% block header_nav_element_block %}
+    {{ super() }}
+    <li class="nav-item">
+        <a id="shopping-cart" href="#" class="nav-link d-inline-block" data-toggle="popover"  data-container="#navbar" data-popover-content="#shopping-cart-wrapper" data-placement="bottom">
+            <span id="shopping-cart-items">
+                {{ cart_num_of_items }}
+            </span>
+            <i class="material-icons" style="padding:0 0 0 15px;font-size: 24px;">shopping_cart</i>
+        </a>
+    </li>    
+    {{ separator() }}
+{% endblock %}
+
+
+{% block main_block %}
+<section id="shopping-cart" style="display: none">
+    <div id="shopping-cart-wrapper" class="shopping-cart-container">
+        <div class="popover-heading">
+            Shopping Cart
+        </div>        
+        <div class="popover-body shopping-cart-details">
+            {% include 'cart_details.html' %}            
+        </div>
+    </div>
+</section>
+<section id="photonav">
+    <div class="container">
+        <div class="row no-gutters">
+            <div class="col-12 col-sm-11">
+                {% block breadcrumb_block %}
+                    {% call breadcrumb_m.base() %}
+                        {{ breadcrumb_m.link(url_for('shop.index_view'), 'Home' ) }}
+                        {% for breadcrumb in breadcrumbs %}
+                            {% if not loop.last %}
+                                {{ breadcrumb_m.link(breadcrumb.url, breadcrumb.title) }}
+                            {% else %}
+                                {{ breadcrumb_m.link(breadcrumb.url, breadcrumb.title, True) }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endcall%}
+                {% endblock %}
+            </div>
+            <div class="col-12 col-sm-1">
+                <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#photonav-filter">Filter</button>
+            </div>					
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <hr class="header-separator"/>
+            </div>
+        </div>
+        <div id="photonav-filter" class="row collapse">
+            <div class="col-12">
+                <div style="height: 200px">
+                    I'm the filter - Placeholder
+                </div>					
+                <hr class="header-separator"/>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="photos">
+    <div class="container">
+        <div class="row">       
+            {% block photos_section %}     
+
+            {% endblock %}
+        </div>
+    </div>		
+</section>
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+
+    <script src="{{ site_static.url(filename='site/js/shopping_cart.js') }}" type="text/javascript"></script>
+    <script>
+    
+    $('#photos .photos-buy-card').shoppingCart({
+
+    });
+
+    $(document).ready( function() {
+        $(function() {
+            $.fn.popover.Constructor.Default.whiteList.table = [];
+            $.fn.popover.Constructor.Default.whiteList.tr = ['data-id'];
+            $.fn.popover.Constructor.Default.whiteList.td = [];
+            $.fn.popover.Constructor.Default.whiteList.th = [];
+            $.fn.popover.Constructor.Default.whiteList.div = [];
+            $.fn.popover.Constructor.Default.whiteList.tbody = [];
+            $.fn.popover.Constructor.Default.whiteList.thead = [];
+
+            $('#shopping-cart').popover({
+                html: true,
+                //placement: 'top',
+                //container: '.shopping-cart-container',
+                //container: 'body',
+                //container: '.navbar',
+                content: function() {
+                    var content = $(this).attr("data-popover-content");
+                    //return $(content).children(".popover-body").html();
+                    $.ajax({
+                        type: 'GET',
+                        url: "{{url_for('shop.cart_api')}}",
+                        dataType: 'html',
+                        success: function (data) {
+                            $('.popover .popover-body').html(data);
+                            //popover.$tip.addClass(popover.options.placement);
+                        },
+                        error: function (data) {
+                            console.log(data.responseJSON);
+                        }
+                    }); 
+                    return "Loading ..."
+                },
+                title: function() {
+                    var title = $(this).attr("data-popover-content");
+                    return $(title).children(".popover-heading").html();
+                },
+            });
+        });
+    });
+
+    
+    
+    </script>
+{% endblock %}
+
+

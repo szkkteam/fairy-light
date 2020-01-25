@@ -23,7 +23,6 @@
                 $.ajax({
                     type: 'POST',
                     url: $(this).attr('href'),
-                    data: JSON.stringify({ 'id': cardId, 'type': cardType }),
                     contentType: 'application/json;charset=UTF-8',
                     success: function (data) {
                         /* Update the counter at the shopping cart. */
@@ -38,15 +37,13 @@
             });        
         });
 
-                    
+        /* Remove element from cart */
         $(document.body).on('click', '.clear-item', function(e) {
             e.preventDefault();
-            const cardId = $(this).parent().parent().attr('data-id');
 
             $.ajax({
-                type: 'POST',
+                type: 'DELETE',
                 url: $(this).attr('href'),
-                data: JSON.stringify({ 'id': cardId }),
                 contentType: 'application/json;charset=UTF-8',
                 success: function (data) {
                     /* Update the counter at the shopping cart. */
@@ -64,7 +61,7 @@
             e.preventDefault();
 
             $.ajax({
-                type: 'POST',
+                type: 'DELETE',
                 url: $(this).attr('href'),
                 contentType: 'application/json;charset=UTF-8',
                 success: function (data) {
@@ -87,7 +84,7 @@
         function loadCartData ( ) {
             $.ajax({
                 type: 'GET',
-                url: '/photos/cart',
+                url: '/shop/cart',
                 dataType: 'html',
                 success: function (data) {
                     $('.popover .popover-body').html(data);

@@ -42,9 +42,8 @@ BUNDLES = [
     'backend.contrib.security',
     'backend.contrib.contact_submission',
     'backend.contrib.newsletter_subscribe',
-    'backend.contrib.photo_album',
+    'backend.shop',
     'backend.site',
-    'backend.payment',
 
     'backend.contrib.test_file',
     #'backend.site',
