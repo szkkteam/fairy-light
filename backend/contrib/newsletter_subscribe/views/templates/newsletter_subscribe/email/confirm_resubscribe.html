@@ -1,7 +1,9 @@
 {% extends 'email/layout.html' %}
 
-{% block body %}
-  <p>Flask React Starter</p>
-  <p>You have subscribed again</p>
-  <p>Change your mind?<a href="{{ unsubscribe_link }}">Unsubscribe</a></p>
+{% block preview %}
+  <p>You are successfully subscribed to our mailing list</p>
+{% endblock %}
+
+{% block unsubscribe %}
+  <br>Change your mind?<a href="{{unsubscribe_link}}">Unsubscribe</a>.
 {% endblock %}

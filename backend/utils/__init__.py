@@ -11,7 +11,7 @@ from loguru import logger
 
 # Internal package imports
 from .decorators import was_decorated_without_parenthesis
-from .mail import send_mail
+from .mail import send_mail, prepare_mail, send_mail_sync
 
 def slugify(string):
     string = re.sub(r'[^\w\s-]', '',
@@ -44,3 +44,18 @@ def listify(obj):
     if not isinstance(obj, (tuple, list)):
         return [obj]
     return obj
+
+
+
+def decode_token(token):
+    """ Decode the token to retrive the encoded data """
+    s = URLSafeSerializer(current_app.secret_key, salt=current_app.config['SECURITY_PASSWORD_SALT'])
+    try:
+        return s.loads(token)
+    except BadData:
+        return None
+
+def encode_token(data):
+    """ Encode a data and return with the encoded token """
+    s = URLSafeSerializer(current_app.secret_key, salt=current_app.config['SECURITY_PASSWORD_SALT'])
+    return s.dumps(data)

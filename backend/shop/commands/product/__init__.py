@@ -15,6 +15,7 @@ from loguru import logger
 from backend.extensions.mediamanager import storage as mm
 from backend.utils import listify
 from backend.extensions import db
+from backend.tasks import prepare_product_async_task
 
 from backend.shop.models import ShippingStatus, Order, StripeUser, Image
 
@@ -25,25 +26,21 @@ from ...product import deliver_product, create_archive
 @shop.command()
 @click.option('--id', '-i', expose_value=True,
               help='Product ID to deliver.')
-@click.option('--storage', '-s', help='Media Storage name to handle the files.')
 @with_appcontext
-def deliver(id, storage):
-    order = create_archive(id, storage)
-    deliver_product(order)
+def deliver(id):
+    prepare_product_async_task.delay(id)
 
 @shop.command()
 @click.option('--id', '-i', expose_value=True,
               help='Product ID to deliver.')
-@click.option('--storage', '-s', help='Media Storage name to handle the files.')
-def archive(id, storage):
-    create_archive(id, storage)
+def archive(id):
+    create_archive(id)
 
 @shop.command()
 @click.option('--id', '-i', expose_value=True,
               help='Product ID to deliver.')
 def send(id):
-    order = Order.get(id)
     # Check the order ID
     assert order, "Order Id: \'{id}\' is invalid.".format(id=id)
-    deliver_product(order)
+    deliver_product(id=id)
 

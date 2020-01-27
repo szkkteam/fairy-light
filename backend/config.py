@@ -135,7 +135,7 @@ class BaseConfig(object):
     MAIL_USERNAME = os.environ.get('FLASK_MAIL_USERNAME', None)
     MAIL_PASSWORD = os.environ.get('FLASK_MAIL_PASSWORD', None)
     MAIL_DEFAULT_SENDER = (
-        os.environ.get('FLASK_MAIL_DEFAULT_SENDER_NAME', 'Flask-Starter'),
+        os.environ.get('FLASK_MAIL_DEFAULT_SENDER_NAME', 'Fairy Light'),
         os.environ.get('FLASK_MAIL_DEFAULT_SENDER_EMAIL',
                        f"noreply@{os.environ.get('FLASK_DOMAIN', 'localhost')}")
     )
