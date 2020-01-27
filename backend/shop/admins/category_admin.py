@@ -28,18 +28,16 @@ from jinja2 import Markup
 
 # Internal package imports
 from backend.contrib.admin import ModelAdmin, macro
-from backend.contrib.admin.field import MediaManagerImageUploadField
 from backend.utils import string_to_bool
 
 from ..models import Category, Image
-
-from .. import photo_album_storage
+from .field import MediaManagerImageUploadField
 
 class InlineImageAdmin(InlineFormAdmin):
     form_columns = ('id', 'price', 'path')
 
     form_extra_fields = {
-        'path': MediaManagerImageUploadField('Image', storage=photo_album_storage()),
+        'path': MediaManagerImageUploadField('Image'),
     }
 
 

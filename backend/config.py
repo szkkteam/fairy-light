@@ -186,12 +186,24 @@ class BaseConfig(object):
     # Flask MM - MediaManager                                            #
     ##########################################################################
     # The global local storage root.
-    MM_PHOTO_ALBUM = {
-        'ROOT': os.path.join(STATIC_FOLDER, 'photo_album'),
+    MM_PHOTO = {
+        'ROOT': os.path.join(STATIC_FOLDER, 'photo'),
         'PREFIX': '/photo',
         'STORAGE': 'local',
         'MANAGER': 'image',
-        'THUMBNAIL_SIZE': (253,220,True),
+        'THUMBNAIL_SIZE': (253,220,True), # Generate strict thumbnails
+        'MAX_SIZE': (1280, 1720, False), # Optimise the image size for the watermarked image
+        'POSTPROCESS': ({'watermark': {
+            'sad': 'asd'  # TODO: Define Postprocessing keyword arguments for example: https://github.com/bashu/django-watermark/blob/develop/watermarker/templatetags/watermark.py
+        }}, )
+    }
+
+    MM_PRODUCT = {
+        'ROOT': os.path.join(STATIC_FOLDER, 'product'),
+        'PREFIX': '/product',
+        'STORAGE': 'local',
+        'MANAGER': 'image',
+        'THUMBNAIL_SIZE': None, # Do not generate thumbnails
     }
 
     ##########################################################################
