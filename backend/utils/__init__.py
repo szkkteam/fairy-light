@@ -7,11 +7,13 @@ import unicodedata
 
 # Pip package imports
 from flask_sqlalchemy.model import camel_to_snake_case
+from flask import current_app
+from itsdangerous import URLSafeSerializer, BadData
 from loguru import logger
 
 # Internal package imports
 from .decorators import was_decorated_without_parenthesis
-from .mail import send_mail, prepare_mail, send_mail_sync
+#from .mail import send_mail, prepare_mail, send_mail_sync
 
 def slugify(string):
     string = re.sub(r'[^\w\s-]', '',

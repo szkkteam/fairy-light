@@ -16,7 +16,7 @@ from backend.utils import decode_token
 from backend.extensions.mediamanager import storage as mm
 
 from .blueprint import shop
-from ..models import Category, Order, PaymentStatus
+from ..models import Order
 from ..inventory import ProductInventory
 from .checkout import is_intent_success, is_order_success
 from .. import STORAGE_NAME
@@ -31,19 +31,23 @@ def product_download(token):
             logger.debug("Invalid token: \'{token}\' requested.".format(token=token))
             abort(404)
         # TODO: Using the passed storage name, or get it directly?
-        st = m.by_name(STORAGE_NAME)
+        st = mm.by_name(STORAGE_NAME)
+        order = Order.get(order_id)
         # Read the zipfile as binary
-        byte_stream = io.BytesIO()
-        byte_stream = st.read(order.path)
+        with open(st.path(order.path), 'rb') as arch_in:
+            byte_stream = io.BytesIO(arch_in.read())
 
         byte_stream.seek(0)
 
         return send_file(
             byte_stream,
+            #st.path(order.path),
             mimetype='application/zip',
             as_attachment=True,
-            attachment_filename='order_%s.zip' % order_id
+            cache_timeout=1,
+            attachment_filename='fairy_light_order_%s.zip' % order_id
         )
 
     except Exception as e:
         logger.error(e)
+        return abort(404)

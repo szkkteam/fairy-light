@@ -3,7 +3,6 @@
 
 # Common Python library imports
 import os
-import sys
 
 # Pip package imports
 from flask import url_for
@@ -15,10 +14,12 @@ from loguru import logger
 # Internal package imports
 from backend.extensions.mediamanager import storage as mm
 from backend.extensions import db
-from backend.utils import prepare_mail, encode_token, send_mail_sync, send_mail
+from backend.utils import encode_token
 
-from backend.shop.models import ShippingStatus, Order
+
+from .models import ShippingStatus, Order
 from . import STORAGE_NAME
+
 
 
 def create_archive(id):
@@ -51,62 +52,34 @@ def create_archive(id):
 
         return order
 
-def deliver_product(**kwargs):
+def prepare_mail(**kwargs):
+    print(kwargs)
     order = kwargs.get('order', None)
     if order is None:
-        order = order.get(kwargs.get('id'))
+        order = Order.get(kwargs.get('id'))
     try:
         # Get the e-mail address
-        email = order.user.mail
+        email = order.user.email
         # Generate the unique download url
         token = encode_token(order.id)
 
         subject = "Product order: %s ready to download" % order.id
-        send_mail(prepare_mail(subject,
-                    email,
-                    'email/product_deliver.html',
-                    order_id=order.id,
-                    download_link=url_for('shop.product_download', token=token),
-                  ))
-
-        order.set_shipping_status(ShippingStatus.succeeded, False)
-        logger.debug("Order: \'{id}\' has been delivered to: \'{email}\' address.".format(id=order.id, email=email))
-        logger.debug("Order: \'{id}\' can be accessed at the following url: {url}".format(id=order.id, url=url_for('shop.product_download', token=token)))
-
-    except Exception as e:
-        logger.error(e)
-        order.set_shipping_status(ShippingStatus.failed, False)
-    finally:
-        db.session.add(order)
-        db.session.commit()
-
-def deliver_product_sync(**kwargs):
-    order = kwargs.get('order', None)
-    if order is None:
-        order = order.get(kwargs.get('id'))
-    try:
-        # Get the e-mail address
-        email = order.user.mail
-        # Generate the unique download url
-        token = encode_token(order.id)
-
-        subject = "Product order: %s ready to download" % order.id
-        msg = prepare_mail(subject,
-                    email,
-                    'email/product_deliver.html',
-                    order_id=order.id,
-                    download_link=url_for('shop.product_download', token=token),
+        template = 'email/product_deliver.html'
+        mail_data = dict(order_id=order.id,
+                         download_link=url_for('shop.product_download', token=token),
                   )
 
-        send_mail_sync(msg)
-
         order.set_shipping_status(ShippingStatus.succeeded, False)
-        logger.debug("Order: \'{id}\' has been delivered to: \'{email}\' address.".format(id=order.id, email=email))
         logger.debug("Order: \'{id}\' can be accessed at the following url: {url}".format(id=order.id, url=url_for('shop.product_download', token=token)))
+
+        return subject, email, template, mail_data
 
     except Exception as e:
         logger.error(e)
         order.set_shipping_status(ShippingStatus.failed, False)
+
     finally:
         db.session.add(order)
         db.session.commit()
+
+

@@ -8,14 +8,16 @@ from http import HTTPStatus
 from flask import request, jsonify, render_template
 
 # Internal package imports
+from backend.utils import decode_token
+
 from ..models import NewsletterSubscribe
-from ..utils import decode_email_token, generate_unsubscribe_link
+from ..utils import generate_unsubscribe_link
 from .blueprint import newsletter_subscribe
 
 
 @newsletter_subscribe.route('/resubscribe/<token>', methods=['GET'])
 def resubscribe(token):
-    email_str = decode_email_token(token)
+    email_str = decode_token(token)
     if email_str is None:
         if not request.is_json:
             # Return redirect view
