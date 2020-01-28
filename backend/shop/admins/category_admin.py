@@ -31,13 +31,13 @@ from backend.contrib.admin import ModelAdmin, macro
 from backend.utils import string_to_bool
 
 from ..models import Category, Image
-from .field import MediaManagerImageUploadField
+from .field import StorageImageUploadField, ProtectedImageUploadField
 
 class InlineImageAdmin(InlineFormAdmin):
     form_columns = ('id', 'price', 'path')
 
     form_extra_fields = {
-        'path': MediaManagerImageUploadField('Image'),
+        'path': ProtectedImageUploadField('Image'),
     }
 
 
@@ -111,7 +111,7 @@ class CategoryAdmin(ModelAdmin):
     form_columns = ( 'title', 'public', 'price', 'cover', 'images')
 
     form_extra_fields = {
-        'cover': MediaManagerImageUploadField('Cover Photo', storage=photo_album_storage()),
+        'cover': StorageImageUploadField('Cover Photo'),
     }
 
     column_formatters = {

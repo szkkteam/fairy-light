@@ -23,9 +23,9 @@ import flask_mm as mm
 from ..storage import get_protected, get_public
 
 
-class MediaManagerImageUploadField(fields.StringField):
+class StorageImageUploadField(fields.StringField):
 
-    class MultipleImageUploadInput(ImageUploadInput):
+    class StorageImageUploadInput(ImageUploadInput):
         """
             Renders a image input chooser field.
             You can customize `empty_template` and `data_template` members to customize
@@ -41,9 +41,8 @@ class MediaManagerImageUploadField(fields.StringField):
                 filename = field.data
 
             return get_public().url(filename)
-            #return get_url(field.endpoint, mm=field.storage.name, filename=filename)
 
-    widget = MultipleImageUploadInput()
+    widget = StorageImageUploadInput()
 
     def __init__(self, label=None, validators=None, **kwargs):
 
@@ -51,7 +50,7 @@ class MediaManagerImageUploadField(fields.StringField):
 
         self._should_delete = False
 
-        super(MediaManagerImageUploadField, self).__init__(label, validators, **kwargs)
+        super(StorageImageUploadField, self).__init__(label, validators, **kwargs)
 
     @property
     def thumbnail_size(self):
@@ -67,8 +66,7 @@ class MediaManagerImageUploadField(fields.StringField):
             :param filename:
                 File name to check
         """
-        is_allowed = get_public().is_allowed(filename) and get_protected()is_allowed(filename)
-        return is_allowed
+        return get_public().is_allowed(filename)
 
     def _is_uploaded_file(self, data):
         retval = (data and isinstance(data, FileStorage) and data.filename)
@@ -111,6 +109,51 @@ class MediaManagerImageUploadField(fields.StringField):
             # If field should be deleted, clean it up
             if self._should_delete:
                 get_public().delete(field)
+                setattr(obj, name, None)
+                return
+
+        if self._is_uploaded_file(self.data):
+            if field:
+                get_public().delete(field)
+
+            # Save first the thumbnail and the watermarked version.
+            filename = get_public().save(self.data)
+
+            print("filename: ", filename, flush=True)
+            # update filename of FileStorage to our validated name
+            self.data.filename = filename
+
+            setattr(obj, name, filename)
+
+    def generate_name(self, obj, file_data):
+        return self.namegen(obj, file_data)
+
+
+class ProtectedImageUploadField(fields.StringField):
+
+    def __init__(self, label=None, validators=None, **kwargs):
+
+        assert isinstance(storage, mm.managers.BaseManager)
+
+        self._should_delete = False
+
+        super(ProtectedImageUploadField, self).__init__(label, validators, **kwargs)
+
+    def is_file_allowed(self, filename):
+        """
+            Check if file extension is allowed.
+            :param filename:
+                File name to check
+        """
+        is_allowed = get_public().is_allowed(filename) and get_protected().is_allowed(filename)
+        return is_allowed
+
+    def populate_obj(self, obj, name):
+        field = getattr(obj, name, None)
+        if field:
+            # If field should be deleted, clean it up
+            if self._should_delete:
+                get_public().delete(field)
                 get_protected().delete(field)
                 setattr(obj, name, None)
                 return
@@ -129,6 +172,3 @@ class MediaManagerImageUploadField(fields.StringField):
             self.data.filename = filename
 
             setattr(obj, name, filename)
-
-    def generate_name(self, obj, file_data):
-        return self.namegen(obj, file_data)

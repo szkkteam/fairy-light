@@ -36,7 +36,7 @@ def create_archive(id):
             # Update the Shipping Status
             order.set_shipping_status(ShippingStatus.ongoing, False)
             # Get the image paths
-            img_paths = [ st.path(image.path) for image in order.product ]
+            img_paths = [ image.path for image in order.product ]
             logger.debug("Archiving: [{paths}].".format(paths=img_paths))
             # Archive files
             archive_path = st.archive_files(st.generate_name("product_%s.zip" % order.id), img_paths)

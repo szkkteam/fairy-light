@@ -24,8 +24,7 @@ from backend.extensions import db
 from backend import utils
 
 from .image import Image, ImageStatus
-
-from .. import photo_album_storage
+from ..storage import get_public
 
 
 class Category(Model, BaseNestedSets):
@@ -43,7 +42,7 @@ class Category(Model, BaseNestedSets):
     def get_thumbnail_path(self):
         if not self.cover:
             return None
-        return photo_album_storage().url(photo_album_storage().generate_thumbnail_name(self.cover))
+        return get_public().url(get_public().generate_thumbnail_name(self.cover))
 
     def get_thumbnail_markup(self, height=None):
         if not self.cover:
@@ -59,7 +58,7 @@ class Category(Model, BaseNestedSets):
     def get_path(self):
         if not self.cover:
             return None
-        return photo_album_storage().url(self.cover)
+        return get_public().url(self.cover)
 
     @classmethod
     def get_images(cls, id):
@@ -93,6 +92,6 @@ def del_image(mapper, connection, target):
     if target.cover:
         # Delete image
         try:
-            photo_album_storage().delete(target.cover)
+            get_public().delete(target.cover)
         except OSError:
             pass

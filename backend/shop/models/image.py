@@ -22,8 +22,8 @@ from backend.database import (
     Enum
 )
 from backend.extensions import db
-from .. import photo_album_storage
 from backend import utils
+from ..storage import get_public
 
 class ImageStatus(enum.Enum):
 
@@ -45,7 +45,7 @@ class Image(Model):
     @property
     def title(self):
         if self.path:
-            return os.path.basename(photo_album_storage().namegen.original_name(self.path))
+            return os.path.basename(get_public().namegen.original_name(self.path))
         return "No Image"
 
     @property
@@ -59,7 +59,7 @@ class Image(Model):
     def get_thumbnail_path(self):
         if not self.path:
             return ''
-        return photo_album_storage().url(photo_album_storage().generate_thumbnail_name(self.path))
+        return get_public().url(get_public().generate_thumbnail_name(self.path))
 
     def get_thumbnail_markup(self, height=None):
         if not self.path:
@@ -74,7 +74,7 @@ class Image(Model):
     def get_path(self):
         if not self.path:
             return ''
-        return photo_album_storage().url(self.path)
+        return get_public().url(self.path)
 
     @classmethod
     def get_all_by_ids(cls, list_of_ids):
@@ -87,6 +87,6 @@ def del_image(mapper, connection, target):
     if target.path:
         # Delete image
         try:
-            photo_album_storage().delete(target.path)
+            get_public().delete(target.path)
         except OSError:
             pass
