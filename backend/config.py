@@ -249,6 +249,7 @@ class DevConfig(BaseConfig):
     ##########################################################################
     ENV = 'dev'
     DEBUG = get_boolean_env('FLASK_DEBUG', True)
+    SERVER_NAME = 'localhost:5000'
     # EXPLAIN_TEMPLATE_LOADING = True
 
     ##########################################################################

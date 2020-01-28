@@ -12,7 +12,8 @@ from loguru import logger
 
 # Internal package imports
 from flask.helpers import get_debug_flag
-from backend.utils import title_case
+#from backend.utils import title_case
+from backend.utils import *
 
 def safe_import_module(module_name):
     """Like importlib's import_module, except it does not raise ImportError

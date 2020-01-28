@@ -17,3 +17,7 @@ from .checkout import (
     checkout_success,
     checkout_cancel
 )
+
+from .download import (
+    product_download
+)

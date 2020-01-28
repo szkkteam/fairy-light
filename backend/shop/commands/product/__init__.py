@@ -2,25 +2,18 @@
 # -*- coding: utf-8 -*-
 
 # Common Python library imports
-import os
-import sys
 
 # Pip package imports
 import click
 from flask.cli import with_appcontext
-
 from loguru import logger
 
 # Internal package imports
-from backend.extensions.mediamanager import storage as mm
-from backend.utils import listify
-from backend.extensions import db
 from backend.tasks import prepare_product_async_task
-
-from backend.shop.models import ShippingStatus, Order, StripeUser, Image
+from backend.utils.mail import send_mail
 
 from ..group import shop
-from ...product import deliver_product, create_archive
+from backend.shop.product import prepare_mail, create_archive
 
 
 @shop.command()
@@ -33,14 +26,20 @@ def deliver(id):
 @shop.command()
 @click.option('--id', '-i', expose_value=True,
               help='Product ID to deliver.')
+@with_appcontext
 def archive(id):
     create_archive(id)
 
 @shop.command()
 @click.option('--id', '-i', expose_value=True,
               help='Product ID to deliver.')
+@with_appcontext
 def send(id):
     # Check the order ID
-    assert order, "Order Id: \'{id}\' is invalid.".format(id=id)
-    deliver_product(id=id)
-
+    try:
+        subject, recipients, template, kwargs = prepare_mail(id=id)
+    except TypeError as e:
+        logger.error(e)
+    else:
+        send_mail(subject, recipients, template, kwargs)
+        logger.debug("Order: \'{id}\' has been delivered to: \'{email}\' address.".format(id=id, email=recipients))

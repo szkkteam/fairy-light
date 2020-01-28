@@ -8,7 +8,7 @@ from flask import after_this_request, current_app
 # Internal package imports
 from backend.api import ModelResource, CREATE, PATCH
 from backend.extensions.api import api
-from backend.utils import send_mail
+from backend.utils.mail import send_mail
 
 from .blueprint import newsletter_subscribe
 from ..models import NewsletterSubscribe
