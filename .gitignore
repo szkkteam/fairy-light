@@ -35,7 +35,8 @@ MANIFEST
 *.spec
 
 # Flask static folder for uploaded images
-static/photo_album/
+static/photo/
+static/product/
 
 # Installer logs
 pip-log.txt

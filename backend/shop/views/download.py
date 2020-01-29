@@ -19,7 +19,7 @@ from .blueprint import shop
 from ..models import Order
 from ..inventory import ProductInventory
 from .checkout import is_intent_success, is_order_success
-from .. import STORAGE_NAME
+from ..storage import get_protected
 
 
 @shop.route('/download/<string:token>', methods=['GET'])
@@ -31,7 +31,7 @@ def product_download(token):
             logger.debug("Invalid token: \'{token}\' requested.".format(token=token))
             abort(404)
         # TODO: Using the passed storage name, or get it directly?
-        st = mm.by_name(STORAGE_NAME)
+        st = get_protected()
         order = Order.get(order_id)
         # Read the zipfile as binary
         with open(st.path(order.path), 'rb') as arch_in:

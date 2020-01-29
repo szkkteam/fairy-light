@@ -23,31 +23,31 @@ import flask_mm as mm
 from ..storage import get_protected, get_public
 
 
+class StorageImageUploadInput(ImageUploadInput):
+    """
+        Renders a image input chooser field.
+        You can customize `empty_template` and `data_template` members to customize
+        look and feel.
+    """
+
+    # empty_template = ('<input %(file)s>')
+
+    def get_url(self, field):
+
+        if field.thumbnail_size:
+            filename = field.thumbnail_fn(field.data)
+        else:
+            filename = field.data
+
+        return get_public().url(filename)
+
 class StorageImageUploadField(fields.StringField):
 
-    class StorageImageUploadInput(ImageUploadInput):
-        """
-            Renders a image input chooser field.
-            You can customize `empty_template` and `data_template` members to customize
-            look and feel.
-        """
-        empty_template = ('<input %(file)s>')
 
-        def get_url(self, field):
-
-            if field.thumbnail_size:
-                filename = field.thumbnail_fn(field.data)
-            else:
-                filename = field.data
-
-            return get_public().url(filename)
 
     widget = StorageImageUploadInput()
 
     def __init__(self, label=None, validators=None, **kwargs):
-
-        assert isinstance(storage, mm.managers.BaseManager)
-
         self._should_delete = False
 
         super(StorageImageUploadField, self).__init__(label, validators, **kwargs)
@@ -92,7 +92,7 @@ class StorageImageUploadField(fields.StringField):
                 self._should_delete = True
 
 
-        return super(MediaManagerImageUploadField, self).process(formdata, data)
+        return super(StorageImageUploadField, self).process(formdata, data)
 
     def process_formdata(self, valuelist):
         if self._should_delete:
@@ -129,12 +129,11 @@ class StorageImageUploadField(fields.StringField):
         return self.namegen(obj, file_data)
 
 
-class ProtectedImageUploadField(fields.StringField):
+class ProtectedImageUploadField(StorageImageUploadField):
+
+    widget = StorageImageUploadInput()
 
     def __init__(self, label=None, validators=None, **kwargs):
-
-        assert isinstance(storage, mm.managers.BaseManager)
-
         self._should_delete = False
 
         super(ProtectedImageUploadField, self).__init__(label, validators, **kwargs)

@@ -8,6 +8,7 @@ from datetime import timedelta
 # Pip package imports
 import redis
 from appdirs import AppDirs
+from flask_mm.postprocess import Watermarker
 
 # Internal package imports
 from backend.utils.date import utcnow
@@ -193,9 +194,7 @@ class BaseConfig(object):
         'MANAGER': 'image',
         'THUMBNAIL_SIZE': (253,220,True), # Generate strict thumbnails
         'MAX_SIZE': (1280, 1720, False), # Optimise the image size for the watermarked image
-        'POSTPROCESS': ({'watermark': {
-            'sad': 'asd'  # TODO: Define Postprocessing keyword arguments for example: https://github.com/bashu/django-watermark/blob/develop/watermarker/templatetags/watermark.py
-        }}, )
+        'POSTPROCESS': Watermarker(os.path.join(STATIC_FOLDER, 'site', 'img', 'wm_fllogof_rs.png'), position='c'),
     }
 
     MM_PRODUCT = {
@@ -249,7 +248,7 @@ class DevConfig(BaseConfig):
     ##########################################################################
     ENV = 'dev'
     DEBUG = get_boolean_env('FLASK_DEBUG', True)
-    SERVER_NAME = 'localhost:5000'
+    #SERVER_NAME = 'localhost:5000'
     # EXPLAIN_TEMPLATE_LOADING = True
 
     ##########################################################################

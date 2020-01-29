@@ -15,7 +15,6 @@ from wtforms.fields import MultipleFileField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 
 # Internal package imports
-from .field import MediaManagerImageUploadField
 
 class ReorderableForm(BaseForm):
     def __init__(self, formdata=None, obj=None, prefix=u'', **kwargs):
@@ -66,8 +65,3 @@ class CustomImportForm(FlaskForm):
 
 class CustomExportForm(FlaskForm):
     file_name = StringField('File name')
-
-class MultiImageUploadForm(FlaskForm):
-    #upload = MultipleFileField('Import image(s)', validators=[FileRequired(), FileAllowed(['png', 'gif', 'jpg'], 'Not supported image type.')])
-    #upload = MultipleFileField('Import image(s)')
-    upload = MediaManagerImageUploadField('Import image(s)')

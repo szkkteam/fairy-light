@@ -18,13 +18,13 @@ from backend.utils import encode_token
 
 
 from .models import ShippingStatus, Order
-from . import STORAGE_NAME
+from .storage import get_protected
 
 
 
 def create_archive(id):
     try:
-        st = mm.by_name(STORAGE_NAME)
+        st = get_protected()
     except KeyError as e:
         logger.error(e)
         raise
@@ -66,7 +66,7 @@ def prepare_mail(**kwargs):
         subject = "Product order: %s ready to download" % order.id
         template = 'email/product_deliver.html'
         mail_data = dict(order_id=order.id,
-                         download_link=url_for('shop.product_download', token=token),
+                         download_link=url_for('shop.product_download', token=token, _external=True),
                   )
 
         order.set_shipping_status(ShippingStatus.succeeded, False)
