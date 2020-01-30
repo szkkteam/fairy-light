@@ -11,10 +11,27 @@ import enum
 # Pip package imports
 from flask import current_app, render_template, url_for, request, redirect, jsonify, abort, session
 from flask.views import MethodView
+from sqlalchemy import func
 
 from loguru import logger
 
 # Internal package imports
+from backend.extensions import db
+
+from .models import Category, Image
+
+def get_image_details(currency, **kwargs):
+    image = kwargs.get('image', None)
+    if image is None:
+        image_id = kwargs.get('image_id')
+        image = Image.get(image_id)
+
+    return {
+        'id': image.id,
+        'thumb': image.get_thumbnail_path(),
+        'price': image.price if image.price else 0,
+        'currency': currency
+    }
 
 class ProductInventory(object):
     """
@@ -26,18 +43,25 @@ class ProductInventory(object):
                         'intentId: <stripe intent id>,
                     }
                     'items': {
-                        '<image id>': {
-                            'id': <image id>,
-                            'thumb': <image thumbnail>,
-                            'price': <price int>,
-                            'currency': 'eur',
-                        },
-                        '<image id>': {
-                            'id': <image id>,
-                            'thumb': <image thumbnail>,
-                            'price': <price int>,
-                            'currency': 'eur',
-                        },
+                        '<album id>': {
+                            'discount': <percentage float>,
+                            'subTotal': <price int>,
+                            'title': <title str>,
+                            'products': {
+                                '<image id>': {
+                                    'id': <image id>,
+                                    'thumb': <image thumbnail>,
+                                    'price': <price int>,
+                                    'currency': 'eur',
+                                },
+                                '<image id>': {
+                                    'id': <image id>,
+                                    'thumb': <image thumbnail>,
+                                    'price': <price int>,
+                                    'currency': 'eur',
+                                },
+                            }
+                        }
                     }
                 }
             }
@@ -56,27 +80,95 @@ class ProductInventory(object):
             cls.storage['shoppingCart']['tracking'] = {}
 
     @classmethod
-    def add_item(cls, id, thumb, price, currency='eur', **kwargs):
+    def _calculate_subtotal(cls, products):
+        sum = 0
+        for key, item in products.items():
+            sum += item['price']
+        return sum
+
+    @classmethod
+    def _calculate_discount(cls, category, products, discount_above=0.5):
+        """
+        Calculate the applied discount for the images. The equation should be the following.
+        discount = max(x - (n/2),0)*(dc/(n/2))
+        where:
+        x - Number of images bought
+        n - Total number of images in the album
+        dc - Maximum discount for the album
+        :param item:
+        :return:
+        """
+        n = db.session.query(func.count(category.get_images().all()))
+        n_2 = n*discount_above
+        x = len(products.keys())
+        dc = category.discount
+        return max(x - (n_2), 0) * (dc / (n_2))
+
+    @classmethod
+    def add_item(cls, currency='eur', **kwargs):
         try:
-            cls._prepare_layout()
-            item = dict(
-                id = id,
-                thumb = thumb,
-                price = price,
-                currency = currency,
-                **kwargs,
-            )
-            cls.storage['shoppingCart']['items'][id] = item
-            logger.debug("Item \'{item}\' added to the storage.".format(item=item) )
+            image = kwargs.get('image', None)
+            if image is None:
+                image_id = kwargs.get('image_id', None)
+                image = Image.get(image_id)
+            category = kwargs.get('category', None)
+            if category is None:
+                category = Category.get(image.category_id)
+        except Exception as e:
+            logger.error(e)
+            raise
+        else:
+            try:
+                cls._prepare_layout()
+                category_item = {
+                    'subTotal': 0,
+                    'discount': 0,
+                    'title': category.title,
+                    'products': {
+
+                    }
+                }
+                # Pop out the existing key, or get the default
+                category_item = cls.storage['shoppingCart']['items'].pop(category.id, category_item)
+                print(cls.storage['shoppingCart'], flush=True)
+                # Convert image item layout
+                image_item = get_image_details(image=image, currency=currency, **kwargs)
+                # Calculate the subtotal
+                category_item['subTotal'] = cls._calculate_subtotal(category_item['products'])
+                # Calculate the discount
+                category_item['discount'] = cls._calculate_discount(category, category_item['products'])
+                # Re-insert category item
+                category_item['products'][image.id] = image_item
+                # Re-insert to session
+                cls.storage['shoppingCart']['items'][category.id] = category_item
+
+                print(cls.storage['shoppingCart'], flush=True)
+
+                logger.debug("Item \'{item}\' added to the storage.".format(item=image_item) )
+            except Exception as e:
+                logger.error(e)
+
+    @classmethod
+    def add_category(cls, id, currency='eur', **kwargs):
+        try:
+            category = Category.get(id)
+            images = Category.get_images(category.id).all()
+            for image in images:
+                cls.add_item(currency, image=image, category=category)
+
         except Exception as e:
             logger.error(e)
 
     @classmethod
     def remove_item(cls, id):
         try:
+            image = Image.get(id)
+
             cls._prepare_layout()
-            if id in cls.storage['shoppingCart']['items']:
-                item = cls.storage['shoppingCart']['items'].pop(id)
+            if image.category_id in cls.storage['shoppingCart']['items'] and\
+                    id in cls.storage['shoppingCart']['items'][image.category_id]['products']:
+
+                item = cls.storage['shoppingCart']['items'][image.category_id]['products'].pop(id)
                 logger.debug("Item \'{item}\' removed from the storage.".format(item=item))
         except Exception as e:
             logger.error(e)
@@ -104,16 +196,23 @@ class ProductInventory(object):
     def get_total_price(cls):
         total = 0
         cls._prepare_layout()
-        items = cls.storage['shoppingCart']['items']
-        for key, item in items.items():
-            total += item['price']
+        categories = cls.storage['shoppingCart']['items']
+        for category_id, category in categories.items():
+            try:
+                total += (category['subTotal'] * (1.0 - float(category['discount'])))
+            except ValueError as e:
+                logger.error(e)
 
         return total
 
     @classmethod
     def get_num_of_items(cls):
+        num = 0
         cls._prepare_layout()
-        return len(cls.storage['shoppingCart']['items'].keys())
+        categories = cls.storage['shoppingCart']['items']
+        for category_id, category in categories.items():
+            num += len(category['products'].keys())
+        return  num
 
     @classmethod
     def get_content(cls):

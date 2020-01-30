@@ -18,15 +18,7 @@ from ..models import Category, Image, PaymentStatus, Order
 from ..inventory import ProductInventory
 from .blueprint import shop
 
-def get_image_details(id):
-    img = Image.get(id)
-    if img is not None:
-        return {
-            'id': id,
-            'thumb': img.get_thumbnail_path(),
-            'price': img.price if img.price else 0
-        }
-    return {}
+
 
 class CartApi(MethodView):
 
@@ -52,9 +44,7 @@ class CartCategoryApi(MethodView):
 
     def post(self, category_id):
         try:
-            images = Category.get_images(category_id).all()
-            for image in images:
-                ProductInventory.add_item( **get_image_details(image.id) )
+            ProductInventory.add_category(category_id)
             return jsonify({'shopItems': ProductInventory.get_num_of_items()})
 
         except Exception as err:
@@ -69,7 +59,8 @@ class CartItemApi(MethodView):
 
     def post(self, item_id):
         try:
-            ProductInventory.add_item( **get_image_details(item_id))
+            print("Item id: ", item_id, flush=True)
+            ProductInventory.add_item(image_id=item_id)
             return jsonify({'shopItems': ProductInventory.get_num_of_items()})
 
         except Exception as err:

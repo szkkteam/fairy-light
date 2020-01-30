@@ -102,13 +102,13 @@ class CategoryAdmin(ModelAdmin):
 
     inline_models = [InlineImageAdmin(Image) ]
 
-    column_list = ( 'folder', 'cover', 'public', 'price' )
+    column_list = ( 'folder', 'cover', 'public', 'discount' )
 
-    column_editable_list = ( 'title', 'public', 'price')
+    column_editable_list = ( 'title', 'public', 'discount')
 
-    column_details_list = ('title', 'public', 'price', 'cover', 'images')
+    column_details_list = ('title', 'public', 'discount', 'cover', 'images')
 
-    form_columns = ( 'title', 'public', 'price', 'cover', 'images')
+    form_columns = ( 'title', 'public', 'discount', 'cover', 'images')
 
     form_extra_fields = {
         'cover': StorageImageUploadField('Cover Photo'),

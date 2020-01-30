@@ -14,13 +14,22 @@
     </table>
 {% endmacro %}
 
+{% macro subtotal(title, origi_price, discount_price, discount) %}
+    <tr>
+        <td>{{title}}</td>
+        <td>{{origi_price}}</td>
+        <td>{{discount_price}}</td>
+        <td>{{discount}}</td>
+    </tr>
+{% endmacro %}
+
 {% macro row(id, iter, image, price, delete_url="") %}    
     <tr data-id="{{id}}">
         <td scope="row">{{iter}}</td>
         <td >
             <img class="cart-details-img" width="70px;" src="{{ image }}">
         </td>
-        <td>{{prcie}}</td>
+        <td>{{price}}</td>
         <td>
             <a href="{{delete_url}}" class="btn btn-primary clear-item">Remove</a>
         </td>

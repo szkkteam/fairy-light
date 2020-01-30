@@ -65,8 +65,11 @@ def index_view(root=None):
 
     else:
         for element in data:
-            if element.price == 0:
-                element.price = Category.sum_images_price(element.id)
+            print(element, flush=True)
+            if element.discount:
+                element.price = Category.sum_images_price(element.id) * (1 - element.discount)
+            else:
+                element.price = None
 
         return render_template('photos_listing.html',
                                # Navigation specific

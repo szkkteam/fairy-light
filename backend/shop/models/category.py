@@ -31,7 +31,7 @@ class Category(Model, BaseNestedSets):
 
     title = Column(String(80), nullable=True)
     public = Column(Boolean(name='public'), default=True)
-    price = Column(Float, nullable=True)
+    discount = Column(Float, nullable=True)
 
     cover = Column(String(128), nullable=True)
 
