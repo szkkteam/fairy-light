@@ -85,6 +85,7 @@
             $.ajax({
                 type: 'GET',
                 url: '/shop/cart',
+                cache:false,
                 dataType: 'html',
                 success: function (data) {
                     $('.popover .popover-body').html(data);

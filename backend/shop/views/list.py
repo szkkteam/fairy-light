@@ -47,6 +47,16 @@ def index_view(root=None):
     # Query the models at given level.
     data = Category.get_list_from_root(root, only_public=True).all()
 
+    try:
+        cart_items = ProductInventory.get_content()
+        cart_num_of_items = ProductInventory.get_num_of_items()
+        total_price = ProductInventory.get_total_price()
+    except Exception as e:
+        logger.error(e)
+        cart_items = {}
+        cart_num_of_items = 0
+        total_price = 0
+
     if len(data) == 0:
         # If there are no sub categories, query the images.
         data = Category.get_images(root)
@@ -56,9 +66,9 @@ def index_view(root=None):
                                breadcrumbs=breadcrumbs,
 
                                # Shopping cart
-                               cart_items=ProductInventory.get_content(),
-                               cart_num_of_items=ProductInventory.get_num_of_items(),
-                               total_price = ProductInventory.get_total_price(),
+                               cart_items=cart_items,
+                               cart_num_of_items=cart_num_of_items,
+                               total_price=total_price,
 
                                # Datamodel
                                data=data)
@@ -76,9 +86,9 @@ def index_view(root=None):
                                breadcrumbs=breadcrumbs,
 
                                # Shopping cart
-                               cart_items=ProductInventory.get_content(),
-                               cart_num_of_items=ProductInventory.get_num_of_items(),
-                               total_price = ProductInventory.get_total_price(),
+                               cart_items=cart_items,
+                               cart_num_of_items=cart_num_of_items,
+                               total_price=total_price,
 
                                # Datamodel
                                data=data)

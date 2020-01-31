@@ -11,7 +11,6 @@ import enum
 # Pip package imports
 from flask import current_app, render_template, url_for, request, redirect, jsonify, abort, session
 from flask.views import MethodView
-from sqlalchemy import func
 
 from loguru import logger
 
@@ -87,7 +86,7 @@ class ProductInventory(object):
         return sum
 
     @classmethod
-    def _calculate_discount(cls, category, products, discount_above=0.5):
+    def _calculate_discount(cls, n, discount, x, discount_above=0.5):
         """
         Calculate the applied discount for the images. The equation should be the following.
         discount = max(x - (n/2),0)*(dc/(n/2))
@@ -98,11 +97,8 @@ class ProductInventory(object):
         :param item:
         :return:
         """
-        n = db.session.query(func.count(category.get_images().all()))
         n_2 = n*discount_above
-        x = len(products.keys())
-        dc = category.discount
-        return max(x - (n_2), 0) * (dc / (n_2))
+        return max(x - (n_2), 0) * (discount / (n_2))
 
     @classmethod
     def add_item(cls, currency='eur', **kwargs):
@@ -130,19 +126,18 @@ class ProductInventory(object):
                 }
                 # Pop out the existing key, or get the default
                 category_item = cls.storage['shoppingCart']['items'].pop(category.id, category_item)
-                print(cls.storage['shoppingCart'], flush=True)
                 # Convert image item layout
                 image_item = get_image_details(image=image, currency=currency, **kwargs)
+                # Re-insert category item
+                category_item['products'][image.id] = image_item
                 # Calculate the subtotal
                 category_item['subTotal'] = cls._calculate_subtotal(category_item['products'])
                 # Calculate the discount
-                category_item['discount'] = cls._calculate_discount(category, category_item['products'])
-                # Re-insert category item
-                category_item['products'][image.id] = image_item
+                category_item['discount'] = cls._calculate_discount(Category.get_num_if_images(category.id),
+                                                                    category.discount if category.discount is not None else 0,
+                                                                    len(category_item['products'].keys()))
                 # Re-insert to session
                 cls.storage['shoppingCart']['items'][category.id] = category_item
-
-                print(cls.storage['shoppingCart'], flush=True)
 
                 logger.debug("Item \'{item}\' added to the storage.".format(item=image_item) )
             except Exception as e:
@@ -167,8 +162,22 @@ class ProductInventory(object):
             cls._prepare_layout()
             if image.category_id in cls.storage['shoppingCart']['items'] and\
                     id in cls.storage['shoppingCart']['items'][image.category_id]['products']:
-
+                # Query the category
+                category = Category.get(image.category_id)
+                # Shortcut
+                category_item = cls.storage['shoppingCart']['items'][image.category_id]
+                # Remove item
                 item = cls.storage['shoppingCart']['items'][image.category_id]['products'].pop(id)
+                # Calculate the subtotal
+                cls.storage['shoppingCart']['items'][image.category_id]['subTotal'] = cls._calculate_subtotal(category_item['products'])
+                # Calculate the discount
+                cls.storage['shoppingCart']['items'][image.category_id]['discount'] = cls._calculate_discount(Category.get_num_if_images(category.id),
+                                                                    category.discount if category.discount is not None else 0,
+                                                                    len(category_item['products'].keys()))
+                # If no item left in the category, remove it
+                if len(category_item['products'].keys()) == 0:
+                    category_item = cls.storage['shoppingCart']['items'].pop(image.category_id)
+
                 logger.debug("Item \'{item}\' removed from the storage.".format(item=item))
         except Exception as e:
             logger.error(e)

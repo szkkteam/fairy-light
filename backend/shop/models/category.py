@@ -7,6 +7,7 @@ import os
 # Pip package imports
 from sqlalchemy_mptt.mixins import BaseNestedSets
 from sqlalchemy.event import listens_for
+from sqlalchemy import func
 from sqlalchemy.orm import relationship, remote, foreign
 from jinja2 import Markup
 
@@ -63,6 +64,10 @@ class Category(Model, BaseNestedSets):
     @classmethod
     def get_images(cls, id):
         return Image.query.join(Category).filter(Image.category_id == id, Image.status == ImageStatus.active)
+
+    @classmethod
+    def get_num_if_images(cls, id):
+        return db.session.query(func.count(Image.id)).join(Category.images).group_by(Category.id).filter(Category.id == id).all()[0][0]
 
     @classmethod
     def get_list_from_root(cls, root_id, only_public=False):
