@@ -103,11 +103,11 @@ class ProductInventory(object):
     @classmethod
     def add_item(cls, currency='eur', **kwargs):
         try:
-            image = kwargs.get('image', None)
+            image = kwargs.pop('image', None)
             if image is None:
-                image_id = kwargs.get('image_id', None)
+                image_id = kwargs.pop('image_id', None)
                 image = Image.get(image_id)
-            category = kwargs.get('category', None)
+            category = kwargs.pop('category', None)
             if category is None:
                 category = Category.get(image.category_id)
         except Exception as e:
