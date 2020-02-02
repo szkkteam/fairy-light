@@ -5,36 +5,75 @@
 
 {% block custom_css %}
     {{ super() }}
-    <link href="{{ site_static.url(filename='site/css/photos/style.css') }}" rel="stylesheet">
+    <link href="{{ site_static.url(filename='site/css/shop/style.css') }}" rel="stylesheet">
+    
+    <style>
+        .dropdown-menu {
+            top: 130%;
+            left: inherit;
+            right: 0;
+            width: 255px;
+        }
+
+        button.clear-item {
+            padding: 0.0rem 0.025rem !important;
+        }
+
+
+        #cart .cart-album-title {
+            white-space: nowrap;
+        }
+
+        #cart .cart-album-remark {
+            white-space: nowrap;
+            text-align: right;
+        }
+
+        #cart .cart-price {
+            white-space: nowrap;
+            text-align: left;
+        }
+
+    </style>
 
 {% endblock %}
 
 
 {% block header_nav_element_block %}
     {{ super() }}
-    <li class="nav-item">
-        <a id="shopping-cart" href="#" class="nav-link d-inline-block" data-toggle="popover"  data-container="#navbar" data-popover-content="#shopping-cart-wrapper" data-placement="bottom">
-            <span id="shopping-cart-items">
-                {{ cart_num_of_items }}
-            </span>
-            <i class="material-icons" style="padding:0 0 0 15px;font-size: 24px;">shopping_cart</i>
-        </a>
+    <li class="nav-item">        
+        <div id="shopping-cart-dropdown" class="dropdown">
+            <a id="shopping-cart" href="#" class="nav-link d-inline-block dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span id="shopping-cart-items">
+                    {{ cart_num_of_items }}
+                </span>
+                <i class="material-icons" style="padding:0 0 0 15px;font-size: 24px;">shopping_cart</i>
+            </a>
+            <div id="cart" class="dropdown-menu">
+                <span class="dropdown-content">
+                    Loading ...
+                </span>
+                <hr class="header-separator"/>
+                <div class="row text-center my-3">
+                    <div class="col">
+                        <a href="{{url_for('shop.cart_detail', url=current_url)}}" class="btn btn-primary" id="shopping-cart-detail">
+                            <span class="text-nowrap">View Cart</span>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="{{url_for('shop.cart_api')}}" class="btn btn-primary" id="shopping-cart-clear">
+                            <span class="text-nowrap">Clear Cart</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </li>    
     {{ separator() }}
 {% endblock %}
 
 
 {% block main_block %}
-<section id="shopping-cart" style="display: none">
-    <div id="shopping-cart-wrapper" class="shopping-cart-container">
-        <div class="popover-heading">
-            Shopping Cart
-        </div>        
-        <div class="popover-body shopping-cart-details">
-            {% include 'cart_details.html' %}            
-        </div>
-    </div>
-</section>
 <section id="photonav">
     <div class="container">
         <div class="row no-gutters">
@@ -88,49 +127,38 @@
     <script src="{{ site_static.url(filename='site/js/shopping_cart.js') }}" type="text/javascript"></script>
     <script>
     
-    $('#photos .photos-buy-card').shoppingCart({
-
+    $('span.dropdown-content').shoppingCart({
+        buyButton: '.photos-add-btn',
+        clearButton: '#shopping-cart-clear',
+        removeButton: '.clear-item',
+        indicator: '#shopping-cart-items',
+        urlGetCartContent: null,
     });
 
-    $(document).ready( function() {
-        $(function() {
-            $.fn.popover.Constructor.Default.whiteList.table = [];
-            $.fn.popover.Constructor.Default.whiteList.tr = ['data-id'];
-            $.fn.popover.Constructor.Default.whiteList.td = [];
-            $.fn.popover.Constructor.Default.whiteList.th = [];
-            $.fn.popover.Constructor.Default.whiteList.div = [];
-            $.fn.popover.Constructor.Default.whiteList.tbody = [];
-            $.fn.popover.Constructor.Default.whiteList.thead = [];
 
-            $('#shopping-cart').popover({
-                html: true,
-                //placement: 'top',
-                //container: '.shopping-cart-container',
-                //container: 'body',
-                //container: '.navbar',
-                content: function() {
-                    var content = $(this).attr("data-popover-content");
-                    //return $(content).children(".popover-body").html();
-                    $.ajax({
-                        type: 'GET',
-                        url: "{{url_for('shop.cart_api')}}",
-                        dataType: 'html',
-                        success: function (data) {
-                            $('.popover .popover-body').html(data);
-                            //popover.$tip.addClass(popover.options.placement);
-                        },
-                        error: function (data) {
-                            console.log(data.responseJSON);
-                        }
-                    }); 
-                    return "Loading ..."
+    $(document).ready( function() {
+
+        $('.dropdown-toggle').dropdown({
+            boundary : 'window',
+            }
+        );
+
+        $('#shopping-cart-dropdown').on('show.bs.dropdown', function() {
+            $('.dropdown .dropdown-content').html("Loading ...");
+            console.log("Dropped down");
+
+            $.ajax({
+                type: 'GET',
+                url: "{{url_for('shop.cart_api')}}",
+                dataType: 'html',
+                success: function (data) {
+                    $('.dropdown .dropdown-content').html(data);
                 },
-                title: function() {
-                    var title = $(this).attr("data-popover-content");
-                    return $(title).children(".popover-heading").html();
-                },
-            });
-        });
+                error: function (data) {
+                    console.log(data.responseJSON);
+                }
+            }); 
+        });        
     });
 
     

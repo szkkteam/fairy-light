@@ -18,13 +18,27 @@ from ..models import Category, Image, PaymentStatus, Order
 from ..inventory import ProductInventory
 from .blueprint import shop
 
+@shop.route('/cart/detail')
+def cart_detail():
+    return render_template('photos_cart.html',
+                           cart_items=ProductInventory.get_content(),
+                           total_price=ProductInventory.get_total_price(),
+                           return_url=request.args.get('url')
+                           )
+
+@shop.route('/cart/detail/refresh')
+def cart_detail_refresh():
+    return render_template('cart_detail.html',
+                           cart_items=ProductInventory.get_content(),
+                           total_price=ProductInventory.get_total_price()
+                           )
 
 
 class CartApi(MethodView):
 
     def get(self):
         try:
-            return render_template('cart_details.html',
+            return render_template('cart_mini.html',
                                    cart_items=ProductInventory.get_content(),
                                    total_price=ProductInventory.get_total_price(),
                                    )

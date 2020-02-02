@@ -105,7 +105,7 @@
 */
 
 table.cart-table thead, tr, tbody, th, td {
-    text-align: center;
+    /* text-align: center;*/ 
     vertical-align: middle !important;
 }
 

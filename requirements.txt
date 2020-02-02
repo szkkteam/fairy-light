@@ -13,16 +13,21 @@ babel==2.7.0              # via flask-babelex
 bcrypt==3.1.7
 beautifulsoup4==4.8.1
 billiard==3.6.1.0         # via celery
-blinker==1.4              # via flask-mail, flask-principal
+blinker==1.4              # via flask-debugtoolbar, flask-mail, flask-principal
 celery==4.3.0
+certifi==2019.11.28       # via requests
 cffi==1.13.2              # via bcrypt
+chardet==3.0.4            # via requests
 click==7.0                # via flask
 flask-admin==1.5.4
 flask-alembic==2.0.1
 flask-babelex==0.9.3      # via flask-security
+flask-breadcrumbs==0.4.0
+flask-debugtoolbar==0.10.1
 flask-login==0.4.1        # via flask-security
 flask-mail==0.9.1
 flask-marshmallow==0.10.1
+flask-menu==0.7.1         # via flask-breadcrumbs
 flask-principal==0.4.0    # via flask-security
 flask-restful==0.3.7
 flask-security==3.0.0
@@ -30,8 +35,9 @@ flask-session==0.3.1
 flask-sqlalchemy==2.4.1
 flask-wtf==0.14.2
 flask==1.1.1
+idna==2.8                 # via requests
 importlib-metadata==0.23  # via kombu
-itsdangerous==1.1.0       # via flask, flask-security
+itsdangerous==1.1.0       # via flask, flask-debugtoolbar, flask-security
 jinja2-time==0.2.0
 jinja2==2.10.3
 kombu==4.6.6              # via celery
@@ -52,16 +58,21 @@ python-frontmatter==0.4.5
 pytz==2019.3
 pyyaml==5.1.2             # via python-frontmatter
 redis==3.3.11
-six==1.13.0               # via bcrypt, flask-marshmallow, flask-restful, python-dateutil, python-frontmatter
+requests==2.22.0
+six==1.13.0               # via bcrypt, flask-breadcrumbs, flask-marshmallow, flask-menu, flask-restful, python-dateutil, python-frontmatter, sqlalchemy-utils
 soupsieve==1.9.5          # via beautifulsoup4
 speaklater==1.3           # via flask-babelex
-sqlalchemy==1.3.11        # via alembic, flask-alembic, flask-sqlalchemy, marshmallow-sqlalchemy
+sqlalchemy-mptt==0.2.5
+sqlalchemy-utils==0.36.1
+sqlalchemy==1.3.11        # via alembic, flask-alembic, flask-sqlalchemy, marshmallow-sqlalchemy, sqlalchemy-mptt, sqlalchemy-utils
+stripe==2.42.0
 tzlocal==2.0.0
+urllib3==1.25.8           # via requests
 uwsgi==2.0.18
 vine==1.3.0               # via amqp, celery
-werkzeug==0.16.0          # via flask
+werkzeug==0.16.0          # via flask, flask-debugtoolbar
 wtforms==2.2.1            # via flask-admin, flask-wtf
 zipp==0.6.0               # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools==42.0.0        # via markdown
+# setuptools==45.1.0        # via markdown

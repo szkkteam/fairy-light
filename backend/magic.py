@@ -59,7 +59,7 @@ def is_blueprint(obj):
     return isinstance(obj, flask.Blueprint)
 
 def is_filter(obj):
-    return inspect.ismethod(obj)
+    return callable(obj)
 
 def is_click_command(obj):
     return isinstance(obj, click.Command) and not isinstance(obj, click.Group)
@@ -268,7 +268,7 @@ class Bundle(object):
         self._blueprint_names = blueprint_names
 
         if filter_names != sentinel:
-            self._filter_names = self.filter_names
+            self._filter_names = filter_names
 
 
     @property

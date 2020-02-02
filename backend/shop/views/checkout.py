@@ -30,7 +30,9 @@ def is_intent_success():
     if intent_id is not None:
         intent_obj = stripe.PaymentIntent.retrieve(intent_id)
         if 'charges' in intent_obj:
-            return bool(intent_obj['charges']['data'][0]['status'] == 'succeeded')
+            data = intent_obj['charges']['data']
+            if len(data) > 0:
+                return bool(data[0]['status'] == 'succeeded')
     return False
 
 def is_order_success():

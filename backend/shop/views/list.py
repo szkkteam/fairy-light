@@ -64,6 +64,7 @@ def index_view(root=None):
         return render_template('photos_images_listing.html',
                                # Navigation specific
                                breadcrumbs=breadcrumbs,
+                               current_url=breadcrumbs[-1]['url'] if len(breadcrumbs) > 0 else url_for('shop.index_view'),
 
                                # Shopping cart
                                cart_items=cart_items,
@@ -84,6 +85,7 @@ def index_view(root=None):
         return render_template('photos_listing.html',
                                # Navigation specific
                                breadcrumbs=breadcrumbs,
+                               current_url=breadcrumbs[-1]['url'] if len(breadcrumbs) > 0 else url_for('shop.index_view'),
 
                                # Shopping cart
                                cart_items=cart_items,

@@ -26,11 +26,65 @@
             position: relative;
         }
 
-        .album-cover-overlay {
+        .album-title-overlay {
             position: absolute;
-            top: 0;
+            top: 60%;
             right: 0;
             left: 0;
+            background: rgba(0,0,0,0.5);
+            color: #f1f1f1;
+            padding: 0.35rem 0.35rem;            
+        }
+
+        .album-social-overlay {
+            position: absolute;
+            top: 5px;
+            right: 10px;   
+            left: 10px;
+        }
+
+        .album-social-overlay .pictures-number {
+            float: right;
+        }
+
+        .album-social-overlay .pictures-share a {
+            color: #fff;
+        }
+
+
+        .album-discount del {
+            color: grey;
+            text-decoration: none;
+            position: relative;
+            margin-right: 1em;
+        }
+     
+        .album-discount del::before {
+            content: " ";
+            display: block;
+            width: 100%;
+            border-top: 4px solid rgba(255,0,0, 0.8);
+            height: 12px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            visibility: inherit;
+            transform: rotate(-7deg);
+        }
+        .album-discount ins {
+            color: white;
+            font-weight: 400;
+            font-size: 1.2rem;
+            text-decoration: none;
+            padding-right: 0.5em;
+        }
+
+        .card-cart-add {
+            word-spacing: 0.2em;
+        }
+
+        .card-body {
+            padding: 1rem;
         }
 
     </style>
@@ -42,17 +96,50 @@
                 <div class="card text-center">
                     <div class="album-cover">
                         <img class="card-img-top" src="http://placehold.it/253x220">
-                        <div class="album-cover-overlay">
-                            <p>Album Title</p>
+                        <div class="album-title-overlay">                            
+                            <h4>Album Title</h4>
+                        </div>
+                        <div class="album-social-overlay">
+                            <div class="pull-left">
+                                <i class="fa fa-picture-o" aria-hidden="true"></i>
+                                <span>4</span>                                
+                            </div>
+                            <div class="pull-right pictures-share">
+                                <a class="fb-share" href="https://www.facebook.com/sharer/sharer.php?u=http://127.0.0.1:5000/shop" target="_blank">
+                                    <i class="fa fa-share-alt" aria-hidden="true"></i>
+                                </a>                                
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <p>Card body</p>
-                        <a href="#" class="btn btn-primary">Add To Cart</a>
+                    <div class="card-body text-left">
+                        <p class="mb-1">Buy 4 picture now for</p>
+                        <div class="album-discount">
+                            <ins>
+                                <span>$30.00</span>
+                            </ins>
+                            <del>
+                                <span>$44.00</span>        
+                            </del>
+                        </div>
+                        <div class="mt-2">
+                            <a href="#" class="btn btn-primary card-cart-add w-100">ADD TO CART</a>    
+                        </div>                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+       $(document).ready(function() {
+            $('.fb-share').click(function(e) {
+                e.preventDefault();
+                window.open($(this).attr('href'), 'fbShareWindow', 'height=450, width=550, top=' + ($(window).height() / 2 - 275) + ', left=' + ($(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
+                return false;
+            });
+        }); 
+    
+    </script>
+
 </body>
 </html>

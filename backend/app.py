@@ -76,6 +76,7 @@ def _create_app(config_object: BaseConfig, **kwargs):
     register_models(app)
     register_serializers(app)
     register_admins(app)
+    register_filters(app)
 
     deferred_extensions = dict(get_extensions(DEFERRED_EXTENSIONS))
     extensions.update(deferred_extensions)

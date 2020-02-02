@@ -2,15 +2,20 @@
 # -*- coding: utf-8 -*-
 
 # Common Python library imports
-import locale
-
 # Pip package imports
+from babel.numbers import format_currency
+
 # Internal package imports
 
-
-locale.setlocale(locale.LC_ALL, 'de_DE  ')
-
-def format_price(value):
+def format_price(value, iso_locale='de_DE'):
     if value == 0:
         return 'Free'
-    return locale.currency(value, symbol=True, grouping=True)
+    return format_currency(value, 'EUR', format=u'¤ #,##0.00', locale=iso_locale)
+
+def format_percentage(value, default=0.0):
+    if not isinstance(value, float):
+        try:
+            value = float(value)
+        except ValueError:
+            value = default
+    return format(value * 100, '.0f') + '%'

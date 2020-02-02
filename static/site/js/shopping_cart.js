@@ -10,16 +10,14 @@
 		/* Configure options */
         var opts = $.extend( {}, $.fn.shoppingCart.defaults, options );
         
-        /* Register each card shopping cart functionality */
-        $(this).each( function() {
+        /* Store the cart content element */
+        var cartContent = $(this);
 
-            const cardId = $(this).attr('data-id');
-            const cardType = $(this).attr('data-type');
-
-            /* Add item to shopping cart */
-            $(this).find(opts.addToCartFilter).on('click', function(e) {
+        /* Register Buy buttons */
+        if (opts.buyButton) {
+            $(document.body).on('click', opts.buyButton, function(e) {
+                /* Prevent default action if any */
                 e.preventDefault();
-
                 $.ajax({
                     type: 'POST',
                     url: $(this).attr('href'),
@@ -34,84 +32,80 @@
                         console.log(data.responseJSON);
                     }
                 });    
-            });        
-        });
-
-        /* Remove element from cart */
-        $(document.body).on('click', '.clear-item', function(e) {
-            e.preventDefault();
-
-            $.ajax({
-                type: 'DELETE',
-                url: $(this).attr('href'),
-                contentType: 'application/json;charset=UTF-8',
-                success: function (data) {
-                    /* Update the counter at the shopping cart. */
-                    updateItemsCounter(data.shopItems);
-                    /* Update the shopping cart details */
-                    loadCartData();
-                },
-                error: function (data) {
-                    console.log(data.responseJSON);
-                }
             });    
-        });
-
-        $(document.body).on('click', '#shopping-cart-clear', function(e) {
-            e.preventDefault();
-
-            $.ajax({
-                type: 'DELETE',
-                url: $(this).attr('href'),
-                contentType: 'application/json;charset=UTF-8',
-                success: function (data) {
-                    /* Update the counter at the shopping cart. */
-                    updateItemsCounter(data.shopItems);
-                    /* Update the shopping cart details */
-                    loadCartData();
-                },
-                error: function (data) {
-                    console.log(data.responseJSON);
-                }
-            });    
-        })
+        }
+        /* Register Remove buttons */
+        if (opts.removeButton) {
+            $(document.body).on('click', opts.removeButton, function(e) {
+                e.preventDefault();
+                $.ajax({
+                    type: 'DELETE',
+                    url: $(this).attr('href'),
+                    contentType: 'application/json;charset=UTF-8',
+                    success: function (data) {
+                        /* Update the counter at the shopping cart. */
+                        updateItemsCounter(data.shopItems);
+                        /* Update the shopping cart details */
+                        loadCartData();
+                    },
+                    error: function (data) {
+                        console.log(data.responseJSON);
+                    }
+                });   
+            });
+        }
+        if (opts.clearButton) {
+            $(document.body).on('click', opts.clearButton, function(e) {
+                e.preventDefault();
+                $.ajax({
+                    type: 'DELETE',
+                    url: $(this).attr('href'),
+                    contentType: 'application/json;charset=UTF-8',
+                    success: function (data) {
+                        /* Update the counter at the shopping cart. */
+                        updateItemsCounter(data.shopItems);
+                        /* Update the shopping cart details */
+                        loadCartData();
+                    },
+                    error: function (data) {
+                        console.log(data.responseJSON);
+                    }
+                });    
+            });
+        }
 
         function updateItemsCounter(numOfItems) {
-            $(opts.numOfItemsIndicatorFilter).html(numOfItems);
+            if (opts.indicator) {
+                $(opts.indicator).html(numOfItems);
+            }
+            
         };
 
         /* Register common shopping cart functionality */
         function loadCartData ( ) {
-            $.ajax({
-                type: 'GET',
-                url: '/shop/cart',
-                cache:false,
-                dataType: 'html',
-                success: function (data) {
-                    $('.popover .popover-body').html(data);
-                },
-                error: function (data) {
-                    console.log(data.responseJSON);
-                }
-            }); 
+            if (opts.urlGetCartContent) {
+                $.ajax({
+                    type: 'GET',
+                    url: opts.urlGetCartContent,
+                    cache:false,
+                    dataType: 'html',
+                    success: function (data) {
+                        $(cartContent).html(data)
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                }); 
+            }
         };
-				
-		return this;
 	};	
 	
 	$.fn.shoppingCart.defaults = {
-		addToCartFilter : '.photos-add-btn',
-        numOfItemsIndicatorFilter : '#shopping-cart-items',
-        openShoppingCartFilter: '#shopping-cart',
-		shoppingCartDetailsFilter : '#shopping-cart-wrapper',
-		onFailedOperation : function () {},
-		imgPreviewElement : null,
-		inputElements : null,
-		/* buildPreview = function (src, filename ) { return buildPreviewHtml(src, filename) },*/
-		/*
-		foreground: "red",
-		background: "yellow"
-		*/
+        buyButton: '.photos-add-btn',
+        clearButton: '#shopping-cart-clear',
+        removeButton: '.clear-item',
+        indicator: '#shopping-cart-items',
+        urlGetCartContent: '/shop/cart',
 	};
 	
 }( jQuery ));

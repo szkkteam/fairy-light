@@ -5,12 +5,12 @@
 }
 
 
-.anim--top-bottom-borders--out a {
+.anim--top-bottom-borders--out a.nav-link {
     position: relative;
     text-decoration: none;
 }
 
-.anim--top-bottom-borders--out a:before, .anim--top-bottom-borders--out a:after {
+.anim--top-bottom-borders--out a.nav-link:before, .anim--top-bottom-borders--out a.nav-link:after {
     position: absolute;
     left: 0px;
     width: 100%;
@@ -21,24 +21,24 @@
     transition: all 0.3s;
 }
 
-.anim--top-bottom-borders--out a:after {
+.anim--top-bottom-borders--out a.nav-link:after {
     /* TODO: Change this width if dropdown menus will be used */
     width: 100%;
 }
 
-.anim--top-bottom-borders--out a:before
+.anim--top-bottom-borders--out a.nav-link:before
 {
     top: 0px;
     transform: translateY(10px);
 }
 
-.anim--top-bottom-borders--out a:after
+.anim--top-bottom-borders--out a.nav-link:after
 {
     bottom: 0px;
     transform: translateY(-10px);
 }
 
-.anim--top-bottom-borders--out a:hover:before, .anim--top-bottom-borders--out a:hover:after
+.anim--top-bottom-borders--out a.nav-link:hover:before, .anim--top-bottom-borders--out a.nav-link:hover:after
 {
     opacity: 1;
     transform: translateY(0px);
