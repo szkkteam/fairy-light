@@ -42,6 +42,7 @@ itsdangerous==1.1.0       # via flask, flask-debugtoolbar, flask-security
 jinja2-time==0.2.0
 jinja2==2.10.3
 kombu==4.6.6              # via celery
+lml==0.0.9                # via pyexcel, pyexcel-io
 loguru==0.3.2
 lxml==4.4.1
 mako==1.1.0               # via alembic
@@ -54,6 +55,8 @@ passlib==1.7.2            # via flask-security
 pillow==7.0.0             # via flask-mm
 psycopg2==2.8.4
 pycparser==2.19           # via cffi
+pyexcel-io==0.5.20        # via pyexcel
+pyexcel==0.5.15
 python-dateutil==2.8.1
 python-editor==1.0.4      # via alembic
 python-frontmatter==0.4.5
@@ -68,6 +71,7 @@ sqlalchemy-mptt==0.2.5
 sqlalchemy-utils==0.36.1
 sqlalchemy==1.3.11        # via alembic, flask-alembic, flask-sqlalchemy, marshmallow-sqlalchemy, sqlalchemy-mptt, sqlalchemy-utils
 stripe==2.42.0
+texttable==1.6.2          # via pyexcel
 tzlocal==2.0.0
 urllib3==1.25.8           # via requests
 uwsgi==2.0.18
