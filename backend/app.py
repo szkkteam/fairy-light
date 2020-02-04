@@ -50,6 +50,7 @@ def create_app():
     in which case it uses :class:`backend.config.DevConfig`. Also configures
     paths for the templates folder and static files.
     """
+    print("Debug flag: ", get_debug_flag(), flush=True)
     return _create_app(
         DevConfig if get_debug_flag() else ProdConfig,
         template_folder=TEMPLATE_FOLDER,
