@@ -234,7 +234,7 @@ class ProdConfig(BaseConfig):
     ##########################################################################
     # session/cookies                                                        #
     ##########################################################################
-    SESSION_COOKIE_DOMAIN = os.environ.get('FLASK_DOMAIN', 'fairy-light.heroku.com')  # FIXME
+    SESSION_COOKIE_DOMAIN = os.environ.get('FLASK_DOMAIN', 'fairy-light.herokuapp.com') 
     SESSION_COOKIE_SECURE = get_boolean_env('SESSION_COOKIE_SECURE', True)
 
     # SECURITY_TOKEN_MAX_AGE is fixed from time of token generation;
