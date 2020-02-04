@@ -8,32 +8,7 @@
     <link href="{{ site_static.url(filename='site/css/shop/style.css') }}" rel="stylesheet">
     
     <style>
-        .dropdown-menu {
-            top: 130%;
-            left: inherit;
-            right: 0;
-            width: 255px;
-        }
-
-        button.clear-item {
-            padding: 0.0rem 0.025rem !important;
-        }
-
-
-        #cart .cart-album-title {
-            white-space: nowrap;
-        }
-
-        #cart .cart-album-remark {
-            white-space: nowrap;
-            text-align: right;
-        }
-
-        #cart .cart-price {
-            white-space: nowrap;
-            text-align: left;
-        }
-
+       
     </style>
 
 {% endblock %}
@@ -128,7 +103,7 @@
     <script>
     
     $('span.dropdown-content').shoppingCart({
-        buyButton: '.photos-add-btn',
+        buyButton: '#photos .cart-add',
         clearButton: '#shopping-cart-clear',
         removeButton: '.clear-item',
         indicator: '#shopping-cart-items',

@@ -55,6 +55,60 @@ class Category(Model, BaseNestedSets):
 
         return Markup(markup)
 
+    def recursive_num_of_images(self):
+        json_data = self.drilldown_tree(db.session, json=True, json_fields=lambda node: {'num': len(node.images)})
+        sum = 0
+        def recursive_count(node, sum):
+            if 'children' in node:
+                for i in node['children']:
+                    sum += recursive_count(i, sum)
+            else:
+                return node['num']
+            return sum
+        for data in json_data:
+            sum += recursive_count(data, sum)
+        return sum
+
+    def recursive_sum_images_price(self):
+
+        def node_price(node):
+            price = node._sum_images_price()
+            discount = node.discount if node.discount is not None else 0
+            discounted_price = price * ( 1 - discount)
+            return {'original': price, 'discounted': discounted_price }
+
+        json_data = self.drilldown_tree(db.session, json=True, json_fields=node_price)
+        original = 0
+        discounted = 0
+        def recursive_count(node):
+            original = 0
+            discounted = 0
+            if 'children' in node:
+                for i in node['children']:
+                    o, d = recursive_count(i)
+                    original += o
+                    discounted += d
+            else:
+                return node['original'], node['discounted']
+            return original, discounted
+        for data in json_data:
+            o, d = recursive_count(data)
+            original += o
+            discounted += d
+        return original, discounted
+
+    def _get_images(self):
+        return Image.query.join(Category).filter(Image.category_id == self.id, Image.status == ImageStatus.active)
+
+    def _sum_images_price(self):
+        images = self._get_images().all()
+        if len(images) == 0:
+            return 0
+        overall_price = 0
+        for image in images:
+            if image.price is not None:
+                overall_price += image.price
+        return overall_price
 
     def get_path(self):
         if not self.cover:
@@ -63,7 +117,7 @@ class Category(Model, BaseNestedSets):
 
     @classmethod
     def get_images(cls, id):
-        return Image.query.join(Category).filter(Image.category_id == id, Image.status == ImageStatus.active)
+        return cls.get(id)._get_images()
 
     @classmethod
     def get_num_if_images(cls, id):
@@ -83,14 +137,7 @@ class Category(Model, BaseNestedSets):
 
     @classmethod
     def sum_images_price(cls, id):
-        images = cls.get_images(id).all()
-        if len(images) == 0:
-            return None
-        overall_price = 0
-        for image in images:
-            if image.price:
-                overall_price =+ image.price
-        return overall_price
+        return cls.get(id)._sum_images_price()
 
 @listens_for(Category, 'after_delete')
 def del_image(mapper, connection, target):

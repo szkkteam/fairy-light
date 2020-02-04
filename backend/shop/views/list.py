@@ -75,13 +75,6 @@ def index_view(root=None):
                                data=data)
 
     else:
-        for element in data:
-            print(element, flush=True)
-            if element.discount:
-                element.price = Category.sum_images_price(element.id) * (1 - element.discount)
-            else:
-                element.price = None
-
         return render_template('photos_listing.html',
                                # Navigation specific
                                breadcrumbs=breadcrumbs,
@@ -93,6 +86,32 @@ def index_view(root=None):
                                total_price=total_price,
 
                                # Datamodel
-                               data=data)
+                               data=category_data(data))
 
+def category_data(data):
+    list_data = []
+    for element in data:
+        # Determine if customer can buy the whole album
+        can_buy = True if element.discount is not None else False
+        if can_buy:
+            # Get the original and discounted price recursivly
+            original_price, discounted_price = element.recursive_sum_images_price()
+            url_add_to_cart = url_for('shop.cart_category_api', category_id=element.id)
+        else:
+            original_price = 0
+            discounted_price = 0
+            url_add_to_cart = '#'
+
+        list_data.append(dict(
+            can_buy=can_buy,
+            num_of_images=element.recursive_num_of_images(),
+            thumbnail=element.get_thumbnail_path(),
+            title=element.title,
+            original_price=original_price,
+            discounted_price=discounted_price,
+            url_add_to_cart=url_add_to_cart,
+            url_category=url_for('shop.index_view', root=element.id),
+            url_facebook_share=url_for('shop.index_view', root=element.id, _external=True),
+        ))
+    return list_data
 
