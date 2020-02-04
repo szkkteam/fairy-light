@@ -89,24 +89,6 @@ class BaseConfig(object):
     BUNDLES = BUNDLES
 
     ##########################################################################
-    # session/cookies                                                        #
-    ##########################################################################
-    SESSION_TYPE = 'redis'
-    SESSION_REDIS = redis.Redis(
-        host=os.getenv('FLASK_REDIS_HOST', '127.0.0.1'),
-        port=int(os.getenv('FLASK_REDIS_PORT', 6379)),
-    )
-    SESSION_PROTECTION = 'strong'
-    SESSION_COOKIE_HTTPONLY = True
-    SESSION_COOKIE_SECURE = True
-    REMEMBER_COOKIE_HTTPONLY = True
-
-    # SECURITY_TOKEN_MAX_AGE is fixed from time of token generation;
-    # it does not update on refresh like a session timeout would. for that,
-    # we set (the ironically named) PERMANENT_SESSION_LIFETIME
-    PERMANENT_SESSION_LIFETIME = timedelta(days=2)
-
-    ##########################################################################
     # database                                                               #
     ##########################################################################
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -222,19 +204,30 @@ class ProdConfig(BaseConfig):
     ##########################################################################
     # database                                                               #
     ##########################################################################
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://{user}:{password}@{host}:{port}/{db_name}'.format(
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL','postgresql+psycopg2://{user}:{password}@{host}:{port}/{db_name}'.format(
         user=os.environ.get('FLASK_DATABASE_USER', 'flask_api'),
         password=os.environ.get('FLASK_DATABASE_PASSWORD', 'flask_api'),
         host=os.environ.get('FLASK_DATABASE_HOST', '127.0.0.1'),
         port=os.environ.get('FLASK_DATABASE_PORT', 5432),
         db_name=os.environ.get('FLASK_DATABASE_NAME', 'flask_api'),
-    )
+    ))
 
     ##########################################################################
     # session/cookies                                                        #
     ##########################################################################
-    SESSION_COOKIE_DOMAIN = os.environ.get('FLASK_DOMAIN', 'example.com')  # FIXME
+    SESSION_TYPE = 'redis'
+    SESSION_REDIS = redis.from_url(os.environ['REDISCLOUD_URL'])
+
+    SESSION_COOKIE_DOMAIN = os.environ.get('FLASK_DOMAIN', 'fairy-light.heroku.com')  # FIXME
+    SESSION_PROTECTION = 'strong'
+    SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SECURE = get_boolean_env('SESSION_COOKIE_SECURE', True)
+    REMEMBER_COOKIE_HTTPONLY = True
+
+    # SECURITY_TOKEN_MAX_AGE is fixed from time of token generation;
+    # it does not update on refresh like a session timeout would. for that,
+    # we set (the ironically named) PERMANENT_SESSION_LIFETIME
+    PERMANENT_SESSION_LIFETIME = timedelta(days=2)
 
     ##########################################################################
     # Flask FS - FileSystem                                            #
@@ -254,7 +247,20 @@ class DevConfig(BaseConfig):
     ##########################################################################
     # session/cookies                                                        #
     ##########################################################################
+    SESSION_TYPE = 'redis'
+    SESSION_REDIS = redis.Redis(
+        host=os.getenv('FLASK_REDIS_HOST', '127.0.0.1'),
+        port=int(os.getenv('FLASK_REDIS_PORT', 6379)),
+    )
+    SESSION_PROTECTION = 'strong'
+    SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SECURE = False
+    REMEMBER_COOKIE_HTTPONLY = True
+
+    # SECURITY_TOKEN_MAX_AGE is fixed from time of token generation;
+    # it does not update on refresh like a session timeout would. for that,
+    # we set (the ironically named) PERMANENT_SESSION_LIFETIME
+    PERMANENT_SESSION_LIFETIME = timedelta(days=2)
 
     ##########################################################################
     # database                                                               #
