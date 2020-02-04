@@ -36,6 +36,7 @@ flask-session==0.3.1
 flask-sqlalchemy==2.4.1
 flask-wtf==0.14.2
 flask==1.1.1
+gunicorn==20.0.4
 idna==2.8                 # via requests
 importlib-metadata==0.23  # via kombu
 itsdangerous==1.1.0       # via flask, flask-debugtoolbar, flask-security
@@ -81,4 +82,4 @@ wtforms==2.2.1            # via flask-admin, flask-wtf
 zipp==0.6.0               # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools==45.1.0        # via markdown
+# setuptools==45.1.0        # via gunicorn, markdown

@@ -50,7 +50,6 @@ def create_app():
     in which case it uses :class:`backend.config.DevConfig`. Also configures
     paths for the templates folder and static files.
     """
-    print("Debug flag: ", get_debug_flag(), flush=True)
     return _create_app(
         DevConfig if get_debug_flag() else ProdConfig,
         template_folder=TEMPLATE_FOLDER,
@@ -96,8 +95,6 @@ def configure_app(app, config_object):
     - register functions to run on before/after request
     """
     # automatically configure a migrations folder for each bundle
-    print("Database URI: ", config_object.SQLALCHEMY_DATABASE_URI, flush=True)
-    print("Config: ", config_object, flush=True)
     config_object.ALEMBIC['version_locations'] = [
         (bundle._name, os.path.join(PROJECT_ROOT,
                                     bundle.module_name.replace('.', os.sep),
