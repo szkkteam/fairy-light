@@ -233,7 +233,7 @@ class ProdConfig(BaseConfig):
     ##########################################################################
     # session/cookies                                                        #
     ##########################################################################
-    SESSION_COOKIE_DOMAIN = os.environ.get('FLASK_DOMAIN', 'example.com')  # FIXME
+    SESSION_COOKIE_DOMAIN = os.environ.get('FLASK_DOMAIN', 'fairy-light.herokuapp.com')
     SESSION_COOKIE_SECURE = get_boolean_env('SESSION_COOKIE_SECURE', True)
 
     ##########################################################################

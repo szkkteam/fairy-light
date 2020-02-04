@@ -14,6 +14,8 @@ flask-session
 flask-sqlalchemy
 flask-debugtoolbar
 flask-breadcrumbs
+flask-mm
+
 
 sqlalchemy-mptt
 sqlalchemy-utils
