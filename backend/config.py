@@ -92,7 +92,7 @@ class BaseConfig(object):
     # session/cookies                                                        #
     ##########################################################################
     SESSION_TYPE = 'redis'
-    SESSION_REDIS = redis.Redis(
+    SESSION_REDIS = redis.from_url(os.environ.get('REDISCLOUD_URL')) if 'REDISCLOUD_URL' in os.environ else redis.Redis(
         host=os.getenv('FLASK_REDIS_HOST', '127.0.0.1'),
         port=int(os.getenv('FLASK_REDIS_PORT', 6379)),
     )
@@ -216,25 +216,31 @@ class ProdConfig(BaseConfig):
     ##########################################################################
     # flask                                                                  #
     ##########################################################################
+    SERVER_NAME = os.environ.get('SERVER_NAME', 'fairy-light.herokuapp.com')
     ENV = 'prod'
     DEBUG = get_boolean_env('FLASK_DEBUG', False)
 
     ##########################################################################
     # database                                                               #
     ##########################################################################
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://{user}:{password}@{host}:{port}/{db_name}'.format(
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL','postgresql+psycopg2://{user}:{password}@{host}:{port}/{db_name}'.format(
         user=os.environ.get('FLASK_DATABASE_USER', 'flask_api'),
         password=os.environ.get('FLASK_DATABASE_PASSWORD', 'flask_api'),
         host=os.environ.get('FLASK_DATABASE_HOST', '127.0.0.1'),
         port=os.environ.get('FLASK_DATABASE_PORT', 5432),
         db_name=os.environ.get('FLASK_DATABASE_NAME', 'flask_api'),
-    )
+    ))
 
     ##########################################################################
     # session/cookies                                                        #
     ##########################################################################
     SESSION_COOKIE_DOMAIN = os.environ.get('FLASK_DOMAIN', 'fairy-light.herokuapp.com')
     SESSION_COOKIE_SECURE = get_boolean_env('SESSION_COOKIE_SECURE', True)
+
+    # SECURITY_TOKEN_MAX_AGE is fixed from time of token generation;
+    # it does not update on refresh like a session timeout would. for that,
+    # we set (the ironically named) PERMANENT_SESSION_LIFETIME
+    PERMANENT_SESSION_LIFETIME = timedelta(days=2)
 
     ##########################################################################
     # Flask FS - FileSystem                                            #
@@ -255,6 +261,11 @@ class DevConfig(BaseConfig):
     # session/cookies                                                        #
     ##########################################################################
     SESSION_COOKIE_SECURE = False
+
+    # SECURITY_TOKEN_MAX_AGE is fixed from time of token generation;
+    # it does not update on refresh like a session timeout would. for that,
+    # we set (the ironically named) PERMANENT_SESSION_LIFETIME
+    PERMANENT_SESSION_LIFETIME = timedelta(days=2)
 
     ##########################################################################
     # database                                                               #

@@ -18,7 +18,9 @@ flask-mm
 
 
 sqlalchemy-mptt
+gunicorn
 sqlalchemy-utils
+pyexcel
 stripe
 requests
 loguru
