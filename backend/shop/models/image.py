@@ -7,6 +7,7 @@ import enum
 
 # Pip package imports
 from sqlalchemy.event import listens_for
+import PIL
 
 from jinja2 import Markup
 
@@ -23,7 +24,7 @@ from backend.database import (
 )
 from backend.extensions import db
 from backend import utils
-from ..storage import get_public
+from ..storage import get_public, get_protected
 
 class ImageStatus(enum.Enum):
 
@@ -51,6 +52,12 @@ class Image(Model):
     @property
     def slug(self):
         return utils.slugify(self.title)
+
+    @property
+    def image_size(self):
+        img_data = get_protected().path(self.path)
+        im = PIL.Image.open(img_data)
+        return im.size
 
     def set_status(self, status, commit=False):
         self.status = status

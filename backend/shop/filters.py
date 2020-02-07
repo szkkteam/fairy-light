@@ -8,6 +8,7 @@ from babel.numbers import format_currency
 # Internal package imports
 
 def format_price(value, iso_locale='de_DE'):
+    print("Value: ",value)
     if value == 0:
         return 'Free'
     return format_currency(value, 'EUR', format=u'¤ #,##0.00', locale=iso_locale)

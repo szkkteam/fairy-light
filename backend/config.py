@@ -184,28 +184,6 @@ class BaseConfig(object):
     DEBUG_TB_INTERCEPT_REDIRECTS = False
 
     ##########################################################################
-    # Flask MM - MediaManager                                            #
-    ##########################################################################
-    # The global local storage root.
-    MM_PHOTO = {
-        'ROOT': os.path.join(STATIC_FOLDER, 'photo'),
-        'PREFIX': '/photo',
-        'STORAGE': 'local',
-        'MANAGER': 'image',
-        'THUMBNAIL_SIZE': (253,220,True), # Generate strict thumbnails
-        'MAX_SIZE': (1280, 1720, False), # Optimise the image size for the watermarked image
-        'POSTPROCESS': Watermarker(os.path.join(STATIC_FOLDER, 'site', 'img', 'wm_fllogof_rs.png'), position='c'),
-    }
-
-    MM_PRODUCT = {
-        'ROOT': os.path.join(STATIC_FOLDER, 'product'),
-        'PREFIX': '/product',
-        'STORAGE': 'local',
-        'MANAGER': 'image',
-        'THUMBNAIL_SIZE': None, # Do not generate thumbnails
-    }
-
-    ##########################################################################
     # Stripe - Payment                                                       #
     ##########################################################################
     STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
@@ -247,6 +225,32 @@ class ProdConfig(BaseConfig):
     ##########################################################################
     # Whether or not image should be compressedd/optimized by default.
     FS_IMAGES_OPTIMIZE = True
+
+    ##########################################################################
+    # Flask MM - MediaManager                                            #
+    ##########################################################################
+    # The global local storage root.
+    MM_AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY_ID')
+    MM_AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    MM_AWS_REGION = os.environ.get('AWS_REGION')
+    MM_BUCKET_NAME = os.environ.get('BUCKET_NAME', 'fairy-light')
+    MM_PHOTO = {
+        'ROOT': 'photo',
+        'PREFIX': '/photo',  # Serving file from S3 is not yet supported
+        'STORAGE': 's3',
+        'MANAGER': 'image',
+        'THUMBNAIL_SIZE': (253, 220, True),  # Generate strict thumbnails
+        'MAX_SIZE': (1280, 1720, False),  # Optimise the image size for the watermarked image
+        'POSTPROCESS': Watermarker(os.path.join(STATIC_FOLDER, 'site', 'img', 'wm_fllogof_rs.png'), position='c'),
+    }
+
+    MM_PRODUCT = {
+        'ROOT': 'product',
+        'PREFIX': '/product',  # Serving file from S3 is not yet supported
+        'STORAGE': 's3',
+        'MANAGER': 'image',
+        'THUMBNAIL_SIZE': None,  # Do not generate thumbnails
+    }
 
 class DevConfig(BaseConfig):
     ##########################################################################
@@ -300,6 +304,28 @@ class DevConfig(BaseConfig):
     ##########################################################################
     # Whether or not image should be compressedd/optimized by default.
     FS_IMAGES_OPTIMIZE = False
+
+    ##########################################################################
+    # Flask MM - MediaManager                                            #
+    ##########################################################################
+    # The global local storage root.
+    MM_PHOTO = {
+        'ROOT': os.path.join(STATIC_FOLDER, 'photo'),
+        'PREFIX': '/photo',  # Serving file from S3 is not yet supported
+        'STORAGE': 'local',
+        'MANAGER': 'image',
+        'THUMBNAIL_SIZE': (253, 220, True),  # Generate strict thumbnails
+        'MAX_SIZE': (1280, 1720, False),  # Optimise the image size for the watermarked image
+        'POSTPROCESS': Watermarker(os.path.join(STATIC_FOLDER, 'site', 'img', 'wm_fllogof_rs.png'), position='c'),
+    }
+
+    MM_PRODUCT = {
+        'ROOT': os.path.join(STATIC_FOLDER, 'product'),
+        'PREFIX': '/product',  # Serving file from S3 is not yet supported
+        'STORAGE': 'local',
+        'MANAGER': 'image',
+        'THUMBNAIL_SIZE': None,  # Do not generate thumbnails
+    }
 
 class TestConfig(BaseConfig):
     TESTING = True

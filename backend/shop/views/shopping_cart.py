@@ -65,11 +65,13 @@ class CartCategoryApi(MethodView):
             logger.error(traceback.format_exc())
             return jsonify({'error': 'Unknown error occured.'}), 500
 
+    def get(self, category_id):
+        abort(404)
 
 class CartItemApi(MethodView):
 
     def get(self, item_id):
-        pass
+        abort(404)
 
     def post(self, item_id):
         try:

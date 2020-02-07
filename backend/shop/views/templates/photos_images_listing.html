@@ -1,9 +1,71 @@
 {% extends 'photos_index.html' %}
 
+{% block custom_css %}
+    {{ super() }}
+    <!-- Magnific Popup core CSS file -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js"></script>
+    
+    <style>
+       .photo-lightbox hr {
+            border-top: 2px solid rgba(255, 255, 255, 0.7);
+       }
+
+       .photo-lightbox .photo-lightbox-title h4 {
+           margin-bottom: 50px;
+       }
+       
+    </style>
+
+{% endblock %}
+
 {% block photos_section %}     
     {% for element in data %}
-    <div class="col-6 col-md-3">
-        {{ card.render(element.id, 'image', element.get_path(), url_for('shop.cart_item_api', item_id=element.id), element.get_thumbnail_path(), None, element.price) }}
+    <div class="col-6 col-md-3 popup-parent">
+        {{ card.image(element)}}
     </div>    
     {% endfor %}
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+
+
+
+    <script>
+        $(document).ready(function() {
+            $('.popup-parent').magnificPopup({
+                delegate: 'a.popup-item',
+                type:'ajax',
+                ajax: {
+                    settings: null, // Ajax settings object that will extend default one - http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings
+                    // For example:
+                    // settings: {cache:false, async:false}
+
+                    cursor: 'mfp-ajax-cur', // CSS class that will be added to body during the loading (adds "progress" cursor)
+                    tError: '<a href="%url%">The content</a> could not be loaded.' //  Error message, can contain %curr% and %total% tags if gallery is enabled
+                },
+                gallery: {
+                    enabled: true, // set to true to enable gallery
+
+                    preload: [1,1], // read about this option in next Lazy-loading section
+
+                    navigateByImgClick: true,
+
+                    arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>', // markup of an arrow button
+
+                    tPrev: 'Previous (Left arrow key)', // title for left button
+                    tNext: 'Next (Right arrow key)', // title for right button
+                    tCounter: '<span class="mfp-counter">%curr% of %total%</span>' // markup of counter
+                },
+                callbacks: {
+                    lazyLoad: function(item) {
+                        console.log(item); // Magnific Popup data object that should be loaded
+                    }
+                },
+            });
+        });
+    </script>
+
 {% endblock %}
