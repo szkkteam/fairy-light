@@ -1,0 +1,152 @@
+<span>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        <span>
+                            <img class="rounded-circle mx-auto d-block" src="http://placehold.it/60x60" width="60" height="60">
+                        </span>                        
+                    </div>
+                    <div class="card-body">
+                        <form id="register-form" method="post">
+                            <fieldset id="shipping-billing" class="field-border">
+                            <legend>Shipping & Billing information.</legend>
+                            <div class="form-group">
+                                <span>Email</span>
+                                <input type="email" name="email" class="form-control" placeholder="Email" required >
+                                <div class="form-errors" role="alert">
+                                </div>										
+                            </div>
+                            <div class="form-group">
+                                <span>Country</span>
+                                <select class="selectpicker countrypicker">
+                                </select>
+                                <div class="form-errors" role="alert">
+                                </div>										
+                            </div>
+                            <div class="form-group">
+                                <span>Postal Code</span>
+                                <input type="text" name="zip" class="form-control" placeholder="Postal Code" required >
+                                <div class="form-errors" role="alert">
+                                </div>										
+                            </div>
+                            </fieldset>
+                            <fieldset id="payment-information" class="field-border">
+                                <legend>Card Details.</legend>
+                                <div class="form-group">
+                                    <span>Name</span>
+                                    <input type="text" name="name" class="form-control" placeholder="Name" autofocus required>
+                                    <div class="form-errors" role="alert">
+                                    </div>										
+                                </div>		
+                                <div class="form-group">
+                                    <span>Card</span>
+                                    <div id="card-element" class="form-control">
+                                    <!-- A strip Element will be inserted here. -->
+                                    </div>							
+                                    <div id="card-errors" role="alert"></div>
+                                </div>
+                            </fieldset>
+                            <div class="form-group mt-4">
+                                <button id="submit-btn" type="submit" class="btn btn-primary d-block mx-auto w-100">Pay {{price_amount|shop.format_price}}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        $(document).ready( function() {
+            $('.selectpicker').selectpicker().countrypicker();
+            $('.selectpicker').selectpicker('refresh');
+            //$('.countrypicker').countrypicker();    
+
+        });
+        //
+        
+
+        var stripe = Stripe("{{public_key}}");
+        
+        var elements = stripe.elements();
+        
+        // Custom styling can be passed to options when creating an Element.
+        // (Note that this demo uses a wider set of styles than the guide below.)
+        var style = {
+            base: {
+            lineHeight: '1.429'
+            },
+            invalid: {
+            color: '#fa755a',
+            iconColor: '#fa755a'
+            }
+        };
+
+        // Create an instance of the card Element.
+        var card = elements.create('card', {
+            style: style,
+            hidePostalCode : true,
+        });
+
+        // Add an instance of the card Element into the `card-element` <div>.
+        card.mount('#card-element');
+
+        var submitButton = document.getElementById('submit-btn');
+
+            /* TODO:
+            stripe.confirmCardPayment may take several seconds to complete.
+            During that time, disable your form from being resubmitted and show a waiting indicator like a spinner.
+            If you receive an error, show it to the customer, re-enable the form, and hide the waiting indicator.
+            */
+
+        submitButton.addEventListener('click', function(ev) {
+            ev.preventDefault();
+
+            const name = $('input[name=name]').val();
+            const email = $('input[name=email]').val();
+            const zip = $('input[name=zip]').val();
+
+            /* TODO: This is somehow buggy and can't find the options
+            const selectedCountry = $('.countrypicker .filter-option').text();
+            const filter = "option:contains('" + selectedCountry + "')";
+            const options = $('.countrypicker options');
+            const country = $(filter);
+
+            console.log(country);
+            */
+
+            stripe.confirmCardPayment('{{client_secret}}', {
+            payment_method: {
+                card: card,
+                billing_details: {
+                    name: name,
+                    email: email,
+                    address: {
+                        //country: country,
+                        postal_code: zip,
+                    }
+                }
+            },
+            receipt_email: email
+            }).then(function(result) {
+            if (result.error) {
+                // Show error to your customer (e.g., insufficient funds)
+                console.log(result.error.message);
+            } else {
+                // The payment has been processed!
+                console.log(result);
+                if (result.paymentIntent.status === 'succeeded') {
+                // Show a success message to your customer
+                // There's a risk of the customer closing the window before callback
+                // execution. Set up a webhook or plugin to listen for the
+                // payment_intent.succeeded event that handles any business critical
+                // post-payment actions.
+                }
+            }
+            });
+        });
+
+    </script>
+</span>

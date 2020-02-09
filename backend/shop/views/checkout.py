@@ -97,15 +97,14 @@ def checkout():
     # 2) NOT WORKING Still use the stripe payment process, but charge it with 0. (Pro: We have track, and they have receipe. Cont: It's a bit strange to put card details to something which is free)
 
     # Get the cart content
-    cart_content = ProductInventory.get_content()
-    # Calculate the charge amount. The currency in the smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency).
-    charge_amount = int(ProductInventory.get_total_price() * 100)
-    product_ids = list(cart_content.keys())
+    total_price = ProductInventory.get_total_price()
+    product_ids = list(ProductInventory.get_products().keys())
 
     order = get_or_create_order(products=product_ids)
 
     intent_obj = get_or_modify_intent(
-        amount=charge_amount,
+        # Calculate the charge amount. The currency in the smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency).
+        amount=int(total_price * 100),
         description="Fairy Light ord. %d" % order.id,
         currency='eur',
         payment_method_types=['card'],
@@ -114,11 +113,12 @@ def checkout():
 
     client_secret = intent_obj['client_secret']
 
-    return render_template('checkout.html',
-                           cart_items=cart_content,
+    return render_template('checkout_modal.html',
+                           #cart_items=cart_content,
                            client_secret=client_secret,
                            public_key=get_stripe_public_key(),
-                           price_amount=ProductInventory.get_total_price())
+                           num_of_items=len(product_ids),
+                           price_amount=total_price)
 
 class PaymentWebhook(StripeWebhook):
 

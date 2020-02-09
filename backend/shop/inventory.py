@@ -229,6 +229,16 @@ class ProductInventory(object):
         return cls.storage['shoppingCart']['items']
 
     @classmethod
+    def get_products(cls):
+        products = {}
+        cls._prepare_layout()
+        categories = cls.storage['shoppingCart']['items']
+        for category_id, category in categories.items():
+            for prod_id, prod_desc in category['products'].items():
+                products[prod_id] = prod_desc
+        return products
+
+    @classmethod
     def get_order_id(cls):
         cls._prepare_layout()
         if 'orderId' in cls.storage['shoppingCart']['tracking']:

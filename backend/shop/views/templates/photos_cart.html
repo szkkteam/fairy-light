@@ -6,7 +6,102 @@
 {% block custom_css %}
     {{ super() }}
     <link href="{{ site_static.url(filename='site/css/shop/style.css') }}" rel="stylesheet">
-    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="//unpkg.com/bootstrap-select-country@4.0.0/dist/css/bootstrap-select-country.min.css" type="text/css" />
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+    <script src="//unpkg.com/bootstrap-select-country@4.0.0/dist/js/bootstrap-select-country.min.js"></script>
+     <!-- The required Stripe lib -->
+     <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+
+
+     <style>
+         #register-form .field-border {
+           border-radius: 0.25rem;
+           border: 1px solid #666;
+           padding-left: 25px;
+           padding-right: 25px;
+           padding-top: 2px;
+           padding-bottom: 10px;		
+         }
+   
+         #register-form .field-border legend {
+           text-align: center;
+           font-size: 1rem;
+         }
+       
+         #shipping-billing {
+           margin-bottom: 30px;
+         }
+
+         /*
+        Make bootstrap-select work with bootstrap 4 see:
+        https://github.com/silviomoreto/bootstrap-select/issues/1135
+        */
+        
+        .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+            width: 100%;
+        }
+
+        #register-form .btn-light {
+            color: gray;
+            background-color: #fff;
+        }
+
+        .dropdown-toggle.btn-default {
+            color: #292b2c;
+            background-color: #fff;
+            border-color: #ccc;
+        }
+        .bootstrap-select.show > .dropdown-menu > .dropdown-menu {
+            display: block;
+        }
+        .bootstrap-select > .dropdown-menu > .dropdown-menu li.hidden {
+            display: none;
+        }
+        .bootstrap-select > .dropdown-menu > .dropdown-menu li a {
+            display: block;
+            width: 100%;
+            padding: 3px 1.5rem;
+            clear: both;
+            font-weight: 400;
+            color: #292b2c;
+            text-align: inherit;
+            white-space: nowrap;
+            background: 0 0;
+            border: 0;
+            text-decoration: none;
+        }
+        .bootstrap-select > .dropdown-menu > .dropdown-menu li a:hover {
+            background-color: #f4f4f4;
+        }
+        .bootstrap-select > .dropdown-toggle {
+            width: 100%;
+        }
+        .dropdown-menu > li.active > a {
+            color: #fff !important;
+            background-color: #337ab7 !important;
+        }
+        .bootstrap-select .check-mark {
+            line-height: 14px;
+        }
+        .bootstrap-select .check-mark::after {
+            font-family: "FontAwesome";
+            content: "\f00c";
+        }
+        .bootstrap-select button {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .bootstrap-select.btn-group .dropdown-toggle .filter-option {
+            display: inline !important;
+        }
+        
+                   
+     </style>
 
 {% endblock %}
 
@@ -31,15 +126,29 @@
                         </a>
                     </div>
                     <div class="col text-right">
-                        <a href="{{url_for('shop.checkout')}}" class="btn btn-primary btn-point-right" id="shopping-cart-checkout">
+                        {% if total_price > 0 %}
+                        <a href="{{url_for('shop.checkout')}}" class="btn btn-primary btn-point-right" id="checkout-modal-btn" data-toggle="modal" data-target="#checkout-modal">
                             <span class="text-nowrap">Check Out</span>
                         </a>
+                        {% else %}
+                        <a href="{{url_for('shop.checkout')}}" class="btn btn-primary btn-point-right disabled" aria-disabled="true" id="checkout-modal-btn" data-toggle="modal" data-target="#checkout-modal">
+                            <span class="text-nowrap">Check Out</span>
+                        </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<!-- Modal -->
+<div class="modal fade" id="checkout-modal" tabindex="-1" role="dialog" aria-labelledby="checkout-modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            Loading ...
+        </div>
+    </div>
+</div>
 
 {% endblock %}
 
@@ -58,6 +167,26 @@
     });   
 
     $(document).ready(function() {
+
+        // Handle the fetch for modal load
+        $('#checkout-modal-btn').click(function(e) {
+            //e.preventDefault();
+            var targetId = $(this).attr('data-target');
+            var url = $(this).attr('href')
+            var targetDOM = $(targetId + ' .modal-content')
+            targetDOM.html('<button class="btn btn-primary"><span class="spinner-border spinner-border-sm"></span>Loading..</button>');
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'html',
+                success: function (data) {
+                    targetDOM.html(data);
+                },
+                error: function (data) {
+                    console.log(data.responseJSON);
+                }
+            }); 
+        });
 
         //Fixing jQuery Click Events for the iPad
         var ua = navigator.userAgent, event = (ua.match(/iPad/i)) ? "touchstart" : "click";
