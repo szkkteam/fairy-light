@@ -8,11 +8,11 @@ FORWARD_WEBHOOK_DEBUG="$(stripe listen --events payment_intent.created,payment_i
 
 case "$1" in
 
-"forward")
+"local")
   echo "Executing: LOCAL_WEBHOOK_DEBUG"
   echo "$(LOCAL_WEBHOOK_DEBUG)"
   ;;
-"local")
+"forward")
   echo "Executing: FORWARD_WEBHOOK_DEBUG"
   echo "$(FORWARD_WEBHOOK_DEBUG)"
   ;;
