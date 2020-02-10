@@ -1,4 +1,4 @@
-<span>
+<main id="main" class="loading">
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col mx-auto">
@@ -20,8 +20,35 @@
                             </div>
                             <div class="form-group">
                                 <span>Country</span>
-                                <select class="selectpicker countrypicker">
-                                </select>
+                                <select name="country">
+								  <option value="BE">Belgium</option>
+								  <option value="BG">Bulgaria</option>
+								  <option value="CZ">Czechia</option>
+								  <option value="DK">Denmark</option>
+								  <option value="DE">Germany</option>
+								  <option value="EE">Estonia</option>
+								  <option value="IE">Ireland</option>
+								  <option value="EL">Greece</option>
+								  <option value="ES">Spain</option>
+								  <option value="FR">France</option>
+								  <option value="HR">Croatia</option>
+								  <option value="IT">Italy</option>
+								  <option value="CY">Cyprus</option>
+								  <option value="LV">Latvia</option>
+								  <option value="LT">Lithuania</option>
+								  <option value="LU">Luxembourg</option>
+								  <option value="HU">Hungary</option>
+								  <option value="MT">Malta</option>
+								  <option value="NL">Netherlands</option>
+								  <option value="AT">Austria</option>
+								  <option value="PL">Poland</option>
+								  <option value="PT">Portugal</option>
+								  <option value="RO">Romania</option>
+								  <option value="SI">Slovenia</option>
+								  <option value="SK">Slovakia</option>
+								  <option value="FI">Finland</option>
+								  <option value="SE" selected="selected">Sweden</option>
+								</select>
                                 <div class="form-errors" role="alert">
                                 </div>										
                             </div>
@@ -52,101 +79,204 @@
                                 <button id="submit-btn" type="submit" class="btn btn-primary d-block mx-auto w-100">Pay {{price_amount|shop.format_price}}</button>
                             </div>
                         </form>
+						<div id="confirmation">
+						  <div class="status processing">
+							<h1>Completing your order…</h1>
+							<p>We’re just waiting for the confirmation from your bank… This might take a moment but feel free to close this page.</p>
+							<p>We’ll send your receipt via email shortly.</p>
+						  </div>
+						  <div class="status success">
+							<h1>Thanks for your order!</h1>
+							<p>Woot! You successfully made a payment with Stripe.</p>
+							<p class="note">We just sent your receipt to your email address, and your items will be on their way shortly.</p>
+						  </div>
+						  <div class="status receiver">
+							<h1>Thanks! One last step!</h1>
+							<p>Please make a payment using the details below to complete your order.</p>
+							<div class="info"></div>
+						  </div>
+						  <div class="status error">
+							<h1>Oops, payment failed.</h1>
+							<p>It looks like your order could not be paid at this time. Please try again or select a different payment option.</p>
+							<p class="error-message"></p>
+						  </div>
+						</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
+</main>
+<script type="text/javascript">
 
-        $(document).ready( function() {
-            $('.selectpicker').selectpicker().countrypicker();
-            $('.selectpicker').selectpicker('refresh');
-            //$('.countrypicker').countrypicker();    
+	$(document).ready( function() {
 
-        });
-        //
-        
+	});
+	//
+	
 
-        var stripe = Stripe("{{public_key}}");
-        
-        var elements = stripe.elements();
-        
-        // Custom styling can be passed to options when creating an Element.
-        // (Note that this demo uses a wider set of styles than the guide below.)
-        var style = {
-            base: {
-            lineHeight: '1.429'
-            },
-            invalid: {
-            color: '#fa755a',
-            iconColor: '#fa755a'
-            }
-        };
+	var stripe = Stripe("{{public_key}}");
+	
+	var elements = stripe.elements();
+	
+	var submitButton = document.getElementById('submit-btn');
+	
+	var validateEmail = function(sEmail) {
+	  var reEmail = /^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!\.)){0,61}[a-zA-Z0-9]?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!$)){0,61}[a-zA-Z0-9]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/;
 
-        // Create an instance of the card Element.
-        var card = elements.create('card', {
-            style: style,
-            hidePostalCode : true,
-        });
+	  if(!sEmail.match(reEmail)) {
+		alert("Invalid email address");
+		return false;
+	  }
 
-        // Add an instance of the card Element into the `card-element` <div>.
-        card.mount('#card-element');
+	  return true;
 
-        var submitButton = document.getElementById('submit-btn');
+	}
+	
+	// Custom styling can be passed to options when creating an Element.
+	// (Note that this demo uses a wider set of styles than the guide below.)
+	var style = {
+		base: {
+		lineHeight: '1.429'
+		},
+		invalid: {
+		color: '#fa755a',
+		iconColor: '#fa755a'
+		}
+	};
 
-            /* TODO:
-            stripe.confirmCardPayment may take several seconds to complete.
-            During that time, disable your form from being resubmitted and show a waiting indicator like a spinner.
-            If you receive an error, show it to the customer, re-enable the form, and hide the waiting indicator.
-            */
+	// Create an instance of the card Element.
+	var card = elements.create('card', {
+		style: style,
+		hidePostalCode : true,
+	});
 
-        submitButton.addEventListener('click', function(ev) {
-            ev.preventDefault();
+	// Add an instance of the card Element into the `card-element` <div>.
+	card.mount('#card-element');
 
-            const name = $('input[name=name]').val();
-            const email = $('input[name=email]').val();
-            const zip = $('input[name=zip]').val();
+	// Monitor change events on the Card Element to display any errors.
+	card.on('change', ({error}) => {
+		const cardErrors = $('.card-errors');
+		if (error) {
+			cardErrors.text = error.message;
+			cardErrors.addClass('visible');
+		} else {
+			cardErrors.removeClass('visible');
+		}
+		// Re-enable the Pay button.
+		submitButton.disabled = false;
+	});
+	
+	$('input[name=email]').on('blur', function (e) {
+		const valid = validateEmail($(this).val());
+		if (valid) {
+			$(this).next('.form-errors').text = "";
+		} else {
+			$(this).next('.form-errors').text = "Invalid email address";
+		}
+		
+	});
+	
+	/**
+	   * Handle the form submission.
+	   *
+	   * This uses Stripe.js to confirm the PaymentIntent using payment details collected
+	   * with Elements.
+	   *
+	   * Please note this form is not submitted when the user chooses the "Pay" button
+	   * or Apple Pay, Google Pay, and Microsoft Pay since they provide name and
+	   * shipping information directly.
+	   */
 
-            /* TODO: This is somehow buggy and can't find the options
-            const selectedCountry = $('.countrypicker .filter-option').text();
-            const filter = "option:contains('" + selectedCountry + "')";
-            const options = $('.countrypicker options');
-            const country = $(filter);
+	  // Listen to changes to the user-selected country.
+	form.querySelector('select[name=country]')
+		.addEventListener('change', event => {
+		  event.preventDefault();
+		  // TODO: What to do with country? Currently only 1 payment method will be available
+		  //selectCountry(event.target.value);
+	});
 
-            console.log(country);
-            */
+			  
+	submitButton.addEventListener('click', function(ev) {
+		ev.preventDefault();
 
-            stripe.confirmCardPayment('{{client_secret}}', {
-            payment_method: {
-                card: card,
-                billing_details: {
-                    name: name,
-                    email: email,
-                    address: {
-                        //country: country,
-                        postal_code: zip,
-                    }
-                }
-            },
-            receipt_email: email
-            }).then(function(result) {
-            if (result.error) {
-                // Show error to your customer (e.g., insufficient funds)
-                console.log(result.error.message);
-            } else {
-                // The payment has been processed!
-                console.log(result);
-                if (result.paymentIntent.status === 'succeeded') {
-                // Show a success message to your customer
-                // There's a risk of the customer closing the window before callback
-                // execution. Set up a webhook or plugin to listen for the
-                // payment_intent.succeeded event that handles any business critical
-                // post-payment actions.
-                }
-            }
-            });
-        });
+		const name = $('input[name=name]').val();
+		const email = $('input[name=email]').val();
+		const shipping = {
+			name,
+			email,
+			address: {
+				// TODO: Maybe add line1
+				// TODO: Maybe add city
+				postal_code: $('input[name=zip]').val(),
+				// TODO: Maybe add state
+				country: $('input[name=country] option:selected').val(),
+			}
+		};
+		
+		// Disable the Pay button to prevent multiple click events.
+		submitButton.disabled = true;
+		submitButton.textContent = 'Processing…';
 
-    </script>
-</span>
+		// Currently only card payment is supported
+		stripe.confirmCardPayment('{{client_secret}}', 
+		{
+			payment_method: {
+				card: card,
+				billing_details: {
+					name: name,
+					email: email,
+				},
+				shipping,
+			},
+			receipt_email: email
+		}).then(function(result) {
+			if (result.error) {
+				const mainElement = document.getElementById('main');
+				const confirmationElement = document.getElementById('confirmation');
+				if (result.error) {
+					mainElement.classList.remove('processing');
+					mainElement.classList.remove('receiver');
+					confirmationElement.querySelector('.error-message').innerText =
+						error.message;
+					mainElement.classList.add('error');
+				}								
+				// Show error to your customer (e.g., insufficient funds)
+				console.log(result.error.message);
+			} else {
+				// The payment has been processed!
+				console.log(result);
+				if (result.paymentIntent.status === 'succeeded') {
+					// Show a success message to your customer
+					// There's a risk of the customer closing the window before callback
+					// execution. Set up a webhook or plugin to listen for the
+					// payment_intent.succeeded event that handles any business critical
+					// post-payment actions.
+					// Success! Payment is confirmed. Update the interface to display the confirmation screen.
+					mainElement.classList.remove('processing');
+					mainElement.classList.remove('receiver');
+					// Update the note about receipt and shipping (the payment has been fully confirmed by the bank).
+					confirmationElement.querySelector('.note').innerText =
+						'We just sent your receipt to your email address, and your items will be on their way shortly.';
+					mainElement.classList.add('success');
+					// TODO: Redirect user
+				} else if (result.paymentIntent.status === 'processing') {
+					// Success! Now waiting for payment confirmation. Update the interface to display the confirmation screen.
+					mainElement.classList.remove('processing');
+					// Update the note about receipt and shipping (the payment is not yet confirmed by the bank).
+					confirmationElement.querySelector('.note').innerText =
+						'We’ll send your receipt and ship your items as soon as your payment is confirmed.';
+					mainElement.classList.add('success');
+				} else {
+					// Payment has failed.
+					mainElement.classList.remove('success');
+					mainElement.classList.remove('processing');
+					mainElement.classList.remove('receiver');
+					mainElement.classList.add('error');
+				}
+				
+			}
+		});
+	});
+
+</script>
