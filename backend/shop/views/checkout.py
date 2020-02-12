@@ -8,7 +8,7 @@ import traceback
 import sys
 
 # Pip package imports
-from flask import current_app, render_template, url_for, request, redirect, jsonify, abort, session
+from flask import current_app, make_response, render_template, url_for, request, redirect, jsonify, abort, session
 
 from loguru import logger
 
@@ -54,9 +54,9 @@ def get_or_modify_intent(**kwargs):
     intent_id = ProductInventory.get_intent_id()
     if intent_id is not None:
         intent_obj = stripe.PaymentIntent.retrieve(intent_id)
-        print(intent_obj, flush=True)
         stripe.PaymentIntent.modify(intent_obj['id'],
             **kwargs)
+        logger.debug("Payment Intent: \'{id}\' retrieved.".format(id=intent_obj['id']))
     else:
         intent_obj = stripe.PaymentIntent.create(**kwargs)
         ProductInventory.set_intent_id(intent_obj['id'])
@@ -67,7 +67,8 @@ def get_or_create_order(**kwargs):
 
     order_id = ProductInventory.get_order_id()
     if order_id is not None:
-        return Order.get(order_id)
+        order =  Order.get(order_id)
+        logger.debug("Order: \'{id}\' retrieved.".format(id=order.id))
     else:
         order = Order.create(commit=False, **kwargs)
         # Must commit immidiatly because we need the assigned ID
@@ -77,7 +78,7 @@ def get_or_create_order(**kwargs):
         ProductInventory.set_order_id(order.id)
         logger.debug("Order: \'{id}\' created.".format(id=order.id))
 
-        return order
+    return order
 
 def get_or_create_user(**kwargs):
     email = kwargs.get('email', None)
@@ -87,6 +88,24 @@ def get_or_create_user(**kwargs):
         user = StripeUser(email=email, name=name)
         logger.debug("User: \'{user}\' created.".format(user=user))
     return user
+
+@shop.route('/checkout/success')
+def checkout_success():
+    resp =  make_response(render_template('checkout_success.html'))
+    resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
+    return resp
+
+@shop.route('/checkout/processing')
+def checkout_processing():
+    resp = make_response(render_template('checkout_processing.html'))
+    resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
+    return resp
+
+@shop.route('/checkout/failed')
+def checkout_failed():
+    resp = make_response(render_template('checkout_failed.html'))
+    resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
+    return resp
 
 #@payment.route('/')
 @shop.route('/checkout', methods=['GET', 'POST'])
@@ -101,15 +120,21 @@ def checkout():
     product_ids = list(ProductInventory.get_products().keys())
 
     order = get_or_create_order(products=product_ids)
-
-    intent_obj = get_or_modify_intent(
-        # Calculate the charge amount. The currency in the smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency).
-        amount=int(total_price * 100),
-        description="Fairy Light ord. %d" % order.id,
-        currency='eur',
-        payment_method_types=['card'],
-        metadata={'order_id': order.id},
-    )
+    try:
+        intent_obj = get_or_modify_intent(
+            # Calculate the charge amount. The currency in the smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency).
+            amount=int(total_price * 100),
+            description="Fairy Light ord. %d" % order.id,
+            currency='eur',
+            payment_method_types=['card'],
+            metadata={'order_id': order.id},
+        )
+    except Exception as e:
+        logger.error(e)
+        logger.info("Order id: ", order.id)
+        logger.info("Order payment status: ",order.payment_status)
+        logger.info("Order shipping status: ", order.shipping_status)
+        raise
 
     client_secret = intent_obj['client_secret']
 
@@ -189,16 +214,5 @@ class PaymentWebhook(StripeWebhook):
         order.set_payment_status(PaymentStatus.error)
         logger.debug("Payment Charge status: failed.")
         return self.return_success()
-
-
-@shop.route('/checkout-success', methods=['GET'])
-def checkout_success():
-    # Display the "Success" page
-    return render_template('checkout_success.html')
-
-@shop.route('/checkout-cancel', methods=['GET'])
-def checkout_cancel():
-    # Display the "Cancel" page
-    pass
 
 shop.add_url_rule('/checkout-webhook', view_func=PaymentWebhook.as_view('checkout_webhook'))

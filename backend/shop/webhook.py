@@ -89,15 +89,20 @@ class StripeWebhook(MethodView):
             if webhook_secret:
                 # Retrieve the event by verifying the signature using the raw body and secret if webhook signing is configured.
                 signature = request.headers.get('stripe-signature')
+                print("signature: ", signature, flush=True)
+                print("Request data: ", request.data, flush=True)
                 try:
                     event = stripe.Webhook.construct_event(
                         payload=request.data, sig_header=signature, secret=webhook_secret)
                     data = event['data']
+                    # Get the type of webhook event sent - used to check the status of PaymentIntents.
+                    event_type = event['type']
+                except stripe.error.SignatureVerificationError as e:
+                    logger.error(e)
+                    return self.return_error('Webhook signature header is invalid', 400)
                 except Exception as e:
                     logger.error(traceback.format_exc())
-                    self.return_error('Webhook signature header is invalid', 500)
-                # Get the type of webhook event sent - used to check the status of PaymentIntents.
-                event_type = event['type']
+                    return self.return_error('Unknown error', 500)
             else:
                 data = request_data['data']
                 event_type = request_data['type']

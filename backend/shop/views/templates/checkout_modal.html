@@ -11,16 +11,28 @@
                     <div class="card-body">
                         <form id="register-form" method="post">
                             <fieldset id="shipping-billing" class="field-border">
-                            <legend>Shipping & Billing information.</legend>
+							<legend>Shipping & Billing information.</legend>
+							<div class="form-group">
+								<span>Name</span>
+								<input type="text" name="name" class="form-control" placeholder="Name" autofocus required>
+								<div class="form-errors text-danger" role="alert">
+								</div>										
+							</div>		
                             <div class="form-group">
                                 <span>Email</span>
                                 <input type="email" name="email" class="form-control" placeholder="Email" required >
-                                <div class="form-errors" role="alert">
+                                <div class="form-errors text-danger" role="alert">
+                                </div>										
+							</div>
+							<div class="form-group">
+                                <span>Postal Code</span>
+                                <input type="text" name="zip" class="form-control" placeholder="Postal Code" required >
+                                <div class="form-errors text-danger" role="alert">
                                 </div>										
                             </div>
                             <div class="form-group">
                                 <span>Country</span>
-                                <select name="country">
+                                <select class="form-control" name="country">
 								  <option value="BE">Belgium</option>
 								  <option value="BG">Bulgaria</option>
 								  <option value="CZ">Czechia</option>
@@ -52,55 +64,31 @@
                                 <div class="form-errors" role="alert">
                                 </div>										
                             </div>
-                            <div class="form-group">
-                                <span>Postal Code</span>
-                                <input type="text" name="zip" class="form-control" placeholder="Postal Code" required >
-                                <div class="form-errors" role="alert">
-                                </div>										
-                            </div>
                             </fieldset>
                             <fieldset id="payment-information" class="field-border">
-                                <legend>Card Details.</legend>
-                                <div class="form-group">
-                                    <span>Name</span>
-                                    <input type="text" name="name" class="form-control" placeholder="Name" autofocus required>
-                                    <div class="form-errors" role="alert">
-                                    </div>										
-                                </div>		
+                                <legend>Card Details.</legend>                                
                                 <div class="form-group">
                                     <span>Card</span>
                                     <div id="card-element" class="form-control">
                                     <!-- A strip Element will be inserted here. -->
                                     </div>							
-                                    <div id="card-errors" role="alert"></div>
+                                    <div id="card-errors" class="text-danger" role="alert"></div>
                                 </div>
                             </fieldset>
                             <div class="form-group mt-4">
-                                <button id="submit-btn" type="submit" class="btn btn-primary d-block mx-auto w-100">Pay {{price_amount|shop.format_price}}</button>
+                                <button id="submit-btn" type="submit" class="btn btn-primary d-block mx-auto w-100">							
+									<span class="pay-btn-idle">
+										Pay {{price_amount|shop.format_price}}
+									</span>
+									<span class="pay-btn-processing">
+										<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+										Loading...
+									</span>
+								</button>
                             </div>
-                        </form>
-						<div id="confirmation">
-						  <div class="status processing">
-							<h1>Completing your order…</h1>
-							<p>We’re just waiting for the confirmation from your bank… This might take a moment but feel free to close this page.</p>
-							<p>We’ll send your receipt via email shortly.</p>
-						  </div>
-						  <div class="status success">
-							<h1>Thanks for your order!</h1>
-							<p>Woot! You successfully made a payment with Stripe.</p>
-							<p class="note">We just sent your receipt to your email address, and your items will be on their way shortly.</p>
-						  </div>
-						  <div class="status receiver">
-							<h1>Thanks! One last step!</h1>
-							<p>Please make a payment using the details below to complete your order.</p>
-							<div class="info"></div>
-						  </div>
-						  <div class="status error">
-							<h1>Oops, payment failed.</h1>
-							<p>It looks like your order could not be paid at this time. Please try again or select a different payment option.</p>
-							<p class="error-message"></p>
-						  </div>
-						</div>
+						</form>
+						<span id="payment-status">								
+						</span>						
                     </div>
                 </div>
             </div>
@@ -119,7 +107,8 @@
 	
 	var elements = stripe.elements();
 	
-	var submitButton = document.getElementById('submit-btn');
+	var submitButton = $('#submit-btn');
+	//const submitButtonText = $(submitButton).text;
 	
 	var validateEmail = function(sEmail) {
 	  var reEmail = /^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!\.)){0,61}[a-zA-Z0-9]?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9\-](?!$)){0,61}[a-zA-Z0-9]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/;
@@ -155,15 +144,16 @@
 
 	// Monitor change events on the Card Element to display any errors.
 	card.on('change', ({error}) => {
-		const cardErrors = $('.card-errors');
+		const cardErrors = $('#card-errors');
 		if (error) {
-			cardErrors.text = error.message;
-			cardErrors.addClass('visible');
+			cardErrors.text(error.message);
+			//cardErrors.addClass('visible');
 		} else {
-			cardErrors.removeClass('visible');
+			cardErrors.text("");
+			//cardErrors.removeClass('visible');
 		}
 		// Re-enable the Pay button.
-		submitButton.disabled = false;
+		$(submitButton).prop('disabled', false);
 	});
 	
 	$('input[name=email]').on('blur', function (e) {
@@ -186,36 +176,80 @@
 	   * or Apple Pay, Google Pay, and Microsoft Pay since they provide name and
 	   * shipping information directly.
 	   */
-
+	console.log("Test");
 	  // Listen to changes to the user-selected country.
-	form.querySelector('select[name=country]')
-		.addEventListener('change', event => {
-		  event.preventDefault();
+	$('select[name=country]').on('change', function (e) {
+		event.preventDefault();
+	});
 		  // TODO: What to do with country? Currently only 1 payment method will be available
 		  //selectCountry(event.target.value);
-	});
-
 			  
-	submitButton.addEventListener('click', function(ev) {
+	$(submitButton).on('click', function(ev) {
 		ev.preventDefault();
+		
+		/* Validate the form fields */
 
-		const name = $('input[name=name]').val();
-		const email = $('input[name=email]').val();
+
+		const nameField = $('input[name=name]');
+		const emailField = $('input[name=email]');
+		const country = $('select[name=country] option:selected').val();
+		const postalCodeField = $('input[name=zip]');
+
+		const name = $(nameField).val();
+		const email = $(emailField).val();
+		const postalCode = $(postalCodeField).val();
+
+		var error = false
+
+		if (name == "") {
+			$(nameField).next('.form-errors').text("Name must be filled out.");
+			error = true;
+		} else {
+			$(nameField).next('.form-errors').text("");
+		}
+
+		if (email == "") {
+			$(emailField).next('.form-errors').text("Email must be filled out.");
+			error = true;
+		} else {
+			const valid = validateEmail(email);
+			if (valid) {
+				$(emailField).next('.form-errors').text("");
+			} else {
+				$(emailField).next('.form-errors').text("Invalid email address");
+				error = true;
+			}
+			
+		}
+
+		if (postalCode == "") {
+			$(postalCodeField).next('.form-errors').text("Postal Code must be filled out.");
+			error = true;
+		} else {
+			$(postalCodeField).next('.form-errors').text("");
+		}
+
+		if (error) return;
+
 		const shipping = {
 			name,
-			email,
+			//email,
 			address: {
+				line1: "",
+				city: "",
+				state: "",
 				// TODO: Maybe add line1
 				// TODO: Maybe add city
-				postal_code: $('input[name=zip]').val(),
+				postal_code: postalCode,
 				// TODO: Maybe add state
-				country: $('input[name=country] option:selected').val(),
+				country: country,
 			}
 		};
 		
 		// Disable the Pay button to prevent multiple click events.
-		submitButton.disabled = true;
-		submitButton.textContent = 'Processing…';
+		submitButton.prop('disabled', true);
+		$('.pay-btn-idle').css('display', 'none');
+		$('.pay-btn-processing').css('display', 'block');	
 
 		// Currently only card payment is supported
 		stripe.confirmCardPayment('{{client_secret}}', 
@@ -226,23 +260,19 @@
 					name: name,
 					email: email,
 				},
-				shipping,
 			},
+			shipping,
 			receipt_email: email
 		}).then(function(result) {
-			if (result.error) {
-				const mainElement = document.getElementById('main');
-				const confirmationElement = document.getElementById('confirmation');
-				if (result.error) {
-					mainElement.classList.remove('processing');
-					mainElement.classList.remove('receiver');
-					confirmationElement.querySelector('.error-message').innerText =
-						error.message;
-					mainElement.classList.add('error');
-				}								
-				// Show error to your customer (e.g., insufficient funds)
+			const cardErrors = $('#card-errors');
+			if (result.error) {				
+				cardErrors.text(result.error.message);
+				
 				console.log(result.error.message);
+				// Re-enable the Pay button.
+				//$(submitButton).prop('disabled', false);
 			} else {
+				cardErrors.text("");
 				// The payment has been processed!
 				console.log(result);
 				if (result.paymentIntent.status === 'succeeded') {
@@ -252,26 +282,14 @@
 					// payment_intent.succeeded event that handles any business critical
 					// post-payment actions.
 					// Success! Payment is confirmed. Update the interface to display the confirmation screen.
-					mainElement.classList.remove('processing');
-					mainElement.classList.remove('receiver');
-					// Update the note about receipt and shipping (the payment has been fully confirmed by the bank).
-					confirmationElement.querySelector('.note').innerText =
-						'We just sent your receipt to your email address, and your items will be on their way shortly.';
-					mainElement.classList.add('success');
+					window.location.href = "{{url_for('shop.checkout_success')}}"
 					// TODO: Redirect user
 				} else if (result.paymentIntent.status === 'processing') {
 					// Success! Now waiting for payment confirmation. Update the interface to display the confirmation screen.
-					mainElement.classList.remove('processing');
-					// Update the note about receipt and shipping (the payment is not yet confirmed by the bank).
-					confirmationElement.querySelector('.note').innerText =
-						'We’ll send your receipt and ship your items as soon as your payment is confirmed.';
-					mainElement.classList.add('success');
+					window.location.href = "{{url_for('shop.checkout_processing')}}"
 				} else {
-					// Payment has failed.
-					mainElement.classList.remove('success');
-					mainElement.classList.remove('processing');
-					mainElement.classList.remove('receiver');
-					mainElement.classList.add('error');
+					// Success! Now waiting for payment confirmation. Update the interface to display the confirmation screen.
+					window.location.href = "{{url_for('shop.checkout_failed')}}"
 				}
 				
 			}

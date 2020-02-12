@@ -6,7 +6,7 @@ import traceback
 import sys
 
 # Pip package imports
-from flask import render_template, request, url_for, redirect, abort, Response, jsonify, session
+from flask import render_template, request, make_response, redirect, abort, Response, jsonify, session
 from flask.views import MethodView
 from werkzeug.exceptions import BadRequest
 from loguru import logger
@@ -17,14 +17,33 @@ from ..models import Category, Image, PaymentStatus, Order
 
 from ..inventory import ProductInventory
 from .blueprint import shop
+from .checkout import is_intent_success, is_order_success
+
+
+def try_close_cart():
+    if is_intent_success() or is_order_success():
+        ProductInventory.reset()
+        return True
+    else:
+        order_id = ProductInventory.get_order_id()
+        if order_id is not None:
+            order = Order.get(order_id)
+            if order.payment_status == PaymentStatus.confirmed:
+                ProductInventory.reset()
+                return True
+    return False
+
 
 @shop.route('/cart/detail')
 def cart_detail():
-    return render_template('photos_cart.html',
+    try_close_cart()
+    resp = make_response(render_template('photos_cart.html',
                            cart_items=ProductInventory.get_content(),
                            total_price=ProductInventory.get_total_price(),
                            return_url=request.args.get('url')
-                           )
+                           ))
+    resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
+    return resp
 
 @shop.route('/cart/detail/refresh')
 def cart_detail_refresh():
@@ -75,7 +94,6 @@ class CartItemApi(MethodView):
 
     def post(self, item_id):
         try:
-            print("Item id: ", item_id, flush=True)
             ProductInventory.add_item(image_id=item_id)
             return jsonify({'shopItems': ProductInventory.get_num_of_items()})
 
