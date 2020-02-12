@@ -30,7 +30,7 @@ install_requires = read_requirements('requirements.txt')
 dev_requires = read_requirements('requirements-dev.txt')
 
 setup(
-    name='flask_starter',
+    name='fairy_light',
     version=backend.__version__,
     description=backend.__doc__,
     long_description=long_description,
@@ -41,9 +41,20 @@ setup(
     # https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
         'Development Status :: 1 - Planning',
+        'Programming Language :: Python',
+        'Environment :: Web Environment',
+        'Operating System :: OS Independent',
         'Intended Audience :: Developers',
+        'Topic :: System :: Software Distribution',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Programming Language :: Python :: Implementation :: PyPy',
+        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'License :: OSI Approved :: MIT License',
     ],
     packages=find_packages(exclude=['ansible', 'tests']),
     install_requires=install_requires,

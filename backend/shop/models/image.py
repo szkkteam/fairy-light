@@ -55,9 +55,10 @@ class Image(Model):
 
     @property
     def image_size(self):
-        img_data = get_protected().path(self.path)
-        im = PIL.Image.open(img_data)
-        return im.size
+        # TODO: This information should be stored in the DB
+        #img_data = get_protected().path(self.path)
+        #im = PIL.Image.open(img_data)
+        return (1920, 1024)
 
     def set_status(self, status, commit=False):
         self.status = status
