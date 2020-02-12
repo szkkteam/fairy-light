@@ -6,116 +6,47 @@
 {% block custom_css %}
     {{ super() }}
     <link href="{{ site_static.url(filename='site/css/shop/style.css') }}" rel="stylesheet">
-    
-    <style>       
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="//unpkg.com/bootstrap-select-country@4.0.0/dist/css/bootstrap-select-country.min.css" type="text/css" />
 
-        #cart {
-            padding-top: 50px;
-        }
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+    <script src="//unpkg.com/bootstrap-select-country@4.0.0/dist/js/bootstrap-select-country.min.js"></script>
+     <!-- The required Stripe lib -->
+     <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
 
-        #cart .cart-title {
-            padding-bottom: 20px;
-        }
 
-        #cart tr.cart-table-album {
-            cursor: pointer;
-            -webkit-user-select: none;
-            /* Chrome all / Safari all */
-            -moz-user-select: none;
-            /* Firefox all */
-            -ms-user-select: none;
-            /* IE 10+ */
-            user-select: none;
-            /* Likely future */
-        }
+     <style>
+         #register-form .field-border {
+           border-radius: 0.25rem;
+           border: 1px solid #666;
+           padding-left: 25px;
+           padding-right: 25px;
+           padding-top: 2px;
+           padding-bottom: 10px;		
+         }
+   
+         #register-form .field-border legend {
+           text-align: center;
+           font-size: 1rem;
+         }
+       
+         #shipping-billing {
+           margin-bottom: 30px;
+         }
 
-        #cart .cart-album-title {
-            white-space: nowrap;
-        }
+         /* Payment button */
+         .pay-btn-processing {
+             display: none;
+         }
 
-        #cart .cart-album-remark {
-            white-space: nowrap;
-            text-align: right;
-        }
-
-        #cart .cart-price {
-            white-space: nowrap;
-            text-align: left;
-        }
-
-        #cart .cart-photo {
-            width: 70px;
-        }
-
-        #cart tr.cart-table-album td:last-of-type:after {
-            content: "\002b";
-            position: relative;
-            top: 1px;
-            display: inline-block;
-            font-family: 'Glyphicons Halflings';
-            font-style: normal;
-            font-weight: 400;
-            line-height: 1;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            float: right;
-            color: #999;
-            text-align: center;
-            padding: 3px;
-            transition: transform .25s linear;
-            -webkit-transition: -webkit-transform .25s linear;
-        }
-
-        #cart tr.cart-table-album.active td:last-of-type:after {
-            content: "\2212";
-        }
-
-        #cart .btn-point-left {
-            margin-left: 50px;
-            width: 160px;
-        }
-
-        #cart .btn-point-left::before {
-            content: "<";
-        }
-
-        #cart .btn-point-right {
-            margin-right: 50px;
-            width: 160px;
-        }
-
-        #cart .btn-point-right::after {
-            content: ">";
-        }
-
-        #cart .cart-discount del {
-            /*color: rgba(255,0,0, 0.5);*/
-            text-decoration: none;
-            position: relative;
-        }
-        #cart .cart-discount del::before {
-            content: " ";
-            display: block;
-            width: 100%;
-            border-top: 4px solid rgba(255,0,0, 0.8);
-            height: 12px;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            visibility: inherit;
-            transform: rotate(-7deg);
-        }
-        #cart .cart-discount ins {
-            color: green;
-            text-decoration: none;
-            padding-right: 1em;
-        }
-
-        #cart .cart-toggle-element {
-            visibility: hidden;
-        }
-
-    </style>
+         .pay-btn-idle {
+             display: block;
+         }
+ 
+                   
+     </style>
 
 {% endblock %}
 
@@ -140,15 +71,29 @@
                         </a>
                     </div>
                     <div class="col text-right">
-                        <a href="{{url_for('shop.checkout')}}" class="btn btn-primary btn-point-right" id="shopping-cart-checkout">
+                        {% if total_price > 0 %}
+                        <a href="{{url_for('shop.checkout')}}" class="btn btn-primary btn-point-right" id="checkout-modal-btn" data-toggle="modal" data-target="#checkout-modal">
                             <span class="text-nowrap">Check Out</span>
                         </a>
+                        {% else %}
+                        <a href="{{url_for('shop.checkout')}}" class="btn btn-primary btn-point-right disabled" aria-disabled="true" id="checkout-modal-btn" data-toggle="modal" data-target="#checkout-modal">
+                            <span class="text-nowrap">Check Out</span>
+                        </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<!-- Modal -->
+<div class="modal fade" id="checkout-modal" tabindex="-1" role="dialog" aria-labelledby="checkout-modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            Loading ...
+        </div>
+    </div>
+</div>
 
 {% endblock %}
 
@@ -167,6 +112,26 @@
     });   
 
     $(document).ready(function() {
+
+        // Handle the fetch for modal load
+        $('#checkout-modal-btn').click(function(e) {
+            //e.preventDefault();
+            var targetId = $(this).attr('data-target');
+            var url = $(this).attr('href')
+            var targetDOM = $(targetId + ' .modal-content')
+            targetDOM.html('<button class="btn btn-primary"><span class="spinner-border spinner-border-sm"></span>Loading..</button>');
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'html',
+                success: function (data) {
+                    targetDOM.html(data);
+                },
+                error: function (data) {
+                    console.log(data.responseJSON);
+                }
+            }); 
+        });
 
         //Fixing jQuery Click Events for the iPad
         var ua = navigator.userAgent, event = (ua.match(/iPad/i)) ? "touchstart" : "click";

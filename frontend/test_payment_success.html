@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css"> from: https://bootswatch.com/darkly/#top -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="animations.css"> 
+    <link rel="stylesheet" href="styles.css"> 
+    <!-- Must be always at the end. Don't decalre inline responsive styles. -->
+    
+
+    <style>
+        #result .result-container {
+            margin-top: 60px;
+            width: 80%
+        }
+
+        #result .result-message {
+            margin-bottom: 50px;
+        }
+
+        #result .description {
+            margin-top: 30px;
+            text-align: justify;
+            padding: 15px 10px;
+            border: 1px solid gray;
+        }
+
+        #result .countdown {
+            margin-top: 50px;
+        }
+
+        .countdown h3 {
+            font-size: 1rem;
+        }
+
+        #result .backtoshop {
+            margin-top: 50px;            
+        }
+
+        #result .backtoshop a{
+            padding: 0.375rem 2.5rem;       
+        }
+
+        /* Small devices (landscape phones, 544px and up) */
+    @media (min-width: 544px) {  
+        .countdown h3 {
+            font-size: 2rem;
+        }
+
+        #result .result-message {
+            margin-bottom: 100px;
+        }
+
+        #result .result-container {
+            margin-top: 120px;
+            width: 80%
+        }
+    }
+
+
+    /* Extra large devices (large desktops, 1200px and up) */
+    @media (min-width: 1200px) {  
+        #result .result-container h2{
+            padding-top: 25px;
+        }
+    }
+
+    </style>
+</head>
+<body>        
+    <main id="main">
+        <section id="result">
+            <div class="container">
+                <div class="row">
+                    <div class="col text-center">
+                        <div class="result-container mx-auto d-none d-sm-block">
+                            <div class="clearfix mx-auto">
+                                <div class="pull-left">
+                                    <img src="http://placehold.it/100x100" class="rounded-circle img-fluid" width="100" height="100" alt="payment success">
+                                </div>
+                                <div class="result-message">
+                                    <h2>
+                                        Your order was successfully completed!
+                                    </h2>
+                                </div>                                
+                            </div>
+                        </div>
+                        <div class="result-container mx-auto d-sm-none">
+                            <div class="">
+                                <img src="http://placehold.it/100x100" class="rounded-circle img-fluid" width="100" height="100" alt="payment success">
+                            </div>
+                            <div class="result-message">
+                                <h4>
+                                    Your order was successfully completed!
+                                </h4>
+                            </div>                                
+                        </div>
+                        <h4>
+                            Thank you for your purchase.
+                        </h4>
+                                                
+                        <div class="description">
+                            <p>
+                                You will receive an e-mail soon with your ordered products. If this is not happening within a few hour
+                                you can write to our customer <a href="mailto:example@support.com">support</a>. 
+                                We are happy to answer your question.</p>
+                        </div>
+                        <div class="countdown">
+                            <h3>
+                                You will be automatically redirected to the
+                                <a href="#">home</a> page after 
+                                <span id="countdown">10</span> seconds
+                            </h3>
+                        </div>
+                        <div class="backtoshop">
+                            <h5>Click the link below to continue shopping.</h5>
+                            <a href="#" class="btn btn-primary" >
+                                Back To Shop
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</section>
+    </main>
+    <script>
+        // Total seconds to wait
+        var seconds = 10;
+            
+            function countdown() {
+                seconds = seconds - 1;
+                if (seconds < 0) {
+                    // Chnage your redirection link here
+                    window.location = "#";
+                } else {
+                    // Update remaining seconds
+                    document.getElementById("countdown").innerHTML = seconds;
+                    // Count down using javascript
+                    window.setTimeout("countdown()", 1000);
+                }
+            }
+            
+            // Run countdown function
+            countdown();
+
+    </script>
+
+</body>
+</html>

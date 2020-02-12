@@ -12,9 +12,9 @@ from loguru import logger
 from backend.extensions import db
 
 from .blueprint import shop
-from ..models import Category, Order, PaymentStatus
+from ..models import Category, Order, PaymentStatus, Image
 from ..inventory import ProductInventory
-from .checkout import is_intent_success, is_order_success
+from .shopping_cart import try_close_cart
 
 
 def get_breadcrumbs(root_id):
@@ -28,6 +28,29 @@ def get_breadcrumbs(root_id):
     print("Breadcrumbs: ", breadcrumbs, flush=True)
     return breadcrumbs
 
+@shop.route('/category/<int:category_id>')
+def category_detail(category_id):
+    return render_template('album_modal.html',
+                           data=category_detail(category_id))
+
+@shop.route('/photo/<int:photo_id>')
+def image_lightbox(photo_id):
+    element = Image.get(photo_id)
+    category_title = request.args.get('category')
+    data = dict(
+        category_title=category_title,
+        thumbnail=element.get_thumbnail_path(),
+        title=element.title,
+        size=element.image_size,
+        discounted_price=element.price,
+        url_add_to_cart=url_for('shop.cart_item_api', item_id=element.id),
+        url_image=element.get_path(),
+        url_facebook_share=url_for('shop.index_view', root=element.id, _external=True),
+    )
+
+    return render_template('image_lightbox.html',
+                           data=data)
+
 
 @shop.route('/')
 @shop.route('/<int:root>')
@@ -36,13 +59,7 @@ def index_view(root=None):
     breadcrumbs = get_breadcrumbs(root)
 
     # TODO: There must be a better way, how to close the session cart
-    order_id = ProductInventory.get_order_id()
-    if order_id is not None:
-        order = Order.get(order_id)
-        if order.payment_status == PaymentStatus.confirmed:
-            ProductInventory.reset()
-    if is_intent_success() or is_order_success():
-        ProductInventory.reset()
+    try_close_cart()
 
     # Query the models at given level.
     data = Category.get_list_from_root(root, only_public=True).all()
@@ -72,16 +89,9 @@ def index_view(root=None):
                                total_price=total_price,
 
                                # Datamodel
-                               data=data)
+                               data=image_data(data, category_title=breadcrumbs[-1]['title']))
 
     else:
-        for element in data:
-            print(element, flush=True)
-            if element.discount:
-                element.price = Category.sum_images_price(element.id) * (1 - element.discount)
-            else:
-                element.price = None
-
         return render_template('photos_listing.html',
                                # Navigation specific
                                breadcrumbs=breadcrumbs,
@@ -93,6 +103,62 @@ def index_view(root=None):
                                total_price=total_price,
 
                                # Datamodel
-                               data=data)
+                               data=category_data(data))
 
+def image_data(data, category_title=None):
+    list_data = []
+    for element in data:
+
+        list_data.append(dict(
+            thumbnail=element.get_thumbnail_path(),
+            title=element.title,
+            discounted_price=element.price,
+            url_add_to_cart=url_for('shop.cart_item_api', item_id=element.id),
+            url_image=url_for('shop.image_lightbox', photo_id=element.id, category=category_title),
+            #url_image=element.get_path(),
+            url_facebook_share=url_for('shop.index_view', root=element.id, _external=True),
+        ))
+    return list_data
+
+def category_detail(category_id):
+    element = Category.get(category_id)
+    # Get the original and discounted price recursivly
+    original_price, discounted_price = element.recursive_sum_images_price()
+    data = dict(
+        original_price=original_price,
+        discounted_price=discounted_price,
+        url_add_to_cart = url_for('shop.cart_category_api', category_id=element.id),
+        title=element.title,
+        images=image_data(element.images, category_title=element.title)
+    )
+    return data
+
+def category_data(data):
+    list_data = []
+    for element in data:
+        # Determine if customer can buy the whole album
+        can_buy = True if element.discount is not None else False
+        if can_buy:
+            # Get the original and discounted price recursivly
+            original_price, discounted_price = element.recursive_sum_images_price()
+
+            #url_add_to_cart = url_for('shop.cart_category_api', category_id=element.id)
+            url_add_to_cart = url_for('shop.category_detail', category_id=element.id)
+        else:
+            original_price = 0
+            discounted_price = 0
+            url_add_to_cart = '#'
+
+        list_data.append(dict(
+            can_buy=can_buy,
+            num_of_images=element.recursive_num_of_images(),
+            thumbnail=element.get_thumbnail_path(),
+            title=element.title,
+            original_price=original_price,
+            discounted_price=discounted_price,
+            url_add_to_cart=url_add_to_cart,
+            url_category=url_for('shop.index_view', root=element.id),
+            url_facebook_share=url_for('shop.index_view', root=element.id, _external=True),
+        ))
+    return list_data
 

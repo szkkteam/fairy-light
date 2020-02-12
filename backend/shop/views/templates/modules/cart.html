@@ -109,7 +109,7 @@
     </tr>
 {% endmacro %}
 
-{% macro row(image, price, delete_url="") %}    
+{% macro row(image, price, delete_url=None) %}    
     <tr style="display: table-row">
         <td class="cart-photo">
             <img class="cart-details-img" width="70px;" src="{{ image }}">
@@ -123,7 +123,9 @@
             <span class="cart-album-price">{{price|shop.format_price}}</span>
         </td>
         <td>
-            <button href="{{delete_url}}" class="btn btn-sm btn-danger clear-item"><i class="fa fa-trash-o"></i></button>
+            {% if delete_url %}
+                <button href="{{delete_url}}" class="btn btn-sm btn-danger clear-item"><i class="fa fa-trash-o"></i></button>
+            {% endif %}
         </td>
     </tr>
 {% endmacro %}
@@ -144,12 +146,9 @@
             <span style="white-space: nowrap;">
                 Digital Photo
             </span>
-            <span>
-                {{price|shop.format_price}}
-            </span>
         </td>
         <td>
-            <button href="{{delete_url}}" class="btn btn-sm btn-danger clear-item"><i class="fa fa-trash-o"></i></button>
+            <button href="{{delete_url}}" class="btn btn-sm btn-danger clear-item-mini"><i class="fa fa-trash-o"></i></button>
         </td>
     </tr>
 {% endmacro %}

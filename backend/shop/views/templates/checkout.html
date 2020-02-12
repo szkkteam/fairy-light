@@ -1,216 +1,119 @@
 {% extends 'website/base.html' %}
-{% import 'modules/checkout_cart.html' as cart with context %}
 
-{% block head_css %}
+{% block custom_css %}
     {{ super() }}
-    <!-- The required Stripe lib -->
-    <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
-
+    
+    
     <style>
-        #register-form .field-border {
-          border-radius: 0.25rem;
-          border: 1px solid #666;
-          padding-left: 25px;
-          padding-right: 25px;
-          padding-top: 2px;
-          padding-bottom: 10px;		
+        #result .result-container {
+            margin-top: 60px;
+            width: 80%
         }
-  
-        #register-form .field-border legend {
-          text-align: center;
-          font-size: 1rem;
+
+        #result .result-message {
+            margin-bottom: 50px;
         }
-      
-        #shipping-billing {
-          margin-bottom: 30px;
+
+        #result .description {
+            margin-top: 30px;
+            text-align: justify;
+            padding: 15px 10px;
+            border: 1px solid gray;
         }
-                  
+
+        #result .countdown {
+            margin-top: 50px;
+        }
+
+        .countdown h3 {
+            font-size: 1rem;
+        }
+
+        #result .backtoshop {
+            margin-top: 50px;            
+        }
+
+        #result .backtoshop a{
+            padding: 0.375rem 2.5rem;       
+        }
+
+        /* Small devices (landscape phones, 544px and up) */
+        @media (min-width: 544px) {  
+            .countdown h3 {
+                font-size: 2rem;
+            }
+
+            #result .result-message {
+                margin-bottom: 100px;
+            }
+
+            #result .result-container {
+                margin-top: 120px;
+                width: 80%
+            }
+        }
+
+
+        /* Extra large devices (large desktops, 1200px and up) */
+        @media (min-width: 1200px) {  
+            #result .result-container h2{
+                padding-top: 25px;
+            }
+        }
     </style>
+
 {% endblock %}
 
 {% block page_body %}
+  <main id="main">
+      <section id="result">
+          <div class="container">
+              <div class="row">
+                  <div class="col text-center">
+                      {% block result_title %}
 
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col">
-              <h1>Header Logo</h1>
-            </div>
-          </div>
-          <div class="row justify-content-center">
-            <div class="col-8 max-auto">
-              <div class="card">
-                <div class="card-header">
-                  Payment
-                </div>
-                <div class="card-body">
-                  <form id="register-form" method="post">
-                    <fieldset id="shipping-billing" class="field-border">
-                      <legend>Shipping & Billing information.</legend>
-                      <div class="form-group">
-                        <span>Name</span>
-                        <input type="text" name="name" class="form-control" placeholder="Name" autofocus required>
-                          <div class="form-errors" role="alert">
-                          </div>										
-                      </div>		
-                      <div class="form-group">
-                        <span>Email</span>
-                        <input type="email" name="email" class="form-control" placeholder="Email" required >
-                          <div class="form-errors" role="alert">
-                          </div>										
+                      {% endblock %}
+                      {% block result_body %}
+
+                      {% endblock %}
+                      <div class="countdown">
+                          <h3>
+                              You will be automatically redirected to the
+                              <a href="{{url_for('site.index')}}">home</a> page after 
+                              <span id="countdown">10</span> seconds
+                          </h3>
                       </div>
-                    </fieldset>
-                    <fieldset id="payment-information" class="field-border">
-                      <legend>Card Details.</legend>
-                      <div class="form-group">
-                        <span>Card</span>
-                        <div id="card-element" class="form-control">
-                          <!-- A strip Element will be inserted here. -->
-                        </div>							
-                        <div id="card-errors" role="alert"></div>
+                      <div class="backtoshop">
+                          <h5>Click the link below to continue shopping.</h5>
+                          <a href="{{url_for('shop.index_view')}}" class="btn btn-primary" >
+                              Back To Shop
+                          </a>
                       </div>
-                    </fieldset>
-                    <div class="form-group">
-                      <button id="submit-btn" type="submit" class="btn btn-primary">Register</button>
-                    </div>
-                  </form>
-                </div>
+                  </div>
               </div>
-            </div>
           </div>
-        </div>
-      </div>
-      <div class="col-4">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col">
-              <h4>Order Summary</h1>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-                {% call cart.table() %}
-                  {% for key, item in cart_items.items() %}
-                    {{cart.row(loop.index, image=item['thumb'], price=item['price'])}}
-                  {% endfor %}
-                {% endcall %}              
-            </div>
-            <hr/>
-          </div>
-          <div class="row">
-            <div class="col">
-              <hr/>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <h6>Subtotal:</h4>
-            </div>
-            <div class="col-4">
-              <span>{{price_amount}}</span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <h6>Shipping:</h4>
-            </div>
-            <div class="col-4">
-              <span>Free</span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <hr/>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <h4>Total:</h4>
-            </div>
-            <div class="col-4">
-              <span>{{price_amount}}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-{% endblock %}
-
-{% block tail_js %}
-    {{ super() }}
-    <script src="{{ site_static.url(filename='site/js/payment.js') }}" type="text/javascript"></script>
-    <script type="text/javascript">
-        var stripe = Stripe("{{public_key}}");
-        
-        var elements = stripe.elements();
-        
-        // Custom styling can be passed to options when creating an Element.
-        // (Note that this demo uses a wider set of styles than the guide below.)
-        var style = {
-          base: {
-          lineHeight: '1.429'
-          },
-          invalid: {
-          color: '#fa755a',
-          iconColor: '#fa755a'
+  </section>
+  </main>
+  <script>
+      // Total seconds to wait
+      var seconds = 10;
+          
+          function countdown() {
+              seconds = seconds - 1;
+              if (seconds < 0) {
+                  // Chnage your redirection link here
+                  window.location = "{{url_for('site.index')}}";
+              } else {
+                  // Update remaining seconds
+                  document.getElementById("countdown").innerHTML = seconds;
+                  // Count down using javascript
+                  window.setTimeout("countdown()", 1000);
+              }
           }
-        };
+          
+          // Run countdown function
+          countdown();
 
-        // Create an instance of the card Element.
-        var card = elements.create('card', {
-          style: style,
-          hidePostalCode : false,
-        });
-
-        // Add an instance of the card Element into the `card-element` <div>.
-        card.mount('#card-element');
-
-        var submitButton = document.getElementById('submit-btn');
-
-          /* TODO:
-          stripe.confirmCardPayment may take several seconds to complete.
-          During that time, disable your form from being resubmitted and show a waiting indicator like a spinner.
-          If you receive an error, show it to the customer, re-enable the form, and hide the waiting indicator.
-          */
-
-        submitButton.addEventListener('click', function(ev) {
-          ev.preventDefault();
-
-          const name = $('input[name=name]').val();
-          const email = $('input[name=email]').val();
-
-          stripe.confirmCardPayment('{{client_secret}}', {
-            payment_method: {
-              card: card,
-              billing_details: {
-                name: name,
-                email: email,
-              }
-            },
-            receipt_email: email
-          }).then(function(result) {
-            if (result.error) {
-              // Show error to your customer (e.g., insufficient funds)
-              console.log(result.error.message);
-            } else {
-              // The payment has been processed!
-              console.log(result);
-              if (result.paymentIntent.status === 'succeeded') {
-                // Show a success message to your customer
-                // There's a risk of the customer closing the window before callback
-                // execution. Set up a webhook or plugin to listen for the
-                // payment_intent.succeeded event that handles any business critical
-                // post-payment actions.
-              }
-            }
-          });
-        });
-
-    </script>
+  </script>
 
 {% endblock %}

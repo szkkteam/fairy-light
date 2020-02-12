@@ -3,7 +3,7 @@
 {% block photos_section %}     
     {% for element in data %}
     <div class="col-6 col-md-3">
-        {{ card.render(element.id, 'category', url_for('shop.index_view', root=element.id), cart=url_for('shop.cart_category_api', category_id=element.id), image=element.get_thumbnail_path(), title=element.title, price=element.price) }}
+        {{ card.album(element)}}
     </div>    
     {% endfor %}
 {% endblock %}

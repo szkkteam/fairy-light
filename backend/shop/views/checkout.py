@@ -8,7 +8,7 @@ import traceback
 import sys
 
 # Pip package imports
-from flask import current_app, render_template, url_for, request, redirect, jsonify, abort, session
+from flask import current_app, make_response, render_template, url_for, request, redirect, jsonify, abort, session
 
 from loguru import logger
 
@@ -49,30 +49,14 @@ def generate_password(size=8):
 def get_stripe_public_key():
     return current_app.config['STRIPE_PUBLISHABLE_KEY']
 
-def get_charge_amount(cart_content):
-    charge_amount = ProductInventory.get_total_price()
-    charge_amount_safe = get_products_total_price(cart_content)
-    if charge_amount != charge_amount_safe:
-        logger.warning("During calculating the charge amount there was a missmatch. Cart total: %s - Calculated from models: %s" % (charge_amount, charge_amount_safe))
-        return charge_amount_safe
-    return charge_amount
-
-def get_products_total_price(cart):
-    price = 0
-    ids = cart.keys()
-    models = Image.get_all_by_ids(ids)
-    for m in models:
-        price += m.price if m.price is not None else 0
-    return price
-
 def get_or_modify_intent(**kwargs):
     # Get or Create a PaymentIntent
     intent_id = ProductInventory.get_intent_id()
     if intent_id is not None:
         intent_obj = stripe.PaymentIntent.retrieve(intent_id)
-        print(intent_obj, flush=True)
         stripe.PaymentIntent.modify(intent_obj['id'],
             **kwargs)
+        logger.debug("Payment Intent: \'{id}\' retrieved.".format(id=intent_obj['id']))
     else:
         intent_obj = stripe.PaymentIntent.create(**kwargs)
         ProductInventory.set_intent_id(intent_obj['id'])
@@ -83,7 +67,8 @@ def get_or_create_order(**kwargs):
 
     order_id = ProductInventory.get_order_id()
     if order_id is not None:
-        return Order.get(order_id)
+        order =  Order.get(order_id)
+        logger.debug("Order: \'{id}\' retrieved.".format(id=order.id))
     else:
         order = Order.create(commit=False, **kwargs)
         # Must commit immidiatly because we need the assigned ID
@@ -93,7 +78,7 @@ def get_or_create_order(**kwargs):
         ProductInventory.set_order_id(order.id)
         logger.debug("Order: \'{id}\' created.".format(id=order.id))
 
-        return order
+    return order
 
 def get_or_create_user(**kwargs):
     email = kwargs.get('email', None)
@@ -104,6 +89,24 @@ def get_or_create_user(**kwargs):
         logger.debug("User: \'{user}\' created.".format(user=user))
     return user
 
+@shop.route('/checkout/success')
+def checkout_success():
+    resp =  make_response(render_template('checkout_success.html'))
+    resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
+    return resp
+
+@shop.route('/checkout/processing')
+def checkout_processing():
+    resp = make_response(render_template('checkout_processing.html'))
+    resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
+    return resp
+
+@shop.route('/checkout/failed')
+def checkout_failed():
+    resp = make_response(render_template('checkout_failed.html'))
+    resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
+    return resp
+
 #@payment.route('/')
 @shop.route('/checkout', methods=['GET', 'POST'])
 @csrf.exempt
@@ -113,28 +116,34 @@ def checkout():
     # 2) NOT WORKING Still use the stripe payment process, but charge it with 0. (Pro: We have track, and they have receipe. Cont: It's a bit strange to put card details to something which is free)
 
     # Get the cart content
-    cart_content = ProductInventory.get_content()
-    # Calculate the charge amount. The currency in the smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency).
-    charge_amount = int(get_charge_amount(cart_content) * 100)
-    product_ids = list(cart_content.keys())
+    total_price = ProductInventory.get_total_price()
+    product_ids = list(ProductInventory.get_products().keys())
 
     order = get_or_create_order(products=product_ids)
-
-    intent_obj = get_or_modify_intent(
-        amount=charge_amount,
-        description="Fairy Light ord. %d" % order.id,
-        currency='eur',
-        payment_method_types=['card'],
-        metadata={'order_id': order.id},
-    )
+    try:
+        intent_obj = get_or_modify_intent(
+            # Calculate the charge amount. The currency in the smallest currency unit (e.g., 100 cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency).
+            amount=int(total_price * 100),
+            description="Fairy Light ord. %d" % order.id,
+            currency='eur',
+            payment_method_types=['card'],
+            metadata={'order_id': order.id},
+        )
+    except Exception as e:
+        logger.error(e)
+        logger.info("Order id: ", order.id)
+        logger.info("Order payment status: ",order.payment_status)
+        logger.info("Order shipping status: ", order.shipping_status)
+        raise
 
     client_secret = intent_obj['client_secret']
 
-    return render_template('checkout.html',
-                           cart_items=cart_content,
+    return render_template('checkout_modal.html',
+                           #cart_items=cart_content,
                            client_secret=client_secret,
                            public_key=get_stripe_public_key(),
-                           price_amount=ProductInventory.get_total_price())
+                           num_of_items=len(product_ids),
+                           price_amount=total_price)
 
 class PaymentWebhook(StripeWebhook):
 
@@ -205,16 +214,5 @@ class PaymentWebhook(StripeWebhook):
         order.set_payment_status(PaymentStatus.error)
         logger.debug("Payment Charge status: failed.")
         return self.return_success()
-
-
-@shop.route('/checkout-success', methods=['GET'])
-def checkout_success():
-    # Display the "Success" page
-    return render_template('checkout_success.html')
-
-@shop.route('/checkout-cancel', methods=['GET'])
-def checkout_cancel():
-    # Display the "Cancel" page
-    pass
 
 shop.add_url_rule('/checkout-webhook', view_func=PaymentWebhook.as_view('checkout_webhook'))

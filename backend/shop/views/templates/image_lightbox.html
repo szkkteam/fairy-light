@@ -1,0 +1,43 @@
+{% import 'modules/price.html' as price with context %}
+
+<div class="container photo-lightbox">
+    <div class="row">
+        <div class="col">
+            <img class="card-img-top" src="{{data.url_image}}" alt="{{data.title|lower}}"> 
+        </div>
+        <div class="col my-auto">
+            <span class="photo-lightbox-title">
+                {% if data.category_title %}
+                    <h4>{{data.category_title}} Photo Gallery, {{data.title}}</h4>
+                {% else %}
+                    <h4>Photo Gallery, {{data.title}}</h4>
+                {% endif %}                
+            </span>
+            <form>
+                <hr/>
+                <div class="form-group" style="margin-left: 1.25rem;">
+                    <input class="form-check-input" type="radio" name="digital_download" id="download" value="digital" checked>
+                    <label class="form-check-label" for="download">
+                        Buy a digital download
+                    </label>                      
+                </div>
+                <hr/>
+                <div class="form-group row">
+                    <label class="col-sm-5" for="inputState">Photo size(?)</label>
+                    <div class="col-sm">
+                        <select id="inputState" class="form-control">
+                            <option selected>High quality ({{data.size[0]}}x{{data.size[1]}})</option>
+                        </select>                        
+                    </div>
+                </div>
+                <hr/>
+                <div class="photo-lightbox-price">
+                    <span><b>Total:</b></span>
+                    {{ price.discount(data.discounted_price, data.discounted_price) }}
+                </div>
+                <hr/>
+                <a href="{{data.url_add_to_cart}}" class="btn btn-primary cart-add w-100">ADD TO CART</a>  
+            </form>
+        </div>
+    </div>
+</div>

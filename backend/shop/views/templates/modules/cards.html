@@ -1,5 +1,76 @@
 {% import 'website/static.html' as site_static with context %}
 
+{% macro album(element) %}
+    <div class="card text-center">
+        <div class="album-cover">
+            <a href="{{element.url_category}}">
+                <span>
+                    <img class="card-img-top" src="{{element.thumbnail}}" width="253" height="220" alt="{{element.title|lower}}">
+                    <div class="album-title-overlay">                            
+                        <h4>{{element.title}}</h4>
+                    </div>
+                </span>
+            </a>                        
+            <div class="album-social-overlay">
+                <div class="pull-left">
+                    <i class="fa fa-picture-o" aria-hidden="true"></i>
+                    <span>{{element.num_of_images}}</span>                                
+                </div>
+                <div class="pull-right pictures-share">
+                    <a class="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u={{element.url_facebook_share}}" target="_blank">
+                        <i class="fa fa-share-alt" aria-hidden="true"></i>
+                    </a>                                
+                </div>
+            </div>
+        </div>
+        {% if element.can_buy %}        
+            <div class="card-body text-left">
+                <p class="mb-1">Buy {{element.num_of_images}} picture now for</p>
+                <div class="album-discount">
+                    <ins>
+                        <span>{{element.discounted_price|shop.format_price}}</span>
+                    </ins>
+                    {% if element.discounted_price != element.original_price %}
+                        <del>
+                            <span>{{element.original_price|shop.format_price}}</span>
+                        </del>
+                    {% endif %}
+                </div>
+                <div class="mt-2">
+                    <a href="{{element.url_add_to_cart}}" class="btn btn-primary album-detail w-100" data-toggle="modal" data-target="#exampleModalLong">ADD TO CART</a>    
+                </div>                        
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro image(element) %}
+    <div class="card text-center">
+        <div class="album-cover">
+            <a class="popup-item" href="{{element.url_image}}">
+                <img class="card-img-top" src="{{element.thumbnail}}" width="253" height="220" alt="{{element.title|lower}}">
+            </a>                        
+            <div class="album-social-overlay">
+                <div class="pull-right pictures-share">
+                    <a class="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u={{element.url_facebook_share}}" target="_blank">
+                        <i class="fa fa-share-alt" aria-hidden="true"></i>
+                    </a>                                
+                </div>
+            </div>
+        </div>
+        <div class="card-body text-left">
+            <div class="album-discount">
+                <ins>
+                    <span>{{element.discounted_price|shop.format_price}}</span>
+                </ins>
+            </div>
+            <div class="mt-2">
+                <a href="{{element.url_add_to_cart}}" class="btn btn-primary cart-add w-100">ADD TO CART</a>    
+            </div>                        
+        </div>
+    </div>
+{% endmacro %}
+
 {% macro render(id, type, endpoint, cart='#', image=None, title=None, price=None) %}
     <div class="card photos-buy-card" data-id="{{id}}" data-type="{{type}}">
         <div class="photos-photo">

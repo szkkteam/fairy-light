@@ -1,0 +1,19 @@
+
+{% macro discount(original_price, discounted_price) %}
+    {% if discounted_price != original_price %}
+        <span class="item-price-discount">
+            <ins>
+                <span>{{discounted_price|shop.format_price}}</span>
+            </ins>
+            <del>
+                <span>{{original_price|shop.format_price}}</span>        
+            </del>
+        </span>
+    {% else %}
+        <span class="item-price-nodiscount">{{original_price|shop.format_price}}</span>
+    {% endif %} 
+{% endmacro %}
+
+{% macro discount_percentage(subtotal, discount) %}
+    {{ discount( subtotal, (subtotal * ( 1 - discount)) ) }}
+{% endmacro %}

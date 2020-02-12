@@ -62,6 +62,71 @@
     text-decoration: none;
 }
 
+#photos .album-cover {
+    position: relative;
+}
+
+#photos .album-title-overlay {
+    position: absolute;
+    top: 60%;
+    right: 0;
+    left: 0;
+    background: rgba(0,0,0,0.5);
+    color: #f1f1f1;
+    padding: 0.35rem 0.35rem;            
+}
+
+#photos .album-social-overlay {
+    position: absolute;
+    top: 5px;
+    right: 10px;   
+    left: 10px;
+}
+
+#photos .album-social-overlay .pictures-number {
+    float: right;
+}
+
+#photos .album-social-overlay .pictures-share a {
+    color: #fff;
+}
+
+/* TODO: Remove album discount class*/
+#photos .album-discount del {
+    color: grey;
+    text-decoration: none;
+    position: relative;
+    margin-right: 1em;
+}
+
+#photos .album-discount del::before {
+    content: " ";
+    display: block;
+    width: 100%;
+    border-top: 2px solid rgba(255,0,0, 0.8);
+    height: 12px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    visibility: inherit;
+    transform: rotate(-7deg);
+}
+#photos .album-discount ins {
+    color: white;
+    font-weight: 400;
+    font-size: 1.2rem;
+    text-decoration: none;
+    padding-right: 0.5em;
+}
+
+#photos .card-cart-add {
+    word-spacing: 0.2em;
+}
+
+#photos .card-body {
+    padding: 1rem;
+}
+
 /* Page Navigation Section
 --------------------------------*/
 
@@ -87,16 +152,6 @@
 }
 */
 
-.popover {
-    /* It's kind of hacking. */
-    width: 400px !important;
-    left: -130px !important;    
-    max-width: 400px !important;
-}
-
-.popover-header {
-    text-align: center;
-}
 /*
 .popover-body {
     overflow-y: auto;
@@ -111,4 +166,167 @@ table.cart-table thead, tr, tbody, th, td {
 
 table.cart-table {
     margin-bottom: 5px !important;
+}
+
+.dropdown-menu {
+    top: 130%;
+    left: inherit;
+    right: 0;
+    width: 255px;
+}
+
+button.clear-item {
+    padding: 0.25rem 0.5rem !important;
+}
+
+button.clear-item-mini {
+    padding: 0.0rem 0.25rem !important;
+}
+
+#cart .cart-album-title {
+    white-space: nowrap;
+}
+
+#cart .cart-album-remark {
+    white-space: nowrap;
+    text-align: right;
+}
+
+#cart .cart-price {
+    white-space: nowrap;
+    text-align: left;
+}
+
+
+#cart {
+    padding-top: 50px;
+}
+
+#cart .cart-title {
+    padding-bottom: 20px;
+}
+
+#cart tr.cart-table-album {
+    cursor: pointer;
+    -webkit-user-select: none;
+    /* Chrome all / Safari all */
+    -moz-user-select: none;
+    /* Firefox all */
+    -ms-user-select: none;
+    /* IE 10+ */
+    user-select: none;
+    /* Likely future */
+}
+
+#cart .cart-album-title {
+    white-space: nowrap;
+}
+
+#cart .cart-album-remark {
+    white-space: nowrap;
+    text-align: right;
+}
+
+#cart .cart-price {
+    white-space: nowrap;
+    text-align: left;
+}
+
+#cart .cart-photo {
+    width: 70px;
+}
+
+#cart tr.cart-table-album td:last-of-type:after {
+    content: "\002b";
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    float: right;
+    color: #999;
+    text-align: center;
+    padding: 3px;
+    transition: transform .25s linear;
+    -webkit-transition: -webkit-transform .25s linear;
+}
+
+#cart tr.cart-table-album.active td:last-of-type:after {
+    content: "\2212";
+}
+
+#cart .btn-point-left {
+    margin-left: 50px;
+    width: 160px;
+}
+
+#cart .btn-point-left::before {
+    content: "<";
+}
+
+#cart .btn-point-right {
+    margin-right: 50px;
+    width: 160px;
+}
+
+#cart .btn-point-right::after {
+    content: ">";
+}
+/* TODO: Remove cart discount class*/
+#cart .cart-discount del {
+    /*color: rgba(255,0,0, 0.5);*/
+    text-decoration: none;
+    position: relative;
+}
+#cart .cart-discount del::before {
+    content: " ";
+    display: block;
+    width: 100%;
+    border-top: 4px solid rgba(255,0,0, 0.8);
+    height: 12px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    visibility: inherit;
+    transform: rotate(-7deg);
+} 
+#cart .cart-discount ins {
+    color: green;
+    text-decoration: none;
+    padding-right: 1em;
+}
+
+
+.item-price-discount del {
+    color: grey;
+    text-decoration: none;
+    position: relative;
+    margin-right: 1em;
+}
+.item-price-discount del::before {
+    content: " ";
+    display: block;
+    width: 100%;
+    border-top: 2px solid rgba(255,0,0, 0.8);
+    height: 12px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    visibility: inherit;
+    transform: rotate(-7deg);
+} 
+.item-price-discount ins {
+    color: white;
+    font-weight: 400;
+    font-size: 1.2rem;
+    text-decoration: none;
+    padding-right: 0.5em;
+}
+
+#cart .cart-toggle-element {
+    visibility: hidden;
 }
