@@ -16,7 +16,7 @@ flask-debugtoolbar
 flask-breadcrumbs
 flask-mm
 
-
+boto3
 sqlalchemy-mptt
 gunicorn
 sqlalchemy-utils
