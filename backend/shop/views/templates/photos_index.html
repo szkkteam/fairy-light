@@ -3,6 +3,21 @@
 {% import 'modules/breadcrumb_m.html' as breadcrumb_m with context %}
 {% import 'modules/cards.html' as card with context %}
 
+{% block head_meta %}
+    {{ super() }}
+    {% if facebook %}
+        <meta property="fb:app_id" content="{{facebook_app_id}}" />
+        <meta property="og:url" content="{{facebook.url}}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Fairy Light - Event Photography" />
+        <meta property="og:description" content="Check out our new pictures in {{facebook.title}}" />
+        <meta property="og:image" content="{{facebook.thumbnail}}" />
+        <meta property="og:image:width" content="253" />
+        <meta property="og:image:height" content="220" />
+    {% endif %}
+
+{% endblock %}
+
 {% block custom_css %}
     {{ super() }}
     <link href="{{ site_static.url(filename='site/css/shop/style.css') }}" rel="stylesheet">
@@ -173,6 +188,16 @@
 
     $(document).ready( function() {
 
+        window.fbAsyncInit = function() {
+            FB.init({
+            appId            : '{{facebook_app_id}}',
+            autoLogAppEvents : true,
+            xfbml            : true,
+            version          : 'v6.0'
+            });
+        };
+
+
         $('span.dropdown-content').shoppingCart({
             buyButton: '.cart-add',
             clearButton: '#shopping-cart-clear',
@@ -189,9 +214,12 @@
 
         $('.share-facebook').click(function(e) {
             e.preventDefault();
-            window.open($(this).attr('href'), 'fbShareWindow', 'height=450, width=550, top=' + ($(window).height() / 2 - 275) + ', left=' + ($(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
-            return false;
+            FB.ui({
+                method: 'share',
+                href: $(this).attr('href'),
+            }, function(response){});
         });
+       
 
         $('.album-detail').click(function(e) {
             //e.preventDefault();
@@ -231,6 +259,7 @@
     
     
     </script>
+    <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 {% endblock %}
 
 

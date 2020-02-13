@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 
 # Common Python library imports
+import os
+
 # Pip package imports
-from flask import render_template, request, url_for, redirect, abort
+from flask import render_template, request, url_for, current_app, abort
 
 from sqlalchemy import asc
 
@@ -69,6 +71,17 @@ def index_view(root=None):
     # TODO: There must be a better way, how to close the session cart
     try_close_cart()
 
+    # Get the parent category for social links
+    if root is not None:
+        parent = Category.get(root)
+        facebook = dict(
+            thumbnail=parent.get_thumbnail_path(),
+            title=parent.title,
+            url=url_for('shop.index_view', root=root, _external=True),
+        )
+    else:
+        facebook = None
+
     # Query the models at given level.
     data = Category.get_list_from_root(root, only_public=True).all()
 
@@ -92,6 +105,10 @@ def index_view(root=None):
                                current_url=breadcrumbs[-1]['url'] if len(breadcrumbs) > 0 else url_for('shop.index_view'),
                                previous_url=previous_url,
 
+                               # Social
+                               facebook=facebook,
+                               facebook_app_id=os.environ.get('FACEBOOK_APP_ID', ""),
+
                                # Shopping cart
                                cart_items=cart_items,
                                cart_num_of_items=cart_num_of_items,
@@ -106,6 +123,10 @@ def index_view(root=None):
                                breadcrumbs=breadcrumbs,
                                current_url=breadcrumbs[-1]['url'] if len(breadcrumbs) > 0 else url_for('shop.index_view'),
                                previous_url=previous_url,
+
+                               # Social
+                               facebook=facebook,
+                               facebook_app_id=os.environ.get('FACEBOOK_APP_ID', ""),
 
                                # Shopping cart
                                cart_items=cart_items,
@@ -126,7 +147,7 @@ def image_data(data, category_title=None):
             url_add_to_cart=url_for('shop.cart_item_api', item_id=element.id),
             url_image=url_for('shop.image_lightbox', photo_id=element.id, category=category_title),
             #url_image=element.get_path(),
-            url_facebook_share=url_for('shop.index_view', root=element.id, _external=True),
+            url_external=url_for('shop.index_view', root=element.category_id, _external=True),
         ))
     return list_data
 
@@ -168,7 +189,7 @@ def category_data(data):
             discounted_price=discounted_price,
             url_add_to_cart=url_add_to_cart,
             url_category=url_for('shop.index_view', root=element.id),
-            url_facebook_share=url_for('shop.index_view', root=element.id, _external=True),
+            url_external=url_for('shop.index_view', root=element.id, _external=True),
         ))
     return list_data
 

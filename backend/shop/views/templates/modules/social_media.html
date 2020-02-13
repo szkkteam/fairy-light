@@ -1,5 +1,5 @@
-{% macro facebook_share(title, page_url, thumbnail) %}
-    <a class="share-facebook" href="http:/www.facebook.com/sharer.php?s=100&amp;p[title]=<?php echo urlencode('{{title}}');?>&amp;p[summary]=<?php echo urlencode('Fairy Light - Event Photography') ?>&amp;p[url]=<?php echo urlencode('{{page_url}}'); ?>&amp;p[images][0]=<?php echo urlencode('{{thumbnail}}'); ?>" target="_blank">
+{% macro facebook_share(app_id, page_url) %}
+    <a class="share-facebook" href="https://www.facebook.com/dialog/share?app_id={{app_id}}&amp;display=popup&amp;href={{page_url | shop.urlencode}}&amp;redirect_uri={{page_url | shop.urlencode}}" target="_blank">
         <i class="fa fa-share-alt" aria-hidden="true"></i>
     </a>    
 {% endmacro %}

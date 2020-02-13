@@ -18,7 +18,7 @@
                     <span>{{element.num_of_images}}</span>                                
                 </div>
                 <div class="pull-right pictures-share">
-                    {{sharer.facebook_share(element.title, element.url_facebook_share, element.thumbnail)}}        
+                    {{sharer.facebook_share(facebook_app_id, element.url_external)}}    
                 </div>
             </div>
         </div>
@@ -51,7 +51,7 @@
             </a>                        
             <div class="album-social-overlay">
                 <div class="pull-right pictures-share">
-                    {{sharer.facebook_share('High definition image', element.url_facebook_share, element.thumbnail)}}    
+                    {{sharer.facebook_share(facebook_app_id, element.url_external)}}    
                 </div>
             </div>
         </div>
