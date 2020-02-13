@@ -49,7 +49,9 @@ def image_lightbox(photo_id):
     )
 
     return render_template('image_lightbox.html',
-                           data=data)
+                           data=data,
+                           current_url=url_for('shop.index_view', root=int(element.category_id))
+                           )
 
 
 @shop.route('/')
@@ -58,6 +60,12 @@ def index_view(root=None):
     # Calculate the breadcrumbs relative to the current view
     breadcrumbs = get_breadcrumbs(root)
 
+    if len(breadcrumbs) > 1:
+        previous_url = breadcrumbs[-2]['url']
+    elif len(breadcrumbs) == 1:
+        previous_url = url_for('shop.index_view')
+    else:
+        previous_url = None
     # TODO: There must be a better way, how to close the session cart
     try_close_cart()
 
@@ -82,6 +90,7 @@ def index_view(root=None):
                                # Navigation specific
                                breadcrumbs=breadcrumbs,
                                current_url=breadcrumbs[-1]['url'] if len(breadcrumbs) > 0 else url_for('shop.index_view'),
+                               previous_url=previous_url,
 
                                # Shopping cart
                                cart_items=cart_items,
@@ -96,6 +105,7 @@ def index_view(root=None):
                                # Navigation specific
                                breadcrumbs=breadcrumbs,
                                current_url=breadcrumbs[-1]['url'] if len(breadcrumbs) > 0 else url_for('shop.index_view'),
+                               previous_url=previous_url,
 
                                # Shopping cart
                                cart_items=cart_items,

@@ -237,7 +237,7 @@ button.clear-item-mini {
 }
 
 #cart tr.cart-table-album td:last-of-type:after {
-    content: "\002b";
+    content: "More \002b";
     position: relative;
     top: 1px;
     display: inline-block;
@@ -256,7 +256,7 @@ button.clear-item-mini {
 }
 
 #cart tr.cart-table-album.active td:last-of-type:after {
-    content: "\2212";
+    content: "Less \2212";
 }
 
 #cart .btn-point-left {
