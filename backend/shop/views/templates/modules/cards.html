@@ -1,7 +1,8 @@
 {% import 'website/static.html' as site_static with context %}
+{% import 'modules/social_media.html' as sharer with context %}
 
 {% macro album(element) %}
-    <div class="card text-center">
+    <div class="card text-center" style="position: relative;">
         <div class="album-cover">
             <a href="{{element.url_category}}">
                 <span>
@@ -17,9 +18,7 @@
                     <span>{{element.num_of_images}}</span>                                
                 </div>
                 <div class="pull-right pictures-share">
-                    <a class="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u={{element.url_facebook_share}}" target="_blank">
-                        <i class="fa fa-share-alt" aria-hidden="true"></i>
-                    </a>                                
+                    {{sharer.facebook_share(element.title, element.url_facebook_share, element.thumbnail)}}        
                 </div>
             </div>
         </div>
@@ -37,7 +36,7 @@
                     {% endif %}
                 </div>
                 <div class="mt-2">
-                    <a href="{{element.url_add_to_cart}}" class="btn btn-primary album-detail w-100" data-toggle="modal" data-target="#exampleModalLong">ADD TO CART</a>    
+                    <a href="{{element.url_add_to_cart}}" class="btn btn-primary album-detail w-100" data-toggle="modal" data-target="#exampleModalLong">ADD ALBUM TO CART</a>    
                 </div>                        
             </div>
         {% endif %}
@@ -52,9 +51,7 @@
             </a>                        
             <div class="album-social-overlay">
                 <div class="pull-right pictures-share">
-                    <a class="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u={{element.url_facebook_share}}" target="_blank">
-                        <i class="fa fa-share-alt" aria-hidden="true"></i>
-                    </a>                                
+                    {{sharer.facebook_share('High definition image', element.url_facebook_share, element.thumbnail)}}    
                 </div>
             </div>
         </div>
@@ -65,7 +62,7 @@
                 </ins>
             </div>
             <div class="mt-2">
-                <a href="{{element.url_add_to_cart}}" class="btn btn-primary cart-add w-100">ADD TO CART</a>    
+                <a href="{{element.url_add_to_cart}}" data-animate="true" class="btn btn-primary cart-add w-100">ADD TO CART</a>    
             </div>                        
         </div>
     </div>

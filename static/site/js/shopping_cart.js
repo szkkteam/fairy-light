@@ -17,16 +17,55 @@
         if (opts.buyButton) {
             $(document.body).on('click', opts.buyButton, function(e) {
                 /* Prevent default action if any */
+                var aElement = $(this);
+                const prevItemCount = Number($(opts.indicator).attr('data-val'));
+
                 e.preventDefault();
                 $.ajax({
                     type: 'POST',
                     url: $(this).attr('href'),
                     contentType: 'application/json;charset=UTF-8',
                     success: function (data) {
-                        /* Update the counter at the shopping cart. */
-                        updateItemsCounter(data.shopItems);
-                        /* Update the shopping cart details */
-                        loadCartData();
+                        const itemCount = data.shopItems;
+
+                        if (itemCount != prevItemCount) {
+                            /* If animate is defined */
+                            if (aElement.attr('data-animate') == 'true') {
+                                var el = aElement;
+                                var item = el.parent().parent().parent();
+                                img = item.find('img');
+                                
+                                const offset = $(opts.indicator).offset();                            
+                                cartTopOffset = offset.top - item.offset().top,
+                                cartLeftOffset = offset.left - item.offset().left;
+
+                                var flyingImg = $('<img class="b-flying-img">');
+                                flyingImg.attr('src', img.attr('src'));
+                                flyingImg.css('width', '200').css('height', '200');
+                                flyingImg.animate({
+                                    top: cartTopOffset,
+                                    left: cartLeftOffset,
+                                    width: 50,
+                                    height: 50,
+                                    opacity: 0.1
+                                }, 800, function () {
+                                    flyingImg.remove();
+                                    /* Update the counter at the shopping cart. */
+                                    updateItemsCounter(data.shopItems);
+                                });                             
+                                item.append(flyingImg);
+                            } else if (aElement.next('.alert').length > 0) {
+                                aElement.next('.alert').css('visibility', 'visible');    
+                                updateItemsCounter(data.shopItems);
+                            } else {
+                                if (itemCount != prevItemCount) {
+                                    /* Update the counter at the shopping cart. */
+                                    updateItemsCounter(data.shopItems);
+                                }
+                            }                                                                  
+                            /* Update the shopping cart details */
+                            loadCartData();
+                        }                        
                     },
                     error: function (data) {
                         console.log(data.responseJSON);
@@ -76,7 +115,18 @@
 
         function updateItemsCounter(numOfItems) {
             if (opts.indicator) {
-                $(opts.indicator).html(numOfItems);
+
+
+                var el = $(opts.indicator);
+                el.animate({
+                    backgroundColor: "rgba(255,0,0,1)",
+                  }, 200, function () {
+                    $(opts.indicator).html(numOfItems);
+                    $(opts.indicator).attr('data-val', numOfItems);
+                  }).animate({
+                    backgroundColor: "rgba(255,0,0,0)",
+                  }, 400);                             
+                  
             }
             
         };

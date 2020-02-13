@@ -16,6 +16,18 @@
            margin-bottom: 50px;
        }
        
+       button.mfp-close {
+           color:white !important;
+           font-size: 50px;
+           right: 17px;
+           top: 5px;
+       }
+
+        .mfp-gallery .mfp-first .mfp-arrow-left, 
+        .mfp-gallery .mfp-last .mfp-arrow-right {
+            visibility: hidden;
+        }
+
     </style>
 
 {% endblock %}
@@ -35,6 +47,7 @@
 
     <script>
         $(document).ready(function() {
+
             $('.popup-parent').magnificPopup({
                 delegate: 'a.popup-item',
                 type:'ajax',
@@ -61,8 +74,39 @@
                 },
                 callbacks: {
                     lazyLoad: function(item) {
-                        console.log(item); // Magnific Popup data object that should be loaded
-                    }
+                        //console.log(item); // Magnific Popup data object that should be loaded
+                    },
+                    open: function() {
+                        var mfp = jQuery.magnificPopup.instance;
+
+                        // hide image nav when first/last
+                        if(mfp.index >= mfp.items.length - 1) {
+                            $(".mfp-container").addClass("mfp-last");
+                        } else {;
+                            $(".mfp-last").removeClass("mfp-last");
+                        }
+                        if(mfp.index == 0) {
+                            $(".mfp-container").addClass("mfp-first");
+                        } else {;
+                            $(".mfp-first").removeClass("mfp-first");
+                        }
+                    },
+                    change: function(){
+                        var mfp = jQuery.magnificPopup.instance;
+
+                        // hide image nav when first/last
+                        if(mfp.index >= mfp.items.length - 1) {
+                            $(".mfp-container").addClass("mfp-last");
+                        } else {;
+                            $(".mfp-last").removeClass("mfp-last");
+                        }
+                        if(mfp.index == 0) {
+                            $(".mfp-container").addClass("mfp-first");
+                        } else {;
+                            $(".mfp-first").removeClass("mfp-first");
+                        }
+
+                    }, //change
                 },
             });
         });
