@@ -1,0 +1,83 @@
+{% extends 'website/layout.html' %}
+{% import 'modules/sections.html' as section with context %}
+{% import 'modules/services.html' as services with context %}
+
+{% block custom_css %}
+    {{ super() }}
+    <link href="{{ site_static.url(filename='site/css/index/style.css') }}" rel="stylesheet">
+
+    <style>
+        #services .tab-menu a.active,
+        #services .tab-content {
+            background-color: #303030;
+        }
+
+        #services .tab-menu a {
+            padding-left: 10px;
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
+
+        #services .tab-menu a h4 {
+            margin-bottom: 0px;
+        }   
+
+        #services .tab-menu a:hover {
+            background-color: #606060;
+            text-decoration: none;
+        }
+
+        #services .tab-content>div {
+            padding: 20px;
+        }
+    
+    </style>
+
+{% endblock %}
+
+{% block main_block %}
+    <section id="title">
+        <div class="container my-5">
+            {{ section.header('Our Services', 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium') }}
+        </div>
+    </section>
+    <section id="services">
+        <div class="container">
+            <div class="row no-gutters tab-container">
+                <div class="col-2">
+                    <div class="nav flex-column nav-pills tab-menu" id="service-tab" role="tablist" aria-orientation="vertical">
+                        {{ services.tab_item('service-service1', 'Event', is_active=True) }}
+                        {{ services.tab_item('service-service2', 'Wedding') }}
+                        {{ services.tab_item('service-service3', 'Video Clip') }}
+                        {{ services.tab_item('service-service4', 'Portfolio') }}
+                    </div>
+                </div>
+                <div class="col-10">
+                    <div class="tab-content" id="service-tab-content">
+                        {% call services.tab_content('service-service1', is_active=True) %}
+                            {% include 'contents/service_event.html' %}
+                        {% endcall %}
+                        {% call services.tab_content('service-service2') %}
+                            {% include 'contents/service_event.html' %}
+                        {% endcall %}
+                        {% call services.tab_content('service-service3') %}
+                            {% include 'contents/service_event.html' %}
+                        {% endcall %}
+                        {% call services.tab_content('service-service4') %}
+                            {% include 'contents/service_event.html' %}
+                        {% endcall %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="contact">
+        <div class="container">
+            {% call section.header('Contact us', 'We are happy to answer your questions.') %}
+                <div class="text-center">
+                    <a href="{{url_for('site.index')}}#contact" class="btn btn-primary w-25" >Write Now!</a>
+                </div>    
+            {% endcall %}
+        </div>
+    </section>
+{% endblock %}

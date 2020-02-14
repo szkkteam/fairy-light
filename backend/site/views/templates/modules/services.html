@@ -13,3 +13,21 @@
     </p>
 </div>
 {% endmacro %}
+
+{% macro tab_item(id, title, is_active=False) %}
+    <a class="tab-group-item {{'active' if is_active else ''}}" id="{{id}}-tab" data-toggle="pill" href="#{{id}}" role="tab" aria-controls="{{id}}" aria-selected="true">
+        <h4>
+            {{title}}
+        </h4>
+    </a>   
+{% endmacro %}
+
+{% macro tab_content(id, text=None,is_active=False) %}
+    <div class="tab-pane fade {{'show active' if is_active else ''}}" id="{{id}}" role="tabpanel" aria-labelledby="{{id}}-tab">
+        {% if text %}
+            {{text}}
+        {% else %}
+            {{caller()}}
+        {% endif %}
+    </div>
+{% endmacro %}
