@@ -1,0 +1,61 @@
+{% macro filter(title, filter, is_active=False) %}
+    <li class="{{ 'filter-active' if is_active else ''}}" data-filter="{{filter}}">
+        {{title}}
+    </li>
+{% endmacro %}
+
+{% macro details_link(link='#') %}
+    <a href="{{link}}" title="More Details">
+        <i class="fa fa-link"></i>
+    </a>
+{% endmacro %}
+
+{% macro image_link(image, gallery, title=None) %}
+    <a class="venobox" data-gall="{{gallery}}" href="{{image}}" title="{{title if title else ''}}">
+        <i class="fa fa-plus-circle"></i>
+    </a>   
+{% endmacro %}
+
+{% macro video_link(video, gallery, title=None) %}
+    <a class="venobox" data-gall="{{gallery}}" data-vbtype="video" data-autoplay="true" href="{{video}}" title="{{title if title else ''}}">
+        <i class="fa fa-plus-circle"></i>
+    </a>                    
+{% endmacro %}
+
+{% macro item(thumbnail, filter, title=None, desc=None) %}
+    <div class="col-lg-3 col-md-6 portfolio-item {{filter}}">
+        <div class="portfolio-wrap">
+            <img src="{{thumbnail}}" alt="{{desc|lower if desc else ''}}" class="img-fluid">
+            <div class="portfolio-links">
+                {{ caller() }}
+            </div>                      
+            <div class="portfolio-info">
+                {% if title %}
+                    <h4>
+                        {{title}}
+                    </h4>
+                {% endif %}
+                {% if desc %}
+                    <p>
+                        {{desc}}
+                    </p>
+                {% endif %}
+            </div>                            
+        </div>
+    </div>
+{% endmacro %}
+
+
+{% macro image(image, filter, title=None, desc=None, gallery='photos') %}
+    {% call item(image, filter, title, desc) %}
+        {{ image_link(image, gallery, title) }}
+        {{ details_link() }}            
+    {% endcall %}    
+{% endmacro %}
+
+{% macro youtube(thumbnail, video, filter, title=None, desc=None, gallery='videos') %}
+    {% call item(thumbnail, filter, title, desc) %}
+        {{ video_link(video, gallery, title) }}
+        {{ details_link() }}            
+    {% endcall %}    
+{% endmacro %}

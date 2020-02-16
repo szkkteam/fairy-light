@@ -6,3 +6,6 @@
 # Internal package imports
 from .blueprint import site
 from .index import index
+from .services import services
+from .about import about
+from .portfolio import portfolio

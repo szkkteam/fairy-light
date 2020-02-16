@@ -1,13 +1,18 @@
-{% macro header(title, text) %}
+{% macro header(title, text=None) %}
     <div class="row">
         <div class="col-12">
             <h1 class="section-title">{{title}}</h1>
             <div class="section-title-divider">
                 <hr/>
             </div>
-            <p class="section-description">
-                {{text}}
-            </p>
+            {% if text %}
+                <p class="section-description">
+                    {{text}}
+                </p>
+            {% endif %}      
+            {% if caller %}                      
+                {{caller()}}
+            {% endif %}
         </div>
     </div>
 {% endmacro %}

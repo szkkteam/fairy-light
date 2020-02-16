@@ -1,0 +1,77 @@
+{% extends 'website/layout.html' %}
+{% import 'modules/sections.html' as section with context %}
+{% import 'modules/services.html' as services with context %}
+
+{% block custom_css %}
+    {{ super() }}
+    <link href="{{ site_static.url(filename='site/css/index/style.css') }}" rel="stylesheet">
+
+    <style>
+       
+    </style>
+
+{% endblock %}
+
+{% block main_block %}
+    <section id="title">
+        <div class="container mt-5">
+            {{ section.header('About us', 'Friends in life, partners in photography.') }}
+        </div>
+    </section>
+    <section id="details">
+        <div class="container my-5">
+            <div class="row">
+                <div class="col">
+                    <p>
+                        We love to work together, especially when it’s about photography. That’s why we made a decision, and started a new project- Event photography with immediately printed pictures. This service is extremely comfortable for our customers. They get the finished, printed pictures without waiting, right there at the spot and of course the pics are available in digital format also.  Precise and fast work, beautiful results. Two enthusiastic photographers, one event, several high quality printed pictures, satisfied guests and lots of fun! 
+                    </p>
+                    <div class="clear-fix">
+                        <div class="pull-right" >
+                            <img class=""  src="http://placehold.it/400x300">    
+                            <figcaption class="figure-caption" >Anna and Eszti, @apacheforestphotography @sztiphoto</figcaption>
+                        </div>                                                        
+                    </div>
+                    <p>
+                        We are happy to go to:
+                    </p>
+                    <ul>
+                        <li>
+                            Private or company events
+                        </li>
+                        <li>
+                            Family Events
+                        </li>
+                        <li>
+                            Weddings
+                        </li>
+                        <li>
+                            City or school events
+                        </li>
+                        <li>
+                            Sport and hobby events
+                        </li>
+                        <li>
+                            Animal themed events
+                        </li>
+                    </ul>
+
+                    <p>
+                        Always looking for new opportunities!
+                    </p>
+                    <p>
+                        Can’t wait to work together, and add some extra fun to the everyday-life.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="contact">
+        <div class="container">
+            {% call section.header('Are you interested?', 'We are happy to answer your questions.') %}
+                <div class="text-center">
+                    <a href="{{url_for('site.index')}}#contact" class="btn btn-primary w-25" >Write Now!</a>
+                </div>    
+            {% endcall %}
+        </div>
+    </section>
+{% endblock %}

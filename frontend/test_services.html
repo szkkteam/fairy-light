@@ -22,17 +22,29 @@
     <link rel="stylesheet" href="media_queries.css"> 
 
     <style>
-		
-        /* Use with caution, it has a really strange effect when resizing the browser. */
-		.test-resp-font h4 {
-			font-size: calc(7px + (26 - 7) * ((100vw - 300px) / (1600 - 300)));
-			line-height: calc(1.3em + (1.5 - 1.2) * ((100vw - 300px)/(1600 - 300)));
-		}
-		.test-resp-font p {
-			font-size: calc(4px + (16 - 4) * ((100vw - 300px) / (1600 - 300)));
-			line-height: calc(1.3em + (1.5 - 1.2) * ((100vw - 300px)/(1600 - 300)));				
-		}
-			
+        #services .tab-menu a.active,
+        #services .tab-content {
+            background-color: #303030;
+        }
+
+        #services .tab-menu a {
+            padding-left: 10px;
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
+
+        #services .tab-menu a h4 {
+            margin-bottom: 0px;
+        }   
+
+        #services .tab-menu a:hover {
+            background-color: #606060;
+            text-decoration: none;
+        }
+
+        #services .tab-content>div {
+            padding: 20px;
+        }
 
     </style>
 </head>
@@ -71,9 +83,84 @@
         </div>  
     </div>
     <main id="main">
-        <section>
-		
-		</section>
+        <section id="title">
+            <div class="container">
+                <div class="row my-5">
+                    <div class="col-12">
+                        <h1 class="section-title">Our Services</h1>
+                        <div class="section-title-divider">
+                            <hr/>
+                        </div>
+                        <p class="section-description">
+                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="services">
+            <div class="container">
+                <div class="row no-gutters tab-container">
+                    <div class="col-2">
+                        <div class="nav flex-column nav-pills tab-menu" id="service-tab" role="tablist" aria-orientation="vertical">
+                            <a class="tab-group-item active" id="service-service1-tab" data-toggle="pill" href="#service-service1" role="tab" aria-controls="service-service1" aria-selected="true">
+                                <h4>
+                                    Event
+                                </h4>
+                            </a>                                
+                            <a class="tab-group-item" id="service-service2-tab" data-toggle="pill" href="#service-service2" role="tab" aria-controls="service-service2" aria-selected="false">
+                                <h4>
+                                    Wedding
+                                </h4>
+                            </a>
+                            <a class="tab-group-item" id="service-service3-tab" data-toggle="pill" href="#service-service3" role="tab" aria-controls="service-service3" aria-selected="false">
+                                <h4>
+                                    Video Clip
+                                </h4>
+                            </a>
+                            <a class="tab-group-item" id="service-service4-tab" data-toggle="pill" href="#service-service4" role="tab" aria-controls="service-service4" aria-selected="false">
+                                <h4>
+                                    Portfolio
+                                </h4>
+                            </a>    
+                        </div>
+                    </div>
+                    <div class="col-10">
+                        <div class="tab-content" id="service-tab-content">
+                            
+                            <div class="tab-pane fade show active" id="service-service1" role="tabpanel" aria-labelledby="service-service1-tab">
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Gravida arcu ac tortor dignissim convallis aenean. In tellus integer feugiat scelerisque. Sit amet nulla facilisi morbi. Porttitor lacus luctus accumsan tortor posuere ac ut consequat. Vitae congue eu consequat ac felis. Vitae suscipit tellus mauris a diam maecenas. Gravida arcu ac tortor dignissim convallis aenean. Etiam tempor orci eu lobortis elementum nibh tellus molestie nunc. Quis auctor elit sed vulputate mi sit amet mauris commodo. In arcu cursus euismod quis viverra nibh cras pulvinar.
+                                </p><p>
+                                    Imperdiet nulla malesuada pellentesque elit eget gravida cum sociis natoque. Id velit ut tortor pretium viverra suspendisse potenti nullam. Rhoncus mattis rhoncus urna neque viverra justo nec. Vulputate mi sit amet mauris commodo quis imperdiet massa tincidunt. Pretium aenean pharetra magna ac placerat. Lobortis feugiat vivamus at augue eget arcu. Mauris ultrices eros in cursus turpis massa tincidunt. Nascetur ridiculus mus mauris vitae ultricies leo integer. Ultrices sagittis orci a scelerisque purus semper eget. Sed risus pretium quam vulputate dignissim suspendisse. Massa tincidunt nunc pulvinar sapien et ligula. Rutrum quisque non tellus orci.
+                                </p>
+                            </div>
+                            <div class="tab-pane fade" id="service-service2" role="tabpanel" aria-labelledby="service-service2-tab">
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pharetra pharetra massa massa ultricies mi. Nam libero justo laoreet sit amet cursus sit amet. Nam libero justo laoreet sit amet cursus sit. Libero volutpat sed cras ornare. Neque ornare aenean euismod elementum nisi quis eleifend. Nisl vel pretium lectus quam id leo in vitae. Vitae et leo duis ut diam quam nulla porttitor. Orci ac auctor augue mauris augue. Dui vivamus arcu felis bibendum ut tristique et egestas quis. Sed enim ut sem viverra aliquet. Sollicitudin nibh sit amet commodo. Facilisis leo vel fringilla est ullamcorper eget nulla. Egestas dui id ornare arcu odio ut sem nulla. At erat pellentesque adipiscing commodo elit. Quam pellentesque nec nam aliquam sem et tortor consequat id. Augue interdum velit euismod in pellentesque massa.
+                                </p><p>
+                                    Dictum fusce ut placerat orci nulla pellentesque dignissim enim. Vestibulum mattis ullamcorper velit sed. Tortor aliquam nulla facilisi cras fermentum odio eu feugiat. In arcu cursus euismod quis viverra. Sagittis orci a scelerisque purus semper. In hendrerit gravida rutrum quisque non tellus. Erat imperdiet sed euismod nisi. Morbi quis commodo odio aenean sed adipiscing diam donec adipiscing. Ut tortor pretium viverra suspendisse. Hendrerit gravida rutrum quisque non tellus orci ac auctor. Quam nulla porttitor massa id neque aliquam vestibulum. Mattis enim ut tellus elementum sagittis. Interdum varius sit amet mattis vulputate enim nulla aliquet porttitor. Pulvinar pellentesque habitant morbi tristique senectus. Aliquam id diam maecenas ultricies mi eget mauris pharetra. Et leo duis ut diam. Nisl condimentum id venenatis a condimentum vitae sapien pellentesque habitant. Lectus nulla at volutpat diam ut. Pharetra pharetra massa massa ultricies. Aliquam nulla facilisi cras fermentum odio eu feugiat pretium.
+                                </p>
+                            </div>
+                            <div class="tab-pane fade" id="service-service3" role="tabpanel" aria-labelledby="service-service3-tab">
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Interdum varius sit amet mattis vulputate enim nulla aliquet. Id diam vel quam elementum pulvinar etiam non. Adipiscing enim eu turpis egestas pretium aenean pharetra. Quam viverra orci sagittis eu volutpat odio facilisis. Sem integer vitae justo eget magna. Sed velit dignissim sodales ut eu sem integer vitae justo. Mauris commodo quis imperdiet massa tincidunt nunc. Justo laoreet sit amet cursus sit amet dictum sit. Tortor consequat id porta nibh venenatis cras. Varius sit amet mattis vulputate enim nulla aliquet porttitor lacus. Nec feugiat nisl pretium fusce id velit. Curabitur vitae nunc sed velit dignissim sodales. Sit amet volutpat consequat mauris nunc congue nisi vitae suscipit. Molestie nunc non blandit massa enim nec dui. Urna porttitor rhoncus dolor purus non enim praesent. Non enim praesent elementum facilisis leo vel. Fames ac turpis egestas sed tempus urna.
+                                </p><p>
+                                    Et malesuada fames ac turpis egestas maecenas pharetra. Duis at tellus at urna. Id faucibus nisl tincidunt eget nullam non nisi. Lobortis elementum nibh tellus molestie nunc non blandit massa. Sed cras ornare arcu dui vivamus arcu felis. Cursus turpis massa tincidunt dui ut ornare lectus sit amet. Enim nec dui nunc mattis enim. Adipiscing enim eu turpis egestas pretium. Amet purus gravida quis blandit turpis cursus in hac habitasse. Nunc mattis enim ut tellus. Pellentesque id nibh tortor id aliquet. Libero enim sed faucibus turpis. Fusce ut placerat orci nulla. Odio ut enim blandit volutpat maecenas volutpat blandit. In est ante in nibh mauris cursus mattis molestie a. Semper risus in hendrerit gravida rutrum quisque. Venenatis urna cursus eget nunc scelerisque viverra mauris in aliquam. Eu sem integer vitae justo eget magna. In mollis nunc sed id semper risus in.
+                                </p>
+                            </div>
+                            <div class="tab-pane fade" id="service-service4" role="tabpanel" aria-labelledby="service-service4-tab">
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Diam donec adipiscing tristique risus. Massa tincidunt nunc pulvinar sapien et ligula ullamcorper malesuada. Netus et malesuada fames ac turpis egestas maecenas pharetra convallis. Consequat mauris nunc congue nisi vitae suscipit tellus. Eu tincidunt tortor aliquam nulla facilisi cras fermentum odio eu. Venenatis urna cursus eget nunc scelerisque viverra mauris. Aliquam id diam maecenas ultricies mi eget mauris pharetra et. Ut tortor pretium viverra suspendisse potenti nullam ac. Facilisis mauris sit amet massa vitae tortor. Pretium aenean pharetra magna ac placerat vestibulum lectus. Orci dapibus ultrices in iaculis.
+                                </p><p>
+                                    Laoreet suspendisse interdum consectetur libero id faucibus nisl. Tincidunt arcu non sodales neque sodales ut etiam sit amet. Tincidunt praesent semper feugiat nibh sed pulvinar proin gravida hendrerit. Vestibulum sed arcu non odio euismod lacinia at quis risus. Id venenatis a condimentum vitae sapien pellentesque habitant. Ridiculus mus mauris vitae ultricies. In dictum non consectetur a erat nam at lectus. Amet volutpat consequat mauris nunc congue nisi vitae suscipit tellus. Adipiscing elit duis tristique sollicitudin nibh sit amet commodo. Ac tincidunt vitae semper quis lectus nulla at. Praesent elementum facilisis leo vel fringilla est ullamcorper eget.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
     <footer id="footer">
         <div class="footer-top">
@@ -168,5 +255,25 @@
         </div>
     </footer>
     <!-- For the footer: https://bootstrapmade.com/demo/TheEvent/ or https://bootstrapmade.com/demo/BizPage/ -->
+
+    <script>
+    // Show appropriate pill based on #anchor in URL    
+    const anchor = window.location.hash;
+    if (anchor) {
+        $(`a[href="${anchor}"]`).tab('show')
+    }
+    
+
+    $(document).ready(function() {
+        $("div.bhoechie-tab-menu>div.list-group>a").click(function(e) {
+            e.preventDefault();
+            $(this).siblings('a.active').removeClass("active");
+            $(this).addClass("active");
+            var index = $(this).index();
+            $("div.bhoechie-tab>div.bhoechie-tab-content").removeClass("active");
+            $("div.bhoechie-tab>div.bhoechie-tab-content").eq(index).addClass("active");
+        });
+    });
+    </script>
 </body>
 </html>
