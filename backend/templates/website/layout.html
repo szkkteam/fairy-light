@@ -21,11 +21,12 @@
 	{% endblock %}	
 	{% block header_block %}
 		{% call navigation.navbar() %}
-			{{ nav_link('site.index', 'Home'|upper) }}
-			{{ nav_link('shop.index_view', 'Photos'|upper) }}
-			{{ nav_link('site.services', 'Services'|upper) }}
-			{{ nav_link('site.index', 'About'|upper) }}
-			{{ nav_link('site.index', 'Contact'|upper) }}
+			{{ nav_link(url_for('site.index'), 'Home'|upper) }}
+			{{ nav_link(url_for('shop.index_view'), 'Photos'|upper) }}
+			{{ nav_link(url_for('site.services'), 'Services'|upper) }}
+			{{ nav_link(url_for('site.about'), 'About'|upper) }}
+			{{ nav_link(url_for('site.portfolio'), 'Portfolio'|upper) }}
+			{{ nav_link(url_for('site.index') + '#contact', 'Contact'|upper) }}
 			{% block header_nav_element_block %}
 
 			{% endblock %}

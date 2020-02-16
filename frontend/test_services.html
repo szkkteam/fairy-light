@@ -257,6 +257,13 @@
     <!-- For the footer: https://bootstrapmade.com/demo/TheEvent/ or https://bootstrapmade.com/demo/BizPage/ -->
 
     <script>
+    // Show appropriate pill based on #anchor in URL    
+    const anchor = window.location.hash;
+    if (anchor) {
+        $(`a[href="${anchor}"]`).tab('show')
+    }
+    
+
     $(document).ready(function() {
         $("div.bhoechie-tab-menu>div.list-group>a").click(function(e) {
             e.preventDefault();

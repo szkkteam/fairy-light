@@ -81,3 +81,15 @@
         </div>
     </section>
 {% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    
+    <script>
+    // Show appropriate pill based on #anchor in URL    
+    const anchor = window.location.hash;
+    if (anchor) {
+        $(`a[href="${anchor}"]`).tab('show')
+    }
+    </script>
+{% endblock %}

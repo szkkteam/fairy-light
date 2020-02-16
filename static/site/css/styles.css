@@ -217,6 +217,11 @@ ul.nav-link-icon li:last-child {
     color: #fff;
 }
 
+#contact .map {
+    width: 80%;
+    /*margin-bottom: 40px; */
+}
+
 #contact .form #sendmessage {
     color: #fff;
     border: 1px solid #333;

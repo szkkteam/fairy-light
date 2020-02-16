@@ -1,8 +1,8 @@
-{% macro item(service_img, title, text) %}
+{% macro item(img, title, text, link='#') %}
 <div class="col-md-4 service-item">
     <div class="service-pic">
-        <a href="#album">
-            <img class="rounded-circle" src="{{service_img}}">
+        <a href="{{link}}">
+            <img class="rounded-circle" src="{{img}}">
         </a>
     </div>
     <h3 class="service-title">

@@ -4,14 +4,14 @@
 	</li>			
 {% endmacro %}
 
-{% macro nav_link(endpoint, name) -%}
-    {% if request.endpoint.endswith(endpoint) %}
+{% macro nav_link(url, name) -%}
+    {% if request.endpoint.endswith(url) %}
 		<li class="nav-item active">
-			<a class="nav-link d-inline-block" href="{{ url_for(endpoint) }}">{{name}}</a>
+			<a class="nav-link d-inline-block" href="{{url}}">{{name}}</a>
 		</li>
     {% else %}
 		<li class="nav-item">
-			<a class="nav-link d-inline-block" href="{{ url_for(endpoint) }}">{{name}}</a>
+			<a class="nav-link d-inline-block" href="{{url}}">{{name}}</a>
 		</li>
 	{% endif %}
 	{{ separator() }}
