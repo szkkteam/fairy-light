@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css"> from: https://bootswatch.com/darkly/#top -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollToFixed/1.0.8/jquery-scrolltofixed-min.js"></script>
+    
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="animations.css"> 
+    <link rel="stylesheet" href="styles.css"> 
+    <!-- Must be always at the end. Don't decalre inline responsive styles. -->
+    <link rel="stylesheet" href="media_queries.css"> 
+
+    <style>
+        /* Header Styles
+---------------------------------*/
+
+
+        .header{
+            text-align:center;
+            background:url(../img/pw_maze_black_2X.png) left top repeat;
+            padding:280px 0;
+        }
+        .logo{
+            width:130px;
+            margin:0 auto 35px;
+        }
+        .header h1{
+            font-family: 'Montserrat',sans-serif;
+            font-size:50px;
+            font-weight:400;
+            letter-spacing: -1px;
+            margin:0 0 22px 0 ;
+            color:#fff;
+        }
+
+        .we-create{
+            padding:0;
+            margin:35px 0 55px;
+        }
+        .wp-pic{
+            margin-bottom:20px;
+        }
+        .we-create li{
+            display:inline-block;
+            font-family: 'Montserrat',sans-serif;
+            font-size:14px;
+            color: #bcbcbc;
+            text-transform: uppercase;
+            font-weight: 400;
+            margin:0 5px 0 0;
+            padding:0 0 0 15px;
+        }
+        .we-create li:first-child{
+            background:none;
+        }
+
+        .start-button {
+            padding-left: 0px;
+        }
+
+        .start-button li a{
+        color: #fff;
+        }
+
+
+        .link{
+            padding:15px 35px;
+            background:#7cc576;
+            color:#fff !important;
+            font-size:16px;
+            font-weight:400;
+            font-family: 'Montserrat', sans-serif;
+            display:inline-block;
+            border-radius:3px;
+            text-transform:uppercase;
+            line-height:25px;
+            margin-bottom:20px;
+            transition:all 0.3s ease-in-out;
+            -moz-transition:all 0.3s ease-in-out;
+            -webkit-transition:all 0.3s ease-in-out;
+        }
+        .link:hover {
+            text-decoration:none;
+            color:#7cc576 !important;
+            background:#fff;
+        }
+
+        .link:active, .link:focus {
+            background: #7cc576;
+            text-decoration:none;
+            color:#fff !important;
+        }
+
+        /* Navigation
+        ---------------------------------*/
+        .main-nav-outer{
+            padding:0px;
+            border-bottom:1px solid #dddddd;
+            box-shadow:0 4px 5px -3px #ececec;
+            position:relative;
+            background:#fff;
+        }
+        .main-nav{
+            text-align:center;
+            margin:10px 0 0px;
+            padding:0;
+            list-style:none;
+        }
+        .main-nav li{
+            display:inline;
+            margin:0 1px;
+        }
+        .main-nav li a{
+            display:inline-block;
+            color:#222222;
+            text-transform:uppercase;
+            font-family: 'Montserrat', sans-serif;
+            text-decoration: none;
+            line-height:20px;
+            margin:17px 32px;
+            transition:all 0.3s ease-in-out;
+            -moz-transition:all 0.3s ease-in-out;
+            -webkit-transition:all 0.3s ease-in-out;
+        }
+
+        .main-nav li a:hover{ 
+            text-decoration:none;
+            color: #7cc576;
+        }
+
+        .small-logo{ 
+            padding:0 32px;
+        }
+
+
+        .main-section{
+            padding:90px 0 110px;
+        }
+
+        .res-nav_click {
+            line-height:38px;
+            font-family: 'FontAwesome';
+            font-size:38px;
+            text-decoration: none !important;
+            color:#777777;
+            font-style:normal;
+            display:none;
+            width:42px;
+            height:27px;
+            margin-top: 15px;
+            margin-bottom: 25px;
+            float: right;
+            transition:all 0.3s ease-in-out;
+            -moz-transition:all 0.3s ease-in-out;
+            -webkit-transition:all 0.3s ease-in-out;
+        }
+
+        .res-nav_click:hover, .res-nav_click:active, .res-nav_click:focus {
+            color: #7cc576 !important;
+        }
+
+        .portfolioContainer{
+            max-width: 1140px;
+        }
+
+            
+    @media only screen and (min-width: 992px) {
+        /****Ipad Landscape 1024 Container 970 ****/
+
+        .service-list{ margin-bottom:30px;}
+        .c-logo-part ul li{ margin:0 15px;}
+        .form{ margin:0 0 0 20px}
+        .main-nav{ display:block !important; }
+        /*.portfolioContainer{ width:800px; margin:0px auto !important; } */
+
+    }
+
+    @media only screen and (min-width: 768px) and (max-width: 991px) {
+        /****Ipad Portrait 768 Container 750 ****/
+        body{ font-size:13px;}
+        p{ line-height:20px ;}
+        .header h1{ font-size:46px;}
+        .main-nav ul li a{ padding:14px;}
+        .small-logo{ padding:0 20px;}
+        h2{ font-size:30px}
+        h6{ font-size:16px;}
+        h3{ font-size:15px;}
+        .service-list{ margin-bottom:20px; font-size:15px;}
+        .featured-work p.padding-b{ padding-bottom:15px;}
+        .main-section{ padding:70px 0;}
+        .c-logo-part ul li{ margin:0 1%; float:left; width:18%;}
+        .c-logo-part ul li a{ display:block;}
+        .c-logo-part ul li a img{ display:block;}
+        .form{ margin:0;}
+        .contact-info-box{ margin:0 ;}
+        .social-link{ margin:0;}
+
+        .main-nav{ display:block !important; }
+        .main-nav li a{ padding:8px 15px;}
+        /*.portfolioContainer{ width:750px; margin:0px auto !important; }
+        .Portfolio-box{ height:250px;}*/
+
+
+
+    }
+
+    @media only screen and (max-width: 767px) {
+        /****Mobile Landscape 480 Container 100% ****/
+        body{ font-size:12px;}
+        h2{ font-size:26px;}
+        h3{ font-size:14px;}
+        h6{ font-size:16px; margin-bottom:40px;}
+        p{ line-height:18px;}
+        .service-list{ font-size:12px; margin-bottom:20px;}
+        .we-create li{ font-size:13px; padding:0 0 0 8px}
+        .header h1{ font-size:28px;}
+        .header{ padding:60px 0;}
+        .main-section{ padding:60px 0 70px;}
+        .main-nav{ display:none; position:absolute; left:0; width:100%; top:68px; margin:0 auto; float: none; background:#fff; z-index: 99; border-top: 1px solid #eee;}
+        .main-nav li{ display:block;}
+        .main-nav li.small-logo{ display:none;}
+        .main-nav li a{ display:block; padding:12px 32px; margin: 4px 0; border-bottom: 1px solid #f3f3f3;;}
+        .main-nav li a:hover{color:#7cc576}
+        .team-leader-box{ max-width:307px; width:auto; float:none; margin:0 auto;	}
+        .team-leader-box:nth-of-type(3n){ margin:0 auto}
+        .res-nav_click{ display:block;}
+        .featured-work{ font-size:12px; margin-top:30px;}
+        .featured-box{ font-size:12px;}
+        .featured-box p{ line-height:18px; }
+        .c-logo-part ul a{ margin-bottom:5px;}
+        .main-section.team{ padding:60px 0 50px;}
+        .business-talking h2{ font-size:36px;}
+        .contact-info-box{ margin:0 0 12px 30px; font-size:12px;}
+        .contact-info-box span{ line-height:18px;}
+        .contact-info-box.phone span, .contact-info-box.email span { padding-top: 6px;}
+        .social-link{ margin-left:30px;}
+        .form{ margin:0 30px;}
+        .copyright{ font-size:12px;}
+        .business-talking a{ padding:10px 25px; font-size:14px;}
+        .main-section.contact{ padding:60px 0 70px}
+        .client-part-haead{ font-size:20px; line-height:30px;}
+        .link{ font-size:14px; padding:10px 25px;}
+        .logo{ width:100px;}
+        .main-section.contact{ background-size:contain;}
+        .Portfolio-nav li a{ padding:5px 16px;}
+        .Portfolio-nav li{ display:block;}
+        /*.isotope-item img{ width:300px; left:50%; margin-left:-100px;}
+        .isotope-item{ width:300px; margin:0px auto;}
+        .isotope{ width:400px; margin:0px auto;}
+        .Portfolio-box{}
+        .portfolioContainer{ width:350px; margin:0px auto !important; } */
+
+
+    }
+
+    @media only screen and (max-width: 479px) {
+        /****Mobile Portrait 320 ****/
+        .contact-info-box{ margin-left:0px;}
+        .header{ padding:40px;}
+        .social-link{ margin-left:0px;}
+        .form{ margin:0}
+        .c-logo-part ul li{ display:block;}
+        .Portfolio-box{  max-width:300px !important; width:96.4% !important; margin:0 !important}
+        .Portfolio-box img { max-width:100%;}
+        .portfolioContainer{ width:280px !important; margin:0 auto !important }
+
+    }
+    @media (min-width: 768px) {
+    .small-logo-mobile {
+        display: none;
+    }
+    }
+    @media (max-width: 767px) {
+    .small-logo-mobile {
+        text-align: left;
+        position: absolute;
+        top: 0;
+        padding: 10px 40px 0 0;
+    }
+    
+    .small-logo-mobile img  {
+        height: 50px;
+        }
+    }
+
+    .navbar-right {
+        float:right;
+    }
+
+    .navbar-right{
+        text-align:center;
+        margin:10px 0 0px;
+        padding:0;
+        list-style:none;
+    }
+    .navbar-right li{
+        display:inline;
+        margin:0 1px;
+    }
+
+    </style>
+</head>
+<body>
+    <header class="header" id="header">
+        <!--header-start-->
+        <div class="container">
+            <figure class="logo">
+                <a href="#"><img src="img/logo.png" alt=""></a>
+            </figure>
+            <h1 class="">Welcome To Knight Studios</h1>
+            <ul class="we-create">
+                <li>We are a digital agency that loves crafting beautiful websites.</li>
+            </ul>
+            <a class="linkservicelink" href="#service">Get Started</a>
+        </div>
+    </header>
+    <!--header-end-->
+
+    <nav class="main-nav-outer" id="test">
+        <!--main-nav-start-->
+        <div class="container">
+        <div class="small-logo-mobile"><a href="#header"><img src="http://placehold.it/60x60" alt=""></a></div>
+            <ul class="main-nav">
+                <li><a href="#header">Home</a></li>
+                <li><a href="#service">Shop</a></li>
+                <li><a href="#Portfolio">Portfolio</a></li>
+                <li class="small-logo"><a href="#header"><img src="http://placehold.it/60x60" alt=""></a></li>
+                <li><a href="#client">Services</a></li>
+                <li><a href="#team">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <ul class="navbar-right">
+                <li>
+                    Cart
+                </li>
+            </ul>
+            <a class="res-nav_click" href="#"><i class="fa fa-bars"></i></a>
+
+        </div>
+    </nav>
+    <!--main-nav-end-->   
+    <main id="main">        
+        <div style="height: 1000px;">
+
+        </div>
+    </main>
+    <footer id="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 footer-info">
+                        <h3>
+                            Fairy Light
+                        </h3>
+                        <p>
+                            Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus. Scelerisque felis imperdiet proin fermentum leo. Amet volutpat consequat mauris nunc congue.
+                        </p>
+                    </div>
+                    <div class="col-lg-3 col-md-6 footer-links">
+                        <h4>
+                            Useful Links                        
+                        </h4>
+                        <ul>
+                            <li>
+                                <a href="#">Home</a>
+                            </li>
+                            <li>
+                                <a href="#">About Us</a>
+                            </li>
+                            <li>
+                                <a href="#">Services</a>
+                            </li>
+                            <li>
+                                <a href="#">Terms of service</a>
+                            </li>
+                            <li>
+                                <a href="#">Privacy policy</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6 footer-contact">
+                        <h4>
+                            Contact Us
+                        </h4>
+                        <p>
+                            1111 Street Street
+                            <br>
+                            City cty, 9999
+                            <br>
+                            Country
+                            <br>
+                            <strong>Phone:</strong>
+                            <a href="tel:0036111111111">
+                                +36 11 1111 111
+                            </a>
+                            <br>
+                            <strong>Email:</strong>
+                            <a href="mailto:example@test.com">
+                                example@test.com
+                            </a>
+                            <br>
+                        </p>
+                        <div class="social-links">
+                            <a href="" class="facebook">
+                                <i class="fa fa-facebook"></i>
+                            </a>
+                            <a href="" class="instagram">
+                                <i class="fa fa-instagram"></i>
+                            </a>
+                            <a href="" class="linkedin">
+                                <i class="fa fa-linkedin"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 footer-newsletter">
+                        <h4>
+                            Our Newsletter
+                        </h4>
+                        <p>
+                            Tamen quem nulla quae legam multos aute sint culpa legam noster magna veniam enim veniam illum dolore legam minim quorum culpa amet magna export quem marada parida nodela caramase seza. 
+                        </p>
+                        <form action method="post">
+                            <input type="email" name="email">
+                            <input type="submit" value="Subscribe">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">                
+                © Copyright 
+                <strong>Fairy Light</strong>
+                . All Rights Reserved
+            </div>
+        </div>
+    </footer>
+    <!-- For the footer: https://bootstrapmade.com/demo/TheEvent/ or https://bootstrapmade.com/demo/BizPage/ -->
+
+    <script>
+    $(document).ready(function() {
+        $('.res-nav_click').click(function() {
+            $('#test').scrollToFixed();
+            $('.main-nav').slideToggle();
+            return false
+
+        });
+    });
+
+    $(window).load(function() {
+
+        $('.main-nav li a, .servicelink').bind('click', function(event) {
+            var $anchor = $(this);
+
+            $('html, body').stop().animate({
+                scrollTop: $($anchor.attr('href')).offset().top - 102
+            }, 1500, 'easeInOutExpo');
+            /*
+            if you don't want to use the easing effects:
+            $('html, body').stop().animate({
+                scrollTop: $($anchor.attr('href')).offset().top
+            }, 1000);
+            */
+            if ($(window).width() < 768) {
+                $('.main-nav').hide();
+            }
+            event.preventDefault();
+        });
+    });
+    </script>
+</body>
+</html>

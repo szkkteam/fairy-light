@@ -222,6 +222,41 @@ ul.nav-link-icon li:last-child {
     /*margin-bottom: 40px; */
 }
 
+.social-link{
+	padding:35px 0;
+	margin:0 0 0 10px;
+	display:block;
+	overflow:hidden;
+	list-style:none;
+}
+.social-link li{
+	float:left;
+	margin-right:8px;
+}
+.social-link li a{
+	display:block;
+	width:50px;
+	height:50px;
+	text-align:center;
+	line-height:50px;
+	font-size:25px;
+	color:#fff;
+	background:#303030;
+	border-radius:50%;
+	transition:all 0.3s ease-in-out;
+}
+.social-link li a:hover, .social-link li a:focus{
+	text-decoration:none;
+}
+.facebook a:hover {
+	background: #3b5998;
+}
+.instagram a:hover {
+    background: #d6249f;
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
+    box-shadow: 0px 3px 10px rgba(0,0,0,.25);
+}
+
 #contact .form #sendmessage {
     color: #fff;
     border: 1px solid #333;

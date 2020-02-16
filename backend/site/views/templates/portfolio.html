@@ -12,26 +12,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/venobox/1.8.6/venobox.min.js"></script>
 
     <style>
-       #portfolio-filters {
-            padding: 0;
-            margin: 0 0 35px 0;
-            list-style: none;
-            text-align: center
+        #portfolio-filters{
+            padding:0;
+            margin:0 0 45px 0;
+            list-style:none;
+            text-align:center;
         }
-
         #portfolio-filters li {
             cursor: pointer;
-            margin: 0 15px 15px 0;
-            display: inline-block;
-            padding: 5px;
-            line-height: 20px;
-            margin-bottom: 5px;
-            transition: all 0.3s ease-in-out;
+            margin:0 10px;
+            display:inline-block;
+            padding:10px 22px;
+            font-size:12px;
+            line-height:20px;
+            color:#222222;
+            border-radius:4px;
+            text-transform:uppercase;
+            font-family: 'Montserrat', sans-serif;
+            background:#f7f7f7;
+            margin-bottom:5px;
+            transition:all 0.3s ease-in-out;
+            -moz-transition:all 0.3s ease-in-out;
+            -webkit-transition:all 0.3s ease-in-out;
         }
 
-        
         #portfolio-filters li:hover, #portfolio-filters li.filter-active {
-            color: #eb5d1e;
+            background:#7cc576;
+            color:#fff;
+            text-decoration:none;
         }
 
         #portfolio .portfolio-wrap {
