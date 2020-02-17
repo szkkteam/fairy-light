@@ -16,7 +16,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollToFixed/1.0.8/jquery-scrolltofixed-min.js"></script>
+    <script src="https://bigspotteddog.github.io/ScrollToFixed/jquery-scrolltofixed.js"></script>
     
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -30,102 +30,53 @@
 ---------------------------------*/
 
 
-        .header{
-            text-align:center;
-            background:url(../img/pw_maze_black_2X.png) left top repeat;
-            padding:280px 0;
-        }
-        .logo{
-            width:130px;
-            margin:0 auto 35px;
-        }
-        .header h1{
-            font-family: 'Montserrat',sans-serif;
-            font-size:50px;
-            font-weight:400;
-            letter-spacing: -1px;
-            margin:0 0 22px 0 ;
-            color:#fff;
-        }
-
-        .we-create{
+        /* Navigation
+        ---------------------------------*/        
+		.main-nav {
+			width: 100%;
+			text-align:center;
+            margin:0px 0 0px;
             padding:0;
-            margin:35px 0 55px;
+            list-style:none;
+		}
+		
+		.main-nav li{
+            margin:0 1px;
         }
-        .wp-pic{
-            margin-bottom:20px;
-        }
-        .we-create li{
-            display:inline-block;
-            font-family: 'Montserrat',sans-serif;
-            font-size:14px;
-            color: #bcbcbc;
-            text-transform: uppercase;
-            font-weight: 400;
-            margin:0 5px 0 0;
-            padding:0 0 0 15px;
-        }
-        .we-create li:first-child{
-            background:none;
-        }
-
-        .start-button {
-            padding-left: 0px;
-        }
-
-        .start-button li a{
-        color: #fff;
-        }
-
-
-        .link{
-            padding:15px 35px;
-            background:#7cc576;
-            color:#fff !important;
-            font-size:16px;
-            font-weight:400;
-            font-family: 'Montserrat', sans-serif;
-            display:inline-block;
-            border-radius:3px;
+		
+		.main-nav li a{
+            color:#222222;
             text-transform:uppercase;
-            line-height:25px;
-            margin-bottom:20px;
+            font-family: 'Montserrat', sans-serif;
+            text-decoration: none;
+            line-height:20px;
+            margin:17px 32px;
             transition:all 0.3s ease-in-out;
             -moz-transition:all 0.3s ease-in-out;
             -webkit-transition:all 0.3s ease-in-out;
         }
-        .link:hover {
-            text-decoration:none;
-            color:#7cc576 !important;
-            background:#fff;
-        }
 
-        .link:active, .link:focus {
-            background: #7cc576;
+        .main-nav li a:hover{ 
             text-decoration:none;
-            color:#fff !important;
+            color: #7cc576;
         }
-
-        /* Navigation
-        ---------------------------------*/
-        .main-nav-outer{
-            padding:0px;
-            border-bottom:1px solid #dddddd;
-            box-shadow:0 4px 5px -3px #ececec;
-            position:relative;
-            background:#fff;
-        }
-        .main-nav{
+		
+		/*
+        .main-nav_ {
+			width: 100%;
+			
             text-align:center;
-            margin:10px 0 0px;
+            margin:0px 0 0px;
             padding:0;
             list-style:none;
         }
-        .main-nav li{
+		
+        .main-nav_ li{
             display:inline;
             margin:0 1px;
         }
-        .main-nav li a{
+
+        .main-nav_ li a{
             display:inline-block;
             color:#222222;
             text-transform:uppercase;
@@ -142,41 +93,7 @@
             text-decoration:none;
             color: #7cc576;
         }
-
-        .small-logo{ 
-            padding:0 32px;
-        }
-
-
-        .main-section{
-            padding:90px 0 110px;
-        }
-
-        .res-nav_click {
-            line-height:38px;
-            font-family: 'FontAwesome';
-            font-size:38px;
-            text-decoration: none !important;
-            color:#777777;
-            font-style:normal;
-            display:none;
-            width:42px;
-            height:27px;
-            margin-top: 15px;
-            margin-bottom: 25px;
-            float: right;
-            transition:all 0.3s ease-in-out;
-            -moz-transition:all 0.3s ease-in-out;
-            -webkit-transition:all 0.3s ease-in-out;
-        }
-
-        .res-nav_click:hover, .res-nav_click:active, .res-nav_click:focus {
-            color: #7cc576 !important;
-        }
-
-        .portfolioContainer{
-            max-width: 1140px;
-        }
+		*/
 
             
     @media only screen and (min-width: 992px) {
@@ -185,7 +102,6 @@
         .service-list{ margin-bottom:30px;}
         .c-logo-part ul li{ margin:0 15px;}
         .form{ margin:0 0 0 20px}
-        .main-nav{ display:block !important; }
         /*.portfolioContainer{ width:800px; margin:0px auto !important; } */
 
     }
@@ -209,14 +125,6 @@
         .form{ margin:0;}
         .contact-info-box{ margin:0 ;}
         .social-link{ margin:0;}
-
-        .main-nav{ display:block !important; }
-        .main-nav li a{ padding:8px 15px;}
-        /*.portfolioContainer{ width:750px; margin:0px auto !important; }
-        .Portfolio-box{ height:250px;}*/
-
-
-
     }
 
     @media only screen and (max-width: 767px) {
@@ -230,42 +138,7 @@
         .we-create li{ font-size:13px; padding:0 0 0 8px}
         .header h1{ font-size:28px;}
         .header{ padding:60px 0;}
-        .main-section{ padding:60px 0 70px;}
-        .main-nav{ display:none; position:absolute; left:0; width:100%; top:68px; margin:0 auto; float: none; background:#fff; z-index: 99; border-top: 1px solid #eee;}
-        .main-nav li{ display:block;}
-        .main-nav li.small-logo{ display:none;}
-        .main-nav li a{ display:block; padding:12px 32px; margin: 4px 0; border-bottom: 1px solid #f3f3f3;;}
-        .main-nav li a:hover{color:#7cc576}
-        .team-leader-box{ max-width:307px; width:auto; float:none; margin:0 auto;	}
-        .team-leader-box:nth-of-type(3n){ margin:0 auto}
-        .res-nav_click{ display:block;}
-        .featured-work{ font-size:12px; margin-top:30px;}
-        .featured-box{ font-size:12px;}
-        .featured-box p{ line-height:18px; }
-        .c-logo-part ul a{ margin-bottom:5px;}
-        .main-section.team{ padding:60px 0 50px;}
-        .business-talking h2{ font-size:36px;}
-        .contact-info-box{ margin:0 0 12px 30px; font-size:12px;}
-        .contact-info-box span{ line-height:18px;}
-        .contact-info-box.phone span, .contact-info-box.email span { padding-top: 6px;}
-        .social-link{ margin-left:30px;}
-        .form{ margin:0 30px;}
-        .copyright{ font-size:12px;}
-        .business-talking a{ padding:10px 25px; font-size:14px;}
-        .main-section.contact{ padding:60px 0 70px}
-        .client-part-haead{ font-size:20px; line-height:30px;}
-        .link{ font-size:14px; padding:10px 25px;}
-        .logo{ width:100px;}
-        .main-section.contact{ background-size:contain;}
-        .Portfolio-nav li a{ padding:5px 16px;}
-        .Portfolio-nav li{ display:block;}
-        /*.isotope-item img{ width:300px; left:50%; margin-left:-100px;}
-        .isotope-item{ width:300px; margin:0px auto;}
-        .isotope{ width:400px; margin:0px auto;}
-        .Portfolio-box{}
-        .portfolioContainer{ width:350px; margin:0px auto !important; } */
-
-
+        .main-section{ padding:60px 0 70px;}        
     }
 
     @media only screen and (max-width: 479px) {
@@ -281,22 +154,35 @@
 
     }
     @media (min-width: 768px) {
-    .small-logo-mobile {
-        display: none;
-    }
+		.small-logo-mobile {
+			display: none;
+		}
     }
     @media (max-width: 767px) {
-    .small-logo-mobile {
-        text-align: left;
-        position: absolute;
-        top: 0;
-        padding: 10px 40px 0 0;
-    }
+		.small-logo-mobile {
+			
+		}
+		
+		.large-logo {
+			display: none;
+		}
     
-    .small-logo-mobile img  {
-        height: 50px;
-        }
+		.small-logo-mobile img  {
+			height: 50px;
+		}
     }
+	
+	@media (max-width: 1203px) {
+		.main-nav li a{
+				margin:10px 16px;
+			}
+	}
+	
+	@media (max-width: 993px) {
+		.main-nav li a{
+				margin:5px 8px;
+			}
+	}
 
     .navbar-right {
         float:right;
@@ -312,6 +198,48 @@
         display:inline;
         margin:0 1px;
     }
+	
+	#outer-cart {
+		margin-top: 10px;
+	}
+	
+	#cart {
+	  border: 1px solid #dddddd;
+	  width: 150px;
+	  list-style: none;
+	  padding-left: 0px;
+	}
+
+	#cart .title {
+	  border-bottom: 1px solid #dddddd;
+	  width: 100%;
+	  background-color: #dddddd;
+	  font-size: 12pt;
+	  font-weight: bold;
+	}
+
+	#cart .contents {
+	  margin: 1px;
+	}
+
+	#cart .contents ul {
+	  padding: 10px;
+	}
+
+	#cart .contents li {
+	  display: block;
+	}
+
+	#cart .label {
+	  font-weight: bold;
+	  color: #999999;
+	}
+
+	#cart .total {
+	  font-weight: bold;
+	  font-size: 14pt;
+	}
+
 
     </style>
 </head>
@@ -320,7 +248,7 @@
         <!--header-start-->
         <div class="container">
             <figure class="logo">
-                <a href="#"><img src="img/logo.png" alt=""></a>
+                <a href="#"><img src="" alt=""></a>
             </figure>
             <h1 class="">Welcome To Knight Studios</h1>
             <ul class="we-create">
@@ -331,29 +259,51 @@
     </header>
     <!--header-end-->
 
-    <nav class="main-nav-outer" id="test">
-        <!--main-nav-start-->
-        <div class="container">
-        <div class="small-logo-mobile"><a href="#header"><img src="http://placehold.it/60x60" alt=""></a></div>
-            <ul class="main-nav">
-                <li><a href="#header">Home</a></li>
-                <li><a href="#service">Shop</a></li>
-                <li><a href="#Portfolio">Portfolio</a></li>
-                <li class="small-logo"><a href="#header"><img src="http://placehold.it/60x60" alt=""></a></li>
-                <li><a href="#client">Services</a></li>
-                <li><a href="#team">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <ul class="navbar-right">
-                <li>
-                    Cart
-                </li>
-            </ul>
-            <a class="res-nav_click" href="#"><i class="fa fa-bars"></i></a>
-
-        </div>
-    </nav>
+	<div id="test" class="container">
+		<nav class="navbar navbar-expand-md navbar-light bg-light">
+		  <a class="navbar-brand small-logo-mobile" href="#">Brand</a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		  </button>
+		  <div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav main-nav">
+			  <li class="nav-item active">
+				<a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="#">Shop</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="#">Services</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="navbar-brand large-logo" href="#">Brand</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="#">Portfolio</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="#">About</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="#">Contact</a>
+			  </li>
+			</ul>
+		  </div>
+		</nav>
+	</div>
     <!--main-nav-end-->   
+	<div id="outer-cart" class="container">
+		<ul id="cart" class="pull-right">
+			<li class="title">Cart Summary</li>
+			<li class="contents">
+				<ul>
+					<li class="label">Total</li>
+					<li class="total">$0.00</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
     <main id="main">        
         <div style="height: 1000px;">
 
@@ -455,34 +405,20 @@
 
     <script>
     $(document).ready(function() {
+		$('#test').scrollToFixed();
+		$('#outer-cart').scrollToFixed({
+			//marginTop : $('#test').outerHeight() + 10,
+			marginTop : 95 , // outherHeight is not working probably because of the transitions
+			zIndex : 500,
+		});
+	
         $('.res-nav_click').click(function() {
-            $('#test').scrollToFixed();
             $('.main-nav').slideToggle();
             return false
 
         });
     });
 
-    $(window).load(function() {
-
-        $('.main-nav li a, .servicelink').bind('click', function(event) {
-            var $anchor = $(this);
-
-            $('html, body').stop().animate({
-                scrollTop: $($anchor.attr('href')).offset().top - 102
-            }, 1500, 'easeInOutExpo');
-            /*
-            if you don't want to use the easing effects:
-            $('html, body').stop().animate({
-                scrollTop: $($anchor.attr('href')).offset().top
-            }, 1000);
-            */
-            if ($(window).width() < 768) {
-                $('.main-nav').hide();
-            }
-            event.preventDefault();
-        });
-    });
     </script>
 </body>
 </html>
