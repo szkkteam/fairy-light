@@ -23,6 +23,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <!-- TODO: This is temporary, has to be served by the App -->
+        <script src="https://bigspotteddog.github.io/ScrollToFixed/jquery-scrolltofixed.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
         {% block custom_css %}
@@ -31,7 +33,7 @@
         
         <link href="{{ site_static.url(filename='site/css/styles.css') }}" rel="stylesheet">
         <link href="{{ site_static.url(filename='site/css/animations.css') }}" rel="stylesheet">
-        <link href="{{ site_static.url(filename='site/css/media_queries.css') }}" rel="stylesheet">
+        <link href="{{ site_static.url(filename='site/css/responsive.css') }}" rel="stylesheet">
     {% endblock %}
     {% block head %}
 

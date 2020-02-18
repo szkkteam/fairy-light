@@ -1,0 +1,260 @@
+
+/* Hero Section
+--------------------------------*/
+#header {
+    background: url(http://placehold.it/1140x350);
+    /* Image is centered vertically and horizontally at all times */
+    background-position: center center;
+    /* Image doesn't repeat */
+    background-repeat: no-repeat;
+    /* Makes the image fixed in the viewport so that it doesn't move when 
+    the content height is greater than the image height */
+    background-attachment: fixed;
+    /* This is what makes the background image rescale based on its container's size */
+    background-size: cover;
+    /* Pick a solid background color that will be displayed while the background image is loading */
+    background-color:#464646;
+    
+    /* SHORTHAND CSS NOTATION
+    * background: url(background-photo.jpg) center center cover no-repeat fixed;
+    */
+    padding: 160px 0px;
+    
+}
+
+
+/* Carousel
+---------------------------------*/   
+.carousel-caption {
+    background: rgb(0, 0, 0); /* Fallback color */
+    background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
+    color: #f1f1f1;
+    text-align: left;
+    right: 50%; /* TODO: This should be somehow dynamic regarding text size + padding*/
+    left: 5px;
+    bottom: 5px;
+    padding: 5px 8px;
+    margin: 0px;
+}
+
+.carousel-control-prev {
+    top: -20% !important;
+    /* left: -5% !important; Buggy on small screen size */
+}
+
+.carousel-control-next {
+    top: -20% !important;
+    /* right: -5% !important; Buggy on small screen size */
+}
+
+
+/* Service Section
+--------------------------------*/
+#services {
+	padding-bottom: 80px;
+}
+
+#services .service-item {
+    margin-bottom: 20px;
+}
+
+#services .service-pic {
+    float: left;        
+}
+
+#services .service-title {
+    margin-left: 80px;
+    font-weight: 700px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+#services .service-description {
+    margin-left: 80px;
+    line-height: 24px;
+}
+
+/* Subscribe Section
+--------------------------------*/
+#subscribe {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(http://placehold.it/600x260) fixed center center;
+  background-size: cover;
+  padding: 80px 0;
+}
+
+#subscribe .subscribe-title {
+	font-weight: 700;
+}
+
+#subscribe .subscribe-text {
+	
+}
+
+#subscribe .subscribe-btn-container {
+	text-align: center;
+    padding-top: 20px;
+    cursor: pointer;
+}
+
+#subscribe .subscribe-btn {
+	text-transform: uppercase;
+	font-weight: 500;
+	font-size: 16px;
+	letter-spacing: 1px;
+	display: inline-block;
+	padding: 8px 20px;
+	border-radius: 2px;
+	margin: 10px;
+	border: 2px solid #fff;
+}
+
+#subscribe .modal-body input[type="email"] {
+    border: 0;
+    padding: 6px 8px;
+    width: 65%;
+}
+
+#subscribe .modal-body input[type="submit"] {
+    background-color: #18d26e;
+    border: 0;
+    width: 35%;
+    padding: 6px 0;
+    text-align: center;
+    color: #fff;
+    transition: 0.3s;
+    cursor: pointer;
+    float: right;
+}
+
+#subscribe .modal-body {
+    padding: 26px 1rem;
+}
+
+/* Team Section
+--------------------------------*/
+#team {
+	padding: 80px;
+}
+
+#team .team-member {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+#team .team-member h4 {
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+#team .team-member span {
+    font-style: italic; 
+    font-size: 13px;
+}
+
+#team .team-pic {
+	margin-bottom: 15px;
+	height: 150px;
+}
+
+#team .team-social {
+	margin-top: 15px;
+}
+
+#team .team-social i {
+    font-size: 18px;
+    margin: 0 2px;
+    color: #fff;
+}
+
+/* Contact Section
+--------------------------------*/
+#contact {
+    padding: 80px 0;
+}
+
+#contact .info {
+    color: #3333;
+}
+
+#contact .info i {
+    font-size: 18px;
+    margin: 0 2px;
+    color: #fff;
+    float: left;
+}
+
+#contact .info p {
+    padding: 0 0 10px 50px;
+    line-height: 24px;
+    color: #fff;
+}
+
+#contact .map {
+    width: 80%;
+    /*margin-bottom: 40px; */
+}
+
+.social-link{
+	padding:35px 0;
+	margin:0 0 0 10px;
+	display:block;
+	overflow:hidden;
+	list-style:none;
+}
+.social-link li{
+	float:left;
+	margin-right:8px;
+}
+.social-link li a{
+	display:block;
+	width:50px;
+	height:50px;
+	text-align:center;
+	line-height:50px;
+	font-size:25px;
+	color:#fff;
+	background:#303030;
+	border-radius:50%;
+	transition:all 0.3s ease-in-out;
+}
+.social-link li a:hover, .social-link li a:focus{
+	text-decoration:none;
+}
+.facebook a:hover {
+	background: #3b5998;
+}
+.instagram a:hover {
+    background: #d6249f;
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
+    box-shadow: 0px 3px 10px rgba(0,0,0,.25);
+}
+
+#contact .form #sendmessage {
+    color: #fff;
+    border: 1px solid #333;
+    display: none;
+    text-align: center;
+    padding: 15px;
+    font-weight: 600;
+    margin-bottom: 15px; 
+}
+
+#contact .from input, #contact .from textarea {
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#contact .from .validation {
+    color: red;
+    display: none;
+    margin: 0 0 20px;
+    font-weight: 400;
+    font-size: 13px;
+}
+
+#contact .from button[type="submit"] {
+    border: 0;
+    padding: 10px 24px;
+    color: #fff;
+    transition: 0.4s;
+}
