@@ -28,6 +28,26 @@
     <style>
         /* Header Styles
 ---------------------------------*/
+		#header {
+			background: url(http://placehold.it/1140x350);
+			/* Image is centered vertically and horizontally at all times */
+			background-position: center center;
+			/* Image doesn't repeat */
+			background-repeat: no-repeat;
+			/* Makes the image fixed in the viewport so that it doesn't move when 
+			the content height is greater than the image height */
+			background-attachment: fixed;
+			/* This is what makes the background image rescale based on its container's size */
+			background-size: cover;
+			/* Pick a solid background color that will be displayed while the background image is loading */
+			background-color:#464646;
+			
+			/* SHORTHAND CSS NOTATION
+			* background: url(background-photo.jpg) center center cover no-repeat fixed;
+			*/
+			padding: 160px 0px;
+			
+		}
 
 
         /* Navigation
@@ -117,11 +137,11 @@
         }
 				
 				
-		.hi-icon-archive:before {
+		#shopping-cart .hi-icon-archive:before {
 		  content: "\e00f";
 		}
 
-		.hi-icon:after {
+		#shopping-cart .hi-icon:after {
 		  pointer-events: none;
 		  position: absolute;
 		  /*
@@ -142,7 +162,7 @@
 		  box-sizing: content-box;
 		}
 
-		.hi-icon-active {
+		#shopping-cart .hi-icon-active {
 		  background: rgba(255, 255, 255, 0.05);
 		  -webkit-transform: scale(0.93);
 		  -moz-transform: scale(0.93);
@@ -151,7 +171,7 @@
 		  color: #fff;
 		}
 
-		.hi-icon-active:after {
+		#shopping-cart .hi-icon-active:after {
 		  animation: sonarEffect 1.3s ease-out 75ms;
 		}
 
@@ -212,14 +232,14 @@
         .service-list{ font-size:12px; margin-bottom:20px;}
         .we-create li{ font-size:13px; padding:0 0 0 8px}
         .header h1{ font-size:28px;}
-        .header{ padding:60px 0;}
+        /*.header{ padding:60px 0;}*/
         .main-section{ padding:60px 0 70px;}        
     }
 
     @media only screen and (max-width: 479px) {
         /****Mobile Portrait 320 ****/
         .contact-info-box{ margin-left:0px;}
-        .header{ padding:40px;}
+        /* .header{ padding:40px;} */
         .social-link{ margin-left:0px;}
         .form{ margin:0}
         .c-logo-part ul li{ display:block;}
@@ -244,6 +264,12 @@
     
 		#navbar .small-logo-mobile img  {
 			height: 50px;
+		}
+		
+		#header {
+			/* The file size of this background image is 93% smaller
+			* to improve page load speed on mobile internet connections */
+			background-image: url(http://placehold.it/1140x350);
 		}
     }
 	
@@ -323,13 +349,11 @@
         <!--header-start-->
         <div class="container">
             <figure class="logo">
-                <a href="#"><img src="" alt=""></a>
+                <a href="#"><img src="http://placehold.it/100x100" alt=""></a>
             </figure>
-            <h1 class="">Welcome To Knight Studios</h1>
-            <ul class="we-create">
-                <li>We are a digital agency that loves crafting beautiful websites.</li>
-            </ul>
-            <a class="linkservicelink" href="#service">Get Started</a>
+            <h1 class="">Fairy Light</h1>
+			<h2>Event</h2>
+			<h2>Photograpgy</h2>
         </div>
     </header>
     <!--header-end-->
