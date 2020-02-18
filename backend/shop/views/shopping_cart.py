@@ -57,10 +57,18 @@ class CartApi(MethodView):
 
     def get(self):
         try:
-            return render_template('cart_mini.html',
-                                   cart_items=ProductInventory.get_content(),
-                                   total_price=ProductInventory.get_total_price(),
-                                   )
+            if (request.content_type.startswith('application/json')):
+                return jsonify(dict(
+                    cartItems=ProductInventory.get_content(),
+                    totalPrice=ProductInventory.get_total_price(),
+                    numOfItems=ProductInventory.get_num_of_items()
+                ))
+                return json.loads(data.decode("utf-8"))
+            else:
+                return render_template('cart_mini.html',
+                                       cart_items=ProductInventory.get_content(),
+                                       total_price=ProductInventory.get_total_price(),
+                                       )
         except Exception as e:
             logger.error(traceback.format_exc())
             return abort(500)
