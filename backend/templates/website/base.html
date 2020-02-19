@@ -49,15 +49,16 @@
 
         {% endblock %}
 
-        {% block document_ready %}
-        <scipt>
+        <script>
             $(document).ready( function() {
+                {% block document_ready %}
+
+                {% endblock %}
 
                 {% block shopping_cart_init %}
                 {% endblock %}
             });
-        </scipt>
-        {% endblock %}
+        </script>
 
         {% block tail_js %}
         <script src="{{ site_static.url(filename='site/js/app.js') }}" type="text/javascript"></script>

@@ -11,13 +11,14 @@
 		 * Private variables
 		*/
 		/* Configure options */
-        var opts = $.extend( true, $.fn.shoppingCart.defaults, options );		
-        /* Store the cart content element. It should be the shopping cart icon */
-        var cartContent = $(this);
+		var opts = $.extend( true, $.fn.shoppingCart.defaults, options );		
+		var cartContent = $(this);
         /*
 		 * Public variables
 		*/
-		this.numOfItems = cartContent.attr('data-count'); //TODO: Or initialize it with 0
+		/* Store the cart content element. It should be the shopping cart icon */
+		
+		this.numOfItems = parseInt(cartContent.find('[data-count]').attr('data-count')); //TODO: Or initialize it with 0
 
         /*
 		 * Private Methods
@@ -41,50 +42,49 @@
 			});
 		}
 		
-		var getNumOfItems = function() {
-			jsonRequest(this.opts.urls.numOfItems || cartContent.attr('href'), 'GET').then( function(resp) {
-				updateNumOfItems(resp.numOfItems);
+		var getNumOfItems = function(e) {
+			const url1 = opts.urls.numberOfItems;
+			const url2 =  cartContent.find('a').attr('href');
+			jsonRequest(url1 || url2, 'GET').then( function(resp) {
+				updateNumOfItems(e, resp.numOfItems);
 			});
 		};
 		
-		var updateNumOfItems = function(itemCnt) {
+		var updateNumOfItems = function(e, itemCnt) {
 			// Call the registered callback function
-			this.opts.callbacks.onCounterUpdated.apply(this, itemCnt);
+			opts.callbacks.onCounterUpdated.call(e, itemCnt);
 			// Store the fetched value
-			this.numOfItems = itemCnt;
+			e.numOfItems = itemCnt;
 			// Update DOM element
 			cartContent.find('[data-count]').attr('data-count', itemCnt);
 		};
 		
 		var getCartContent = function(e) {
-			var that = this;
 			// Update the placeholder text
-			$(that.opts.delegates.cartContent).html(this.opts.messages.cartLoading);
+			$(opts.delegates.cartContent).html(opts.messages.cartLoading);
 
-			htmlRequest(this.opts.urls.cartContent || e.attr('href'), 'GET').then( function(resp) {
+			htmlRequest(opts.urls.cartContent || cartContent.find('a').attr('href'), 'GET').then( function(resp) {
 				// Call the registered callback function
-				this.opts.callbacks.onCartUpdated.apply(that, resp);
+				opts.callbacks.onCartUpdated.call(e, resp);
 				// Update DOM element
-				$(that.opts.delegates.cartContent).html(resp);
+				$(opts.delegates.cartContent).html(resp);
 			});
 		}
 		
 		var add = function(e) {
-			var that = this;
-			jsonRequest($(e).attr('href'), 'POST').then( function(resp) {
-				if (that.opts.callbacks.onAdd(that, resp) {
+			jsonRequest(cartContent.find('a').attr('href'), 'POST').then( function(resp) {
+				if (that.opts.callbacks.onAdd.call(e, resp)) {
 					updateNumOfItems(resp.shopItems);
 				} else {
 					// Store the fetched value
-					this.numOfItems = resp.shopItems;
+					e.numOfItems = resp.shopItems;
 				}
 			});
 		};
 		
 		var remove = function(e) {
-			var that = this;
-			jsonRequest($(e).attr('href'), 'DELETE').then( function(resp) {
-				if (that.opts.callbacks.onClear(that, resp) {
+			jsonRequest(cartContent.find('a').attr('href'), 'DELETE').then( function(resp) {
+				if (opts.callbacks.onClear.call(e, resp)) {
 					updateNumOfItems(resp.shopItems);
 				} else {
 					// Store the fetched value
@@ -96,38 +96,46 @@
         /*
 		 * Public Methods
 		*/
-		this.initialize = function() {
-			// Update the cart counter indicator
-			getNumOfItems();
-			// Register Open cart event
-			$(cartContent).on('click', function(e) {
-				e.preventDefault();
-				getCartContent(this);
-			});
-			// Register Add to cart event
-			if (this.opts.delegates.buyButton) {
-				$(this.opts.delegates.buyButton).on('click', function(e) {
-					e.preventDefault();
-					add(this);					
-				});
-			}
-			// Register Remove events
-			if (this.opts.delegates.removeButton) {
-				$(document.body).on('click', this.opts.delegates.removeButton, function(e) {
-					e.preventDefault();
-					remove(this);
-				});
-			}
-			// Register Remove events
-			if (this.opts.delegates.clearButton) {
-				$(document.body).on('click', this.opts.delegates.clearButton, function(e) {
-					e.preventDefault();
-					remove(this);
-				});
+		this.hide = function() {
+			cartContent.hide();
+		};
+		this.show = function() {
+			cartContent.show();
+		};
 
-			}
-			
-			return this;
+		this.initialize = function() {
+				// Update the cart counter indicator
+				getNumOfItems(this);
+				// Register Open cart event
+				$(cartContent).on('click', function(e) {
+					e.preventDefault();
+					getCartContent(this);
+				});
+				// Register Add to cart event
+				if (opts.delegates.buyButton) {
+					$(opts.delegates.buyButton).on('click', function(e) {
+						e.preventDefault();
+						add(this);					
+					});
+				}
+				// Register Remove events
+				if (opts.delegates.removeButton) {
+					$(document.body).on('click', opts.delegates.removeButton, function(e) {
+						e.preventDefault();
+						remove(this);
+					});
+				}
+				// Register Remove events
+				if (opts.delegates.clearButton) {
+					$(document.body).on('click', opts.delegates.clearButton, function(e) {
+						e.preventDefault();
+						remove(this);
+					});
+
+				}
+				
+				return this;
+
 		};
 
 		
@@ -142,10 +150,10 @@
 			removeButton: '.clear-item',
 		},
 		callbacks: {
-			onCounterUpdated: function(t, e) { },
-			onCartUpdated: function(t, e) { },			
-			onAdd: function(t, e) { return true; },
-			onClear: function(t, e) { return true; },
+			onCounterUpdated: function(e) { },
+			onCartUpdated: function(e) { },			
+			onAdd: function(e) { return true; },
+			onClear: function(e) { return true; },
 		},
 		urls: {
 			numberOfItems: '/shop/cart',

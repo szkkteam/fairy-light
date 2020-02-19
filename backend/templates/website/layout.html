@@ -14,10 +14,10 @@
 		{{lib.render_navbar()}}
 	{% endblock %}
 	{% block cart_block %}
-		{{lib.cart(cart_num_of_items)}}
+		{{lib.cart(url_for('shop.cart_api'), cart_num_of_items)}}
 	{% endblock %}
 	{% block cart_modal_block %}
-		{{lib.cart_modal({{url_for('shop.cart_detail')}})}}
+		{{lib.cart_modal(url_for('shop.cart_detail'))}}
 	{% endblock %}
 
 	<main id="main">
@@ -31,17 +31,29 @@
 	{% endblock %}    	
 {% endblock %}
 
+{% block document_ready %}
+	{{super()}}
+	
+	$('#navbar').scrollToFixed();
+	$('#outer-cart').scrollToFixed({
+		marginTop : $('#navbar').outerHeight() + 20,
+		//marginTop : 95 , // outherHeight is not working probably because of the transitions
+		zIndex : 500,
+	});
+
+{% endblock %}
+
 {% block shopping_cart_init %}
 	$('#shopping-cart').shoppingCart({
 		delegates : {
 			cartContent: '#shopping-cart-content',
 		},
 		callbacks: {
-			onCounterUpdated: function(t, cnt) {
+			onCounterUpdated: function(cnt) {
 				if (cnt == 0) {
-					t.cartContent.hide();
+					this.hide();
 				} else {
-					t.cartContent.show();
+					this.show();
 				}
 			},
 		}

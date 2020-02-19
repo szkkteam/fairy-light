@@ -50,8 +50,6 @@
 	{% endif %}
 {% endmacro %}
 
-{% import 'modules/forms.html' as form with context %}
-
 {% macro render_footer() %}
     {% call footer() %}
         {{footer_link('Home', url_for('site.index',))}}
@@ -156,7 +154,7 @@
 	</div>
 {% endmacro %}
 
-{% macro cart_modal_backup(url, total) %}
+{% macro cart_modal_backup(url) %}
 	<div class="modal fade" id="shopping-cart-modal" tabindex="-1" role="dialog" aria-labelledby="shopping-cart-modal-label" aria-hidden="true">
 	  <div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -230,4 +228,4 @@
     <div class="modal-footer {{class if class is iterable and class is not string else [class] |join(' ') }}">
         {{ caller() }}
       </div>
-{% endmacro %}
+{% endmacro %} 

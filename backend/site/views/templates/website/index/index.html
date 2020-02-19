@@ -2,23 +2,24 @@
 {% import 'website/modules/carousel.html' as carousel with context %}
 {% import 'website/modules/sections.html' as section with context %}
 {% import 'website/modules/services.html' as services with context %}
-{% import 'website/website/macros.html' as macro with context %}
+{% import 'website/macros.html' as macro with context %}
 {% import 'website/modules/modals.html' as modal with context %}
 {% import 'website/modules/teams.html' as team with context %}
 {% import 'website/modules/hero.html' as hero_img with context %}
 
 {% block custom_css %}
     {{ super() }}
-    <link href="{{ site_static.url(filename='site/css/index/style.css') }}" rel="stylesheet">
+    <link href="{{ site_static.url(filename='site/css/index.css') }}" rel="stylesheet">
 
 {% endblock %}
 
+{% block hero_block %}
+    {%- if request.endpoint == 'site.index' -%}
+        {{ hero_img.hero_section( url_for('site.index') ) }}
+    {%- endif -%}
+{% endblock %}
+
 {% block main_block %}
-	{% block hero_block %}
-		{%- if request.endpoint == 'site.index' -%}
-			{{ hero_img.hero_section( url_for('site.index') ) }}
-		{%- endif -%}
-	{% endblock %}
     <section id="quote">
         <div class="container px-0 mb-1" >
             <div class="row">
