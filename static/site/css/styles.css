@@ -154,6 +154,16 @@ hr.header-separator {
     color: #fff;
 }
 
+/* Cart Modal
+--------------------------------*/
+#shopping-cart-modal .amount-title {
+			padding-right: 25px;
+}
+
+#shopping-cart-modal .amount-amount {
+    padding-right: 0 10px;
+}
+
 /* Footer Section
 --------------------------------*/
 #footer {

@@ -26,6 +26,7 @@
         <!-- TODO: This is temporary, has to be served by the App -->
         <script src="https://bigspotteddog.github.io/ScrollToFixed/jquery-scrolltofixed.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="{{ site_static.url(filename='site/js/new_shopping_cart.js') }}" type="text/javascript"></script>
 
         {% block custom_css %}
 
@@ -47,6 +48,17 @@
         {% block page_body %}
 
         {% endblock %}
+
+        {% block document_ready %}
+        <scipt>
+            $(document).ready( function() {
+
+                {% block shopping_cart_init %}
+                {% endblock %}
+            });
+        </scipt>
+        {% endblock %}
+
         {% block tail_js %}
         <script src="{{ site_static.url(filename='site/js/app.js') }}" type="text/javascript"></script>
 

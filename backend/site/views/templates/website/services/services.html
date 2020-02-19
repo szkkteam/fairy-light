@@ -1,6 +1,6 @@
 {% extends 'website/layout.html' %}
-{% import 'modules/sections.html' as section with context %}
-{% import 'modules/services.html' as services with context %}
+{% import 'website/modules/sections.html' as section with context %}
+{% import 'website/modules/services.html' as services with context %}
 
 {% block custom_css %}
     {{ super() }}
@@ -55,16 +55,16 @@
                 <div class="col-10">
                     <div class="tab-content" id="service-tab-content">
                         {% call services.tab_content('service-service1', is_active=True) %}
-                            {% include 'contents/service_event.html' %}
+                            {% include 'website/contents/service_event.html' %}
                         {% endcall %}
                         {% call services.tab_content('service-service2') %}
-                            {% include 'contents/service_event.html' %}
+                            {% include 'website/contents/service_event.html' %}
                         {% endcall %}
                         {% call services.tab_content('service-service3') %}
-                            {% include 'contents/service_event.html' %}
+                            {% include 'website/contents/service_event.html' %}
                         {% endcall %}
                         {% call services.tab_content('service-service4') %}
-                            {% include 'contents/service_event.html' %}
+                            {% include 'website/contents/service_event.html' %}
                         {% endcall %}
                     </div>
                 </div>

@@ -1,13 +1,6 @@
 {# Common global html template files #}
 {% extends 'website/base.html' %}
 {% import 'website/lib.html' as lib with context %}
-{% import 'website/static.html' as site_static with context %}
-
-{# Local html template files #}
-{% import 'modules/hero.html' as hero_img with context %}
-{% import 'modules/navbar.html' as navigation with context %}
-{% import 'modules/footer.html' as footer with context %}
-{% from 'website/macros.html' import nav_link with context %}
 
 {% block head_css %}
     {{ super() }}
@@ -16,23 +9,16 @@
 {% block page_body %}
 	{{ super() }}
 	{% block hero_block %}
-		{%- if request.endpoint == 'site.index' -%}
-			{{ hero_img.hero_section( url_for('site.index') ) }}
-		{%- endif -%}    
-	{% endblock %}	
+	{% endblock %}
 	{% block header_block %}
-		{% call navigation.navbar() %}
-			{{ nav_link(url_for('site.index'), 'Home'|upper) }}
-			{{ nav_link(url_for('shop.index_view'), 'Photos'|upper) }}
-			{{ nav_link(url_for('site.services'), 'Services'|upper) }}
-			{{ nav_link(url_for('site.about'), 'About'|upper) }}
-			{{ nav_link(url_for('site.portfolio'), 'Portfolio'|upper) }}
-			{{ nav_link(url_for('site.index') + '#contact', 'Contact'|upper) }}
-			{% block header_nav_element_block %}
-
-			{% endblock %}
-		{% endcall %}
-	{% endblock %}    
+		{{lib.render_navbar()}}
+	{% endblock %}
+	{% block cart_block %}
+		{{lib.cart(cart_num_of_items)}}
+	{% endblock %}
+	{% block cart_modal_block %}
+		{{lib.cart_modal({{url_for('shop.cart_detail')}})}}
+	{% endblock %}
 
 	<main id="main">
 	{% block main_block %}
@@ -41,9 +27,23 @@
 	</main>
 	
 	{% block footer_block %}
-		{% call footer.footer() %}
-			{{ footer.link('site.index', 'Home') }}
-			{{ footer.link('site.index', 'About') }}
-		{% endcall %}
+		{{lib.render_footer()}}
 	{% endblock %}    	
+{% endblock %}
+
+{% block shopping_cart_init %}
+	$('#shopping-cart').shoppingCart({
+		delegates : {
+			cartContent: '#shopping-cart-content',
+		},
+		callbacks: {
+			onCounterUpdated: function(t, cnt) {
+				if (cnt == 0) {
+					t.cartContent.hide();
+				} else {
+					t.cartContent.show();
+				}
+			},
+		}
+	});
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends 'checkout.html' %}
+{% extends 'website/checkout/checkout.html' %}
 
 {% block result_title %}
     <div class="result-container mx-auto d-none d-sm-block">
@@ -8,7 +8,7 @@
             </div>
             <div class="result-message">
                 <h2>
-                    Ups ... something went wrong during payment
+                    Your order was successfully completed!
                 </h2>
             </div>                                
         </div>
@@ -19,14 +19,14 @@
         </div>
         <div class="result-message">
             <h4>
-                    Ups ... something went wrong during payment
+                Your order was successfully completed!
             </h4>
         </div>                                
     </div>
 {% endblock %}
 {% block result_body %}
     <h4>
-        Please check your bank account because the bank was not able to charge.
+        Thank you for your purchase.
     </h4>
                             
     <div class="description">

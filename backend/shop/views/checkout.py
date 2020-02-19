@@ -91,19 +91,19 @@ def get_or_create_user(**kwargs):
 
 @shop.route('/checkout/success')
 def checkout_success():
-    resp =  make_response(render_template('checkout_success.html'))
+    resp =  make_response(render_template('website/checkout/checkout_success.html'))
     resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
     return resp
 
 @shop.route('/checkout/processing')
 def checkout_processing():
-    resp = make_response(render_template('checkout_processing.html'))
+    resp = make_response(render_template('website/checkout/checkout_processing.html'))
     resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
     return resp
 
 @shop.route('/checkout/failed')
 def checkout_failed():
-    resp = make_response(render_template('checkout_failed.html'))
+    resp = make_response(render_template('website/checkout/checkout_failed.html'))
     resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
     return resp
 
@@ -138,7 +138,7 @@ def checkout():
 
     client_secret = intent_obj['client_secret']
 
-    return render_template('checkout_modal.html',
+    return render_template('website/checkout/checkout_modal.html',
                            #cart_items=cart_content,
                            client_secret=client_secret,
                            public_key=get_stripe_public_key(),

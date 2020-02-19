@@ -58,6 +58,9 @@
 		
 		var getCartContent = function(e) {
 			var that = this;
+			// Update the placeholder text
+			$(that.opts.delegates.cartContent).html(this.opts.messages.cartLoading);
+
 			htmlRequest(this.opts.urls.cartContent || e.attr('href'), 'GET').then( function(resp) {
 				// Call the registered callback function
 				this.opts.callbacks.onCartUpdated.apply(that, resp);
@@ -147,6 +150,9 @@
 		urls: {
 			numberOfItems: '/shop/cart',
 			cartContent: '/shop/cart',	
+		},
+		messages: {
+			cartLoading: '<button class="btn btn-primary"><span class="spinner-border spinner-border-sm"></span>Loading..</button>',
 		}
 
 	};

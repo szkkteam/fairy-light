@@ -36,18 +36,21 @@ def try_close_cart():
 
 @shop.route('/cart/detail')
 def cart_detail():
+    url = request.args.get('url')
+    if url is None:
+        url = url_for('shop.index_view')
     try_close_cart()
-    resp = make_response(render_template('photos_cart.html',
+    resp = make_response(render_template('website/cart/photos_cart.html',
                            cart_items=ProductInventory.get_content(),
                            total_price=ProductInventory.get_total_price(),
-                           return_url=request.args.get('url')
+                           return_url=url
                            ))
     resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
     return resp
 
 @shop.route('/cart/detail/refresh')
 def cart_detail_refresh():
-    return render_template('cart_detail.html',
+    return render_template('website/cart/cart_detail.html',
                            cart_items=ProductInventory.get_content(),
                            total_price=ProductInventory.get_total_price()
                            )
@@ -65,7 +68,7 @@ class CartApi(MethodView):
                 ))
                 return json.loads(data.decode("utf-8"))
             else:
-                return render_template('cart_mini.html',
+                return render_template('website/cart/cart_mini.html',
                                        cart_items=ProductInventory.get_content(),
                                        total_price=ProductInventory.get_total_price(),
                                        )

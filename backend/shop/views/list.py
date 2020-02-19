@@ -32,7 +32,7 @@ def get_breadcrumbs(root_id):
 
 @shop.route('/category/<int:category_id>')
 def category_detail(category_id):
-    return render_template('album_modal.html',
+    return render_template('website/shop/album_modal.html',
                            data=category_detail(category_id))
 
 @shop.route('/photo/<int:photo_id>')
@@ -50,7 +50,7 @@ def image_lightbox(photo_id):
         url_facebook_share=url_for('shop.index_view', root=element.id, _external=True),
     )
 
-    return render_template('image_lightbox.html',
+    return render_template('website/shop/lightbox.html',
                            data=data,
                            current_url=url_for('shop.index_view', root=int(element.category_id))
                            )
@@ -99,7 +99,7 @@ def index_view(root=None):
         # If there are no sub categories, query the images.
         data = Category.get_images(root)
 
-        return render_template('photos_images_listing.html',
+        return render_template('website/shop/photos.html',
                                # Navigation specific
                                breadcrumbs=breadcrumbs,
                                current_url=breadcrumbs[-1]['url'] if len(breadcrumbs) > 0 else url_for('shop.index_view'),
@@ -118,7 +118,7 @@ def index_view(root=None):
                                data=image_data(data, category_title=breadcrumbs[-1]['title']))
 
     else:
-        return render_template('photos_listing.html',
+        return render_template('website/shop/albums.html',
                                # Navigation specific
                                breadcrumbs=breadcrumbs,
                                current_url=breadcrumbs[-1]['url'] if len(breadcrumbs) > 0 else url_for('shop.index_view'),

@@ -1,4 +1,4 @@
-{% import 'modules/cart.html' as cart with context %}
+{% import 'website/modules/cart.html' as cart with context %}
 
 {% call cart.table_mini() %}
     {% for category_id, category in cart_items.items() %}

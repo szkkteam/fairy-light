@@ -6,10 +6,14 @@
 from flask import render_template
 
 # Internal package imports
+from backend.shop.inventory import ProductInventory
 from backend.site.views.blueprint import site
 
 @site.route('/portfolio')
 def portfolio():
-    return render_template('portfolio.html')
+    return render_template('website/portfolio/portfolio.html',
+                           # Shopping Cart
+                           cart_num_of_items=ProductInventory.get_num_of_items(),
+                           )
 
 

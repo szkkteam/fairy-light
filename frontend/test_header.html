@@ -110,6 +110,7 @@
 			display:inline-block;
             color: #fff;
 			position: relative;
+			cursor: pointer;
         }
 		
 		#shopping-cart .fa-stack[data-count] {
@@ -182,7 +183,14 @@
 			opacity: 0;
 		  }
 		}
+		
+		#shopping-cart-modal .amount-title {
+			padding-right: 25px;
+		}
 
+		#shopping-cart-modal .amount-amount {
+			padding-right: 0 10px;
+		}
             
     @media only screen and (min-width: 992px) {
         /****Ipad Landscape 1024 Container 970 ****/
@@ -392,13 +400,41 @@
     <!--main-nav-end-->   
 	<div id="outer-cart" class="container">
         <div id="shopping-cart">
-            <a class="hi-icon" href="/shop/cart">
+            <a class="hi-icon" data-toggle="modal" data-target="#shopping-cart-modal">
                 <span class="fa-stack fa-2x has-badge" data-count="3">
                     <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-shopping-cart fa-stack-1x fa-inverse" data-count="5"></i>
+                    <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i>
                 </span>
             </a>
         </div>		
+	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="shopping-cart-modal" tabindex="-1" role="dialog" aria-labelledby="shopping-cart-modal-label" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h5 class="modal-title" id="shopping-cart-modal-label">Shopping Cart</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+		  <div id="shopping-cart-content" class="modal-body">
+			...
+		  </div>
+		  <div class="modal-footer justify-content-end">
+			<span class="amount-title">
+				Total:
+			</span>
+			<span class="amount-amount">
+				$20
+			</span>
+		  </div>
+		  <div class="modal-footer justify-content-between">
+			<button type="button" class="btn btn-secondary " data-dismiss="modal">Back</button>
+			<a class="btn btn-primary " href="#">View Cart</a>
+		  </div>
+		</div>
+	  </div>
 	</div>
     <main id="main">        
         <div style="height: 1000px;">
