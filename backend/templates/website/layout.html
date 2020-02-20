@@ -14,7 +14,7 @@
 		{{lib.render_navbar()}}
 	{% endblock %}
 	{% block cart_block %}
-		{{lib.cart(url_for('shop.cart_api'), cart_num_of_items)}}
+		{{lib.cart(None, cart_num_of_items)}}
 	{% endblock %}
 	{% block cart_modal_block %}
 		{{lib.cart_modal(url_for('shop.cart_detail'))}}
@@ -46,6 +46,7 @@
 {% block shopping_cart_init %}
 	$('#shopping-cart').shoppingCart({
 		delegates : {
+			cartModal: '#shopping-cart-modal',
 			cartContent: '#shopping-cart-content',
 		},
 		callbacks: {

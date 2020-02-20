@@ -144,7 +144,7 @@
 {% macro cart(url, counter=0, hide_if_empty=True) %}
     <div id="outer-cart" class="container" >
         <div id="shopping-cart" style="display: {{'none' if (counter == 0) and hide_if_empty else 'block'}};">
-            <a class="hi-icon" href="{{url}}">
+            <a class="hi-icon" data-toggle="modal" data-target="#shopping-cart-modal">
                 <span class="fa-stack fa-2x has-badge" data-count="{{counter}}">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i>
@@ -165,7 +165,7 @@
 			</button>
 		  </div>
 		  <div id="shopping-cart-content" class="modal-body">
-			<button class="btn btn-primary"><span class="spinner-border spinner-border-sm"></span>Loading..</button>
+			<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>
 		  </div>
 		  <div class="modal-footer justify-content-end">
 			<span class="amount-title">
@@ -190,9 +190,9 @@
             <h5 class="modal-title" id="shopping-cart-modal-label">Shopping Cart</h5>
         {% endcall %}
         {% call modal_body(id="shopping-cart-content") %}
-            <button class="btn btn-primary"><span class="spinner-border spinner-border-sm"></span>Loading..</button>
+        <div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>
         {% endcall %}
-        {% call modal_footer(class=['justify-content-between']) %}
+        {% call modal_footer(class='justify-content-between') %}
             <button type="button" class="btn btn-secondary " data-dismiss="modal">Back</button>
 			<a class="btn btn-primary " href="{{url}}">View Cart</a>
         {% endcall %}

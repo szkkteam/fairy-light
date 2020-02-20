@@ -46,46 +46,42 @@
 			const url1 = opts.urls.numberOfItems;
 			const url2 =  cartContent.find('a').attr('href');
 			jsonRequest(url1 || url2, 'GET').then( function(resp) {
-				updateNumOfItems(e, resp.numOfItems);
+				e.updateNumOfItems(resp.numOfItems);
 			});
 		};
-		
-		var updateNumOfItems = function(e, itemCnt) {
-			// Call the registered callback function
-			opts.callbacks.onCounterUpdated.call(e, itemCnt);
-			// Store the fetched value
-			e.numOfItems = itemCnt;
-			// Update DOM element
-			cartContent.find('[data-count]').attr('data-count', itemCnt);
-		};
-		
-		var getCartContent = function(e) {
+				
+		var getCartContent = function(e, usePlaceholder=true) {
 			// Update the placeholder text
-			$(opts.delegates.cartContent).html(opts.messages.cartLoading);
+			if (usePlaceholder) {
+				$(opts.delegates.cartContent).html(opts.messages.cartLoading);
+			}
 
 			htmlRequest(opts.urls.cartContent || cartContent.find('a').attr('href'), 'GET').then( function(resp) {
-				// Call the registered callback function
-				opts.callbacks.onCartUpdated.call(e, resp);
 				// Update DOM element
 				$(opts.delegates.cartContent).html(resp);
+				// Call the registered callback function
+				opts.callbacks.onCartUpdated.call(e, resp);
 			});
 		}
 		
-		var add = function(e) {
-			jsonRequest(cartContent.find('a').attr('href'), 'POST').then( function(resp) {
-				if (that.opts.callbacks.onAdd.call(e, resp)) {
-					updateNumOfItems(resp.shopItems);
+		var add = function(t, e) {
+			jsonRequest(e.attr('href'), 'POST').then( function(resp) {
+				if (opts.callbacks.onAdd.call(t, e, resp)) {
+					t.updateNumOfItems(resp.shopItems);
 				} else {
 					// Store the fetched value
-					e.numOfItems = resp.shopItems;
+					t.numOfItems = resp.shopItems;
 				}
 			});
 		};
 		
-		var remove = function(e) {
-			jsonRequest(cartContent.find('a').attr('href'), 'DELETE').then( function(resp) {
-				if (opts.callbacks.onClear.call(e, resp)) {
-					updateNumOfItems(resp.shopItems);
+		var remove = function(t, e) {
+			jsonRequest(e.attr('href'), 'DELETE').then( function(resp) {
+				if (opts.callbacks.onClear.call(t, e, resp)) {
+					// Delete Element. Not working. Total is not refreshed. Maybe fetch total?
+					//e.parent().parent().remove();
+					getCartContent(t, false);
+					t.updateNumOfItems(resp.shopItems);
 				} else {
 					// Store the fetched value
 					this.numOfItems = resp.shopItems;
@@ -103,33 +99,43 @@
 			cartContent.show();
 		};
 
+		this.updateNumOfItems = function(itemCnt) {
+			// Call the registered callback function
+			opts.callbacks.onCounterUpdated.call(this, itemCnt);
+			// Store the fetched value
+			this.numOfItems = itemCnt;
+			// Update DOM element
+			cartContent.find('[data-count]').attr('data-count', itemCnt);
+		};
+
 		this.initialize = function() {
+				var _that = this;
 				// Update the cart counter indicator
 				getNumOfItems(this);
 				// Register Open cart event
 				$(cartContent).on('click', function(e) {
-					e.preventDefault();
-					getCartContent(this);
+					//e.preventDefault();
+					getCartContent(_that);
 				});
 				// Register Add to cart event
 				if (opts.delegates.buyButton) {
-					$(opts.delegates.buyButton).on('click', function(e) {
+					$(document.body).on('click', opts.delegates.buyButton, function(e) {
 						e.preventDefault();
-						add(this);					
+						add(_that, $(e.currentTarget));					
 					});
 				}
 				// Register Remove events
 				if (opts.delegates.removeButton) {
 					$(document.body).on('click', opts.delegates.removeButton, function(e) {
 						e.preventDefault();
-						remove(this);
+						remove(_that, $(e.currentTarget));
 					});
 				}
 				// Register Remove events
 				if (opts.delegates.clearButton) {
 					$(document.body).on('click', opts.delegates.clearButton, function(e) {
 						e.preventDefault();
-						remove(this);
+						remove(_that, $(e.currentTarget));
 					});
 
 				}
@@ -144,23 +150,24 @@
 	
 	$.fn.shoppingCart.defaults = {
 		delegates : {
+			cartModal: '#shopping-cart-modal',
 			cartContent: '',
-			buyButton: '.photos-add-btn',	
+			buyButton: '.cart-add',	
 			clearButton: '#shopping-cart-clear',
-			removeButton: '.clear-item',
+			removeButton: '.cart-remove',
 		},
 		callbacks: {
 			onCounterUpdated: function(e) { },
 			onCartUpdated: function(e) { },			
-			onAdd: function(e) { return true; },
-			onClear: function(e) { return true; },
+			onAdd: function(e, resp) { return true; },
+			onClear: function(e, resp) { return true; },
 		},
 		urls: {
 			numberOfItems: '/shop/cart',
 			cartContent: '/shop/cart',	
 		},
 		messages: {
-			cartLoading: '<button class="btn btn-primary"><span class="spinner-border spinner-border-sm"></span>Loading..</button>',
+			cartLoading: '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>',
 		}
 
 	};

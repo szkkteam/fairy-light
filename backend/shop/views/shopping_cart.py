@@ -6,7 +6,7 @@ import traceback
 import sys
 
 # Pip package imports
-from flask import render_template, request, make_response, redirect, abort, Response, jsonify, session
+from flask import render_template, request, make_response, url_for, abort, Response, jsonify, session
 from flask.views import MethodView
 from werkzeug.exceptions import BadRequest
 from loguru import logger
@@ -60,13 +60,18 @@ class CartApi(MethodView):
 
     def get(self):
         try:
-            if (request.content_type.startswith('application/json')):
+            print("Request: ", request.content_type, flush=True)
+            try:
+                is_json = request.content_type.startswith('application/json')
+            except Exception:
+                is_json = False
+
+            if is_json:
                 return jsonify(dict(
                     cartItems=ProductInventory.get_content(),
                     totalPrice=ProductInventory.get_total_price(),
                     numOfItems=ProductInventory.get_num_of_items()
                 ))
-                return json.loads(data.decode("utf-8"))
             else:
                 return render_template('website/cart/cart_mini.html',
                                        cart_items=ProductInventory.get_content(),

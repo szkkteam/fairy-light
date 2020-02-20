@@ -2,6 +2,7 @@
 	Resources:
 	- https://learn.jquery.com/plugins/basic-plugin-creation/
 */
+
 (function ( $ ) {
 	
 	$.fn.shoppingCart = function ( options ) {
@@ -30,7 +31,7 @@
 
                         if (itemCount != prevItemCount) {
                             /* If animate is defined */
-                            if (aElement.attr('data-animate') == 'true') {
+                            if (aElement.attr('data-animation') == 'true') {
                                 var el = aElement;
                                 var item = el.parent().parent().parent();
                                 img = item.find('img');
@@ -159,4 +160,3 @@
 	};
 	
 }( jQuery ));
-
