@@ -18,69 +18,14 @@
         <meta property="og:image:height" content="220" />
         <meta property="og:image:alt" content="{{facebook.title|lower}}" />
     {% endif %}
-
 {% endblock %}
 
 {% block custom_css %}
     {{ super() }}
     <link href="{{ site_static.url(filename='site/css/shop.css') }}" rel="stylesheet">
     <script src="http://code.jquery.com/color/jquery.color-2.1.2.min.js"></script>
-    
-    
     <style>
-        .btn-arrow-left {
-            margin-top: 7px;
-            margin-right: 20px;
-            padding: 4px 10px;
-        }
-
-        .b-flying-img {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            top: 0;
-            left: 0;
-            z-index: 5;
-            
-            animation:fly 0.8s 1;
-            -webkit-animation:fly 0.8s 1;
-            -webkit-backface-visibility: hidden;
-        }
-
-        .highlight-item {
-            border-radius: 50%;
-            padding: 5px 10px;
-            /*background-color: rgba(255, 0,0,1);*/
-        }
-        
-        @keyframes fly {
-            0% {
-                -moz-transform: rotate(0deg); /* Для Firefox */
-                -ms-transform: rotate(0deg); /* Для IE */
-                -o-transform: rotate(0deg); /* Для Opera */
-                -webkit-transform: rotate(0deg);
-                transform: rotate(0deg);
-            }
-            100% {
-                -moz-transform: rotate(360deg); /* Для Firefox */
-                -ms-transform: rotate(360deg); /* Для IE */
-                -o-transform: rotate(360deg); /* Для Opera */
-                -webkit-transform: rotate(360deg);
-                transform: rotate(360deg);
-            }
-        }
-
-        @-webkit-keyframes fly {
-            0% {
-                -webkit-transform: rotate(0deg); /* Для Safari, Chrome, iOS */
-            }
-            100% {
-                -webkit-transform: rotate(360deg); /* Для Safari, Chrome, iOS */
-            }
-        }
-
     </style>
-
 {% endblock %}
 
 

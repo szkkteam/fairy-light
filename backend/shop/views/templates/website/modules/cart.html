@@ -1,3 +1,5 @@
+{% import 'website/modules/price.html' as price with context %}
+
 {% macro table_base(header_list=None, c_class='') %}
     <table class="cart-table table-hover table w-100 {{c_class if c_class else ''}}">
         {% if header_list %}
@@ -27,17 +29,17 @@
         <tfoot>
             <tr>                
                 <th colspan="2" class="cart-album-remark"  scope="col">
-                    <span style="white-space: nowrap;">
+                    <span class="cart-album-title">
                         Total:
                     </span>                            
                 </th>            
                 <th class="cart-album-price" style="width: 100px;" scope="col">
-                    <span style="white-space: nowrap;">
-                        {{total_price|shop.format_price}}
+                    <span class="cart-album-title">
+                        {{ price.discount(total_price, total_price }}
                     </span>                            
                 </th>            
                 <th style="width: 100px;" scope="col">
-                    <span style="white-space: nowrap;">
+                    <span clas="cart-album-title">
                     </span>                            
                 </th>            
             </tr>
@@ -45,23 +47,10 @@
     </table>
 {% endmacro %}
 
-{% macro price_discount(subtotal, discount) %}
-    {% if discount > 0 %}
-        <span class="cart-discount">
-            <ins>
-                <span>{{(subtotal * (1 - discount))|shop.format_price}}</span>
-            </ins>
-            <del>
-                <span>{{subtotal|shop.format_price}}</span>        
-            </del>
-        </span>
-    {% else %}
-        <span>{{(subtotal * (1 - discount))|shop.format_price}}</span>
-    {% endif %} 
-{% endmacro %}
-
 {% macro table_album(album_title, discount, subtotal, num_items) %}
     {% set caller_content = caller() %}
+    {% set item_price = (subtotal * (1 - discount)) %}
+
     <tr class="cart-table-album active">
         <td class="cart-album-title">
             <span>
@@ -75,7 +64,7 @@
         </td>
         <td class="cart-price" colspan="2">
             <span class="cart-toggle-element" >
-                <span>{{(subtotal * (1 - discount))|shop.format_price}}</span>
+                {{ price.discount(item_price, item_price) }}
             </span>
         </td>
     </tr>
@@ -95,7 +84,7 @@
             <span>Subtotal ({{num_items}} items):</span>
         </td>
         <td colspan="2" class="cart-price">
-            {{ price_discount(subtotal, discount) }}
+            {{ price.discount_by_percentage(subtotal, discount) }}
         </td>
     </tr>
 {% endmacro %}
@@ -109,7 +98,7 @@
     </tr>
 {% endmacro %}
 
-{% macro row(image, price, delete_url=None) %}    
+{% macro row(image, item_price, delete_url=None) %}
     <tr style="display: table-row">
         <td class="cart-photo">
             <img class="cart-details-img" width="70px;" src="{{ image }}">
@@ -120,7 +109,7 @@
             </span>
         </td>
         <td>
-            <span class="cart-album-price">{{price|shop.format_price}}</span>
+            {{ price.discount(item_price, item_price) }}
         </td>
         <td>
             {% if delete_url %}

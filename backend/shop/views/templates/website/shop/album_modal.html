@@ -20,7 +20,7 @@
                         <span>Discount:</span>
                     </td>
                     <td colspan="2" class="cart-price">
-                        <span>{{ (1 - (data.discounted_price / data.original_price ))|shop.format_percentage}}</span>
+                        {{ price.percentage_from_discount(data.original_price, data.discounted_price) }}
                     </td>
                 </tr>
             {% endif %}

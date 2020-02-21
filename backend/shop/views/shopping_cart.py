@@ -40,7 +40,7 @@ def cart_detail():
     if url is None:
         url = url_for('shop.index_view')
     try_close_cart()
-    resp = make_response(render_template('website/cart/photos_cart.html',
+    resp = make_response(render_template('website/cart/cart.html',
                            cart_items=ProductInventory.get_content(),
                            total_price=ProductInventory.get_total_price(),
                            return_url=url
