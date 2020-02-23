@@ -12,7 +12,7 @@
     <table class="cart-table table-hover table w-100 {{c_class if c_class else ''}}">        
         <tbody>
             {% for image in data.images %}  
-                {{ cart.row(image=image.thumbnail, price=image.discounted_price, delete_url=None) }}
+                {{ cart.row(image=image.thumbnail, item_price=image.discounted_price, delete_url=None) }}
             {% endfor %}
             {% if data.discounted_price != data.original_price %}
                 <tr style="display: table-row">

@@ -2,6 +2,7 @@
 /* Photonav Section
 --------------------------------*/
 #photonav {
+    margin-top: 40px;
     margin-bottom: 80px;
 }
 
@@ -140,4 +141,15 @@ button.mfp-close {
     margin-top: 7px;
     margin-right: 20px;
     padding: 4px 10px;
+}
+
+.photo-lightbox-price span {
+    font-size: 1rem !important;
+}
+
+/* Lightbox
+--------------------------------*/
+
+.title-price-same span {
+    font-size: 0.9375rem !important;
 }

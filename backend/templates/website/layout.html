@@ -17,7 +17,7 @@
 		{{lib.cart(None, cart_num_of_items)}}
 	{% endblock %}
 	{% block cart_modal_block %}
-		{{lib.cart_modal(url_for('shop.cart_detail'))}}
+		{{lib.cart_modal(url_for('shop.cart_detail', url=url_for('shop.index_view')))}}
 	{% endblock %}
 
 	<main id="main">
@@ -35,10 +35,12 @@
 	{{super()}}
 	
 	$('#navbar').scrollToFixed();
-	$('#outer-cart').scrollToFixed({
-		marginTop : $('#navbar').outerHeight() + 20,
+	//#outer-cart	
+	$('#shopping-cart').scrollToFixed({
+		marginTop : $('#navbar').outerHeight(true) + 20,
 		//marginTop : 95 , // outherHeight is not working probably because of the transitions
 		zIndex : 500,
+		spacerClass: $('#spacer'),
 	});
 
 {% endblock %}

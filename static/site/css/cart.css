@@ -22,6 +22,12 @@
    margin-bottom: 20px;
  }
 
+ #terms-condition {
+     padding-left: 25px;
+     padding-right: 25px;
+     margin-top: 25px;
+ }
+
  /* Payment button */
  .pay-btn-processing {
      display: none;

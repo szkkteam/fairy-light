@@ -4,35 +4,7 @@
 
 {% block custom_css %}
     {{ super() }}
-    <link href="{{ site_static.url(filename='site/css/index/style.css') }}" rel="stylesheet">
-
-    <style>
-        #services .tab-menu a.active,
-        #services .tab-content {
-            background-color: #303030;
-        }
-
-        #services .tab-menu a {
-            padding-left: 10px;
-            padding-bottom: 10px;
-            padding-top: 10px;
-        }
-
-        #services .tab-menu a h4 {
-            margin-bottom: 0px;
-        }   
-
-        #services .tab-menu a:hover {
-            background-color: #606060;
-            text-decoration: none;
-        }
-
-        #services .tab-content>div {
-            padding: 20px;
-        }
-    
-    </style>
-
+    <link href="{{ site_static.url(filename='site/css/services.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block main_block %}

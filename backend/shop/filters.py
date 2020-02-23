@@ -12,8 +12,8 @@ from markupsafe import Markup
 
 def format_price(value, iso_locale='de_DE'):
     print("Value: ",value)
-    if value == 0:
-        return 'Free'
+    #if value == 0:
+    #    return 'Free'
     return format_currency(value, 'EUR', format=u'¤ #.##0,00', locale=iso_locale)
 
 def format_percentage(value, default=0.0):

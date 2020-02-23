@@ -1,7 +1,7 @@
-{% macro member(picture, name, role, facebook_link, instagram_link) %}
+{% macro member(picture, name, role, facebook_link, instagram_link, alt=None) %}
     <div class="team-member">
         <div class="team-pic">
-            <img class="rounded-circle" src="{{picture}}">
+            <img class="rounded-circle img-fluid" src="{{picture}}" alt="{{ 'alt|join(' ')' if alt else '' }}">
         </div>
         <h4>{{name}}</h4>
         <span>{{role}}</span>

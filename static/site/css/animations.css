@@ -5,6 +5,8 @@
 }
 
 
+/* Navigation link hover animation (Bottom-Top borders out)
+--------------------------------*/
 .anim--top-bottom-borders--out a.nav-link {
     position: relative;
     text-decoration: none;
@@ -48,7 +50,8 @@
     animation: sonarEffect 1.3s ease-out 75ms;
   }
 
-
+/* Carousel caption slide in animation
+--------------------------------*/
 .anim--carousel-caption--slide-in {
     opacity: 0; /* Initial Opacity set to 0 */
     animation: slide-in 0.8s forwards;
@@ -134,4 +137,24 @@
     100% {
         -webkit-transform: rotate(360deg); /* Для Safari, Chrome, iOS */
     }
+}
+
+/* Shopping cart open click animation
+--------------------------------*/
+.anim--shrink-09 {
+    transition: all .2s ease-in-out;
+}
+
+.anim--shrink-09:hover {
+    -webkit-transform: scale(0.9);
+    -moz-transform: scale(0.9);
+    -ms-transform: scale(0.9);
+    transform: scale(0.9);
+}
+
+.anim--grow-13 {
+    -webkit-transform: scale(1.3);
+    -moz-transform: scale(1.3);
+    -ms-transform: scale(1.3);
+    transform: scale(1.3);
 }

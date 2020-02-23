@@ -7,7 +7,7 @@
         <div class="album-cover">
             <a href="{{element.url_category}}">
                 <span>
-                    <img class="card-img-top" src="{{element.thumbnail}}" width="253" height="220" alt="{{element.title|lower}}">
+                    <img class="card-img-top img-fluid" src="{{element.thumbnail}}" width="253" height="220" alt="{{element.title|lower}}">
                     <div class="album-title-overlay">                            
                         <h4>{{element.title}}</h4>
                     </div>
@@ -26,7 +26,7 @@
         {% if element.can_buy %}        
             <div class="card-body text-left">
                 <p class="mb-1">Buy {{element.num_of_images}} picture now for</p>
-                <div>{{ price.discount(data.original_price, data.discounted_price) }}</div>
+                <div>{{ price.discount(element.original_price, element.discounted_price) }}</div>
                 <div class="mt-2">
                     <a href="{{element.url_add_to_cart}}" class="btn btn-primary album-detail w-100" data-toggle="modal" data-target="#exampleModalLong">ADD ALBUM TO CART</a>    
                 </div>                        
@@ -39,7 +39,7 @@
     <div class="card text-center">
         <div class="album-cover">
             <a class="popup-item" href="{{element.url_image}}">
-                <img class="card-img-top" src="{{element.thumbnail}}" width="253" height="220" alt="{{element.title|lower}}">
+                <img class="card-img-top img-fluid" src="{{element.thumbnail}}" width="253" height="220" alt="{{element.title|lower}}">
             </a>                        
             <div class="album-social-overlay">
                 <div class="pull-right pictures-share">

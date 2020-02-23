@@ -12,8 +12,8 @@
         </span>
 {% endmacro %}
 
-{% macro discount_by_percentage(subtotal, discount) %}
-    {{ discount( subtotal, (subtotal * ( 1 - discount)) ) }}
+{% macro discount_by_percentage(subtotal_price, discount_percentage) %}
+    {{ discount( subtotal_price, (subtotal_price * ( 1.0 - discount_percentage)) ) }}
 {% endmacro %}
 
 {% macro percentage_from_discount(original_price, discounted_price) %}

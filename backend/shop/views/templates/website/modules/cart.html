@@ -35,7 +35,7 @@
                 </th>            
                 <th class="cart-album-price" style="width: 100px;" scope="col">
                     <span class="cart-album-title">
-                        {{ price.discount(total_price, total_price }}
+                        {{ price.discount(total_price, total_price) }}
                     </span>                            
                 </th>            
                 <th style="width: 100px;" scope="col">
@@ -99,7 +99,7 @@
 {% endmacro %}
 
 {% macro row(image, item_price, delete_url=None) %}
-    <tr style="display: table-row">
+    <tr class="title-price-same" style="display: table-row">
         <td class="cart-photo">
             <img class="cart-details-img" width="70px;" src="{{ image }}">
         </td>
@@ -108,7 +108,7 @@
                 Digital Photo
             </span>
         </td>
-        <td>
+        <td >
             {{ price.discount(item_price, item_price) }}
         </td>
         <td>

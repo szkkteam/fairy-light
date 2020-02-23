@@ -1,4 +1,5 @@
 {% import 'website/modules/cart.html' as cart with context %}
+{% import 'website/modules/price.html' as price with context %}
 
 {% call cart.table_mini() %}
     {% for category_id, category in cart_items.items() %}
@@ -6,12 +7,12 @@
             {{ cart.row_mini(image=item['thumb'], price=item['price'], delete_url=url_for('shop.cart_item_api', item_id=item['id'])) }}
         {% endfor %}
     {% endfor %}
-    <tr>
-        <td class="cart-album-remark">
+    <tr class="title-price-same">        
+        <td colspan="2" class="cart-album-remark text-right">
             <span>Total:</span>
         </td>
-        <td colspan="2" class="cart-price">
-            <span>{{total_price|shop.format_price}}</span>
+        <td  class="cart-price">
+            {{ price.discount(total_price, total_price) }}
         </td>
     </tr>
 {% endcall %}

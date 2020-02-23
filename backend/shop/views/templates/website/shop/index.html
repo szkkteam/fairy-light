@@ -1,5 +1,6 @@
 {% extends 'website/layout.html' %}
 {% from 'website/macros.html' import separator with context %}
+{% import 'website/lib.html' as lib with context %}
 {% import 'website/modules/breadcrumb_m.html' as breadcrumb_m with context %}
 {% import 'website/modules/cards.html' as card with context %}
 
@@ -126,6 +127,12 @@
 </section>
 {% endblock %}
 
+
+{% block cart_modal_block %}
+    {{lib.cart_modal(url_for('shop.cart_detail', url=current_url))}}
+{% endblock %}
+
+
 {% block tail_js %}
     {{ super() }}
     
@@ -209,8 +216,6 @@
     <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 {% endblock %}
 
-
-
 {% block document_ready %}
 {{super()}}
 
@@ -230,6 +235,11 @@ urls: {
 },
 callbacks: {
     onCounterUpdated: function(cnt) {
+        var element = $(this).find('a');
+        element.addClass('grow');
+        setTimeout(function() {
+            element.removeClass('grow');
+        }, 200);
         this.show();
     },
     onCartUpdated: function(e) {
@@ -264,7 +274,7 @@ callbacks: {
                 }, 800, function () {
                     flyingImg.remove();
                     /* Update the counter at the shopping cart. */
-                    _that.updateNumOfItems(resp.shopItems)
+                    _that.updateNumOfItems(resp.shopItems);                    
                 });                             
                 item.append(flyingImg);
                 return false;                

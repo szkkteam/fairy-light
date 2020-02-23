@@ -1,8 +1,8 @@
-{% macro item(img, title, text, link='#') %}
+{% macro item(img, title, text, link='#', alt=None) %}
 <div class="col-md-4 service-item">
     <div class="service-pic">
         <a href="{{link}}">
-            <img class="rounded-circle" src="{{img}}">
+            <img class="rounded-circle img-fluid" src="{{img}}" alt="{{ 'alt|join(' ')' if alt else '' }}">
         </a>
     </div>
     <h3 class="service-title">

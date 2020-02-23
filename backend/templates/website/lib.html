@@ -5,11 +5,11 @@
         {{ nav_link('Home', url_for('site.index'))}}
         {{ nav_link('Photos', url_for('shop.index_view')) }}
         {{ nav_link('Services', url_for('site.services')) }}
-        <a class="navbar-brand large-logo" href="{{url_for('site.index')}}">
+        <a class="navbar-brand large-logo flex-fill" href="{{url_for('site.index')}}">
             <img src="http://placehold.it/60x60" alt="logo large fairy light event photography">
         </a>
-        {{ nav_link('About', url_for('site.about')) }}
         {{ nav_link('Portfolio', url_for('site.portfolio')) }}
+        {{ nav_link('About', url_for('site.about')) }}
         {{ nav_link('Contact', url_for('site.index') + '#contact') }}
     {% endcall %}
 {% endmacro %}
@@ -25,7 +25,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav main-nav nav-fill align-items-center">
+                <ul class="navbar-nav main-nav nav-fill align-items-center anim--top-bottom-borders--out">
                    {{caller()}}
                 </ul>
                 </div>
@@ -36,7 +36,7 @@
 
 {% macro nav_link(name, url) -%}
     {% if request.endpoint.endswith(url) %}
-        <li class="nav-item active">
+        <li class="nav-item flex-fill active">
             <a class="nav-link" href="{{url}}">{{name|upper}}
                 <span class="sr-only">
                     (current)
@@ -44,7 +44,7 @@
             </a>
         </li>
     {% else %}
-        <li class="nav-item">
+        <li class="nav-item flex-fill">
             <a class="nav-link" href="{{url}}">{{name|upper}}</a>
         </li>
 	{% endif %}
@@ -53,7 +53,14 @@
 {% macro render_footer() %}
     {% call footer() %}
         {{footer_link('Home', url_for('site.index',))}}
-        {{footer_link('About', url_for('site.index'))}}
+        {{footer_link('About', url_for('site.about'))}}
+        {{footer_link('Contact', url_for('site.index') + '#contact')}}
+        {{footer_link('Terms & Conditions', url_for('site.tc_shop'))}}
+        {{footer_link('Privacy Policy', url_for('site.privacy_policy'))}}
+        {{footer_link('Cookie Policy', url_for('site.cookie_policy'))}}
+        {{footer_link('Return & Refund', url_for('site.refund_policy'))}}
+        {{footer_link('Terms of Service', url_for('site.service_policy'))}}
+        {{footer_link('Disclaimer', url_for('site.disclaimer'))}}
     {% endcall %}
 {% endmacro %}
 
@@ -141,46 +148,16 @@
     </footer>
 {% endmacro %}
 
-{% macro cart(url, counter=0, hide_if_empty=True) %}
+{% macro cart(url, counter=0, hide_if_empty=True, always_hide=False) %}
     <div id="outer-cart" class="container" >
-        <div id="shopping-cart" style="display: {{'none' if (counter == 0) and hide_if_empty else 'block'}};">
-            <a class="hi-icon" data-toggle="modal" data-target="#shopping-cart-modal">
+        <div id="shopping-cart" style="display: {{'none' if ((counter == 0) and hide_if_empty) or always_hide else 'block'}};">
+            <a class="anim--shrink-09" data-toggle="modal" data-target="#shopping-cart-modal">
                 <span class="fa-stack fa-2x has-badge" data-count="{{counter}}">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i>
                 </span>
             </a>
         </div>
-	</div>
-{% endmacro %}
-
-{% macro cart_modal_backup(url) %}
-	<div class="modal fade" id="shopping-cart-modal" tabindex="-1" role="dialog" aria-labelledby="shopping-cart-modal-label" aria-hidden="true">
-	  <div class="modal-dialog" role="document">
-		<div class="modal-content">
-		  <div class="modal-header">
-			<h5 class="modal-title" id="shopping-cart-modal-label">Shopping Cart</h5>
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			  <span aria-hidden="true">&times;</span>
-			</button>
-		  </div>
-		  <div id="shopping-cart-content" class="modal-body">
-			<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>
-		  </div>
-		  <div class="modal-footer justify-content-end">
-			<span class="amount-title">
-				Total:
-			</span>
-			<span class="amount-amount">
-				$20
-			</span>
-		  </div>
-		  <div class="modal-footer justify-content-between">
-			<button type="button" class="btn btn-secondary " data-dismiss="modal">Back</button>
-			<a class="btn btn-primary " href="{{url}}">View Cart</a>
-		  </div>
-		</div>
-	  </div>
 	</div>
 {% endmacro %}
 

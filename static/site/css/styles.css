@@ -75,24 +75,31 @@ hr.header-separator {
     text-decoration: none;
     line-height:20px;        
     margin:10px 32px;
+    /*
     transition:all 0.3s ease-in-out;
     -moz-transition:all 0.3s ease-in-out;
     -webkit-transition:all 0.3s ease-in-out;
+    */
 }
-
+/*
 #navbar .main-nav li a:hover{ 
     text-decoration:none;
     color: #7cc576;
-}
+}*/
 
 #navbar .main-nav li a.navbar-brand {
     padding-bottom: 0px !important;
     padding-top: 0px !important;
 }
 
+#navbar .navbar-brand {
+    margin-right: 0;
+}
+
 /* Cart Icon
 ---------------------------------*/    
 #shopping-cart {
+    /* margin-top: 20px;*/
     float: right;
 }
 
@@ -108,6 +115,7 @@ hr.header-separator {
 }	
 
 #shopping-cart .fa-stack[data-count]:after{
+    transition: all .2s ease-in-out;
     position:absolute;
     right:0%;
     top:1%;
@@ -126,35 +134,18 @@ hr.header-separator {
 #shopping-cart .fa-shopping-cart::before {
     color: #000;
 }
+
+#shopping-cart .grow .fa-stack[data-count]:after{
+    -webkit-transform: scale(1.3);
+    -moz-transform: scale(1.3);
+    -ms-transform: scale(1.3);
+    transform: scale(1.3);
+}
         
+#spacer {
+    height: 10px;
+}
         
-#shopping-cart .hi-icon-archive:before {
-    content: "\e00f";
-}
-
-#shopping-cart .hi-icon:after {
-    pointer-events: none;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    top: 0px;
-    left: 0px;
-    content: '';
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
-}
-
-#shopping-cart .hi-icon-active {
-    background: rgba(255, 255, 255, 0.05);
-    -webkit-transform: scale(0.93);
-    -moz-transform: scale(0.93);
-    -ms-transform: scale(0.93);
-    transform: scale(0.93);
-    color: #fff;
-}
-
 /* Cart Modal
 --------------------------------*/
 #shopping-cart-modal .amount-title {
@@ -181,6 +172,10 @@ hr.header-separator {
 
 #shopping-cart-modal button.clear-item-mini {
     padding: 0.0rem 0.25rem !important;
+}
+
+#shopping-cart-modal .title-price-same span {
+    font-size: 0.9375rem !important;
 }
 
 
