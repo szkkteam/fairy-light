@@ -64,6 +64,7 @@ EXTENSIONS = [
     'backend.extensions.debug:toolbar',
     'backend.extensions.mediamanager:storage',
     'backend.extensions.stripe:stripe',
+    'backend.extensions.babel:babel',
 ]
 
 # list of extensions to register after the bundles
@@ -189,6 +190,16 @@ class BaseConfig(object):
     STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
     STRIPE_WEBHOOK_SECRET = os.environ['STRIPE_WEBOOK_SECRET']
     STRIPE_PUBLISHABLE_KEY = os.environ['STRIPE_PUBLISHABLE_KEY']
+
+    ##########################################################################
+    # Babel                                                                  #
+    ##########################################################################
+    LANGUAGES =  {
+        'en': 'English',
+        'hu': 'Magyar',
+        'de': 'Deutsch',
+    }
+    BABEL_TRANSLATION_DIRECTORIES = 'backend/i18n'
 
 class ProdConfig(BaseConfig):
     ##########################################################################
