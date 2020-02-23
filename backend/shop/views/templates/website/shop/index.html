@@ -1,0 +1,293 @@
+{% extends 'website/layout.html' %}
+{% from 'website/macros.html' import separator with context %}
+{% import 'website/lib.html' as lib with context %}
+{% import 'website/modules/breadcrumb_m.html' as breadcrumb_m with context %}
+{% import 'website/modules/cards.html' as card with context %}
+
+{% block head_meta %}
+    {{ super() }}
+    {% if facebook %}
+        <meta property="fb:app_id" content="{{facebook_app_id}}" />
+        <meta property="og:url" content="{{facebook.url}}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Fairy Light - Event Photography" />
+        <meta property="og:description" content="Check out our new pictures in {{facebook.title}}" />
+        <meta property="og:locale" content="en_EN">
+        <meta property="og:image" content="{{facebook.thumbnail}}" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="253" />
+        <meta property="og:image:height" content="220" />
+        <meta property="og:image:alt" content="{{facebook.title|lower}}" />
+    {% endif %}
+{% endblock %}
+
+{% block custom_css %}
+    {{ super() }}
+    <link href="{{ site_static.url(filename='site/css/shop.css') }}" rel="stylesheet">
+    <script src="http://code.jquery.com/color/jquery.color-2.1.2.min.js"></script>
+    <style>
+    </style>
+{% endblock %}
+
+
+{% block header_nav_element_block %}
+    {{ super() }}
+    <li class="nav-item">        
+        <div id="shopping-cart-dropdown" class="dropdown">
+            <a id="shopping-cart" href="#" class="nav-link d-inline-block dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span id="shopping-cart-items" class="highlight-item" data-val="{{ cart_num_of_items }}">
+                    {{ cart_num_of_items }}
+                </span>
+                <i class="material-icons" style="padding:0 0 0 15px;font-size: 24px;">shopping_cart</i>
+            </a>
+            <div id="cart-dropdow" class="dropdown-menu">
+                <span class="dropdown-content">
+                    Loading ...
+                </span>
+                <hr class="header-separator"/>
+                <div class="row text-center my-3">
+                    <div class="col">
+                        <a href="{{url_for('shop.cart_detail', url=current_url)}}" class="btn btn-primary" id="shopping-cart-detail">
+                            <span class="text-nowrap">View Cart</span>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="{{url_for('shop.cart_api')}}" class="btn btn-primary" id="shopping-cart-clear">
+                            <span class="text-nowrap">Clear Cart</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>    
+    {{ separator() }}
+{% endblock %}
+
+
+{% block main_block %}
+<section id="photonav">
+    <div class="container">
+        <div class="row no-gutters">
+            <div class="col-12 col-sm-11">
+                {% if previous_url %}
+                <div class="navigation-back clear-fix">
+                    <a class="btn btn-primary btn-arrow-left pull-left" href="{{previous_url}}">
+                        <i class="fa fa-arrow-left"></i>
+                        Back
+                    </a>
+                </div>
+                {% endif %}
+                <div class="navigation-breadcrumb">
+                    {% block breadcrumb_block %}
+                        {% call breadcrumb_m.base() %}
+                            {{ breadcrumb_m.link(url_for('shop.index_view'), 'Home' ) }}
+                            {% for breadcrumb in breadcrumbs %}
+                                {% if not loop.last %}
+                                    {{ breadcrumb_m.link(breadcrumb.url, breadcrumb.title) }}
+                                {% else %}
+                                    {{ breadcrumb_m.link(breadcrumb.url, breadcrumb.title, True) }}
+                                {% endif %}
+                            {% endfor %}
+                        {% endcall%}
+                    {% endblock %}                    
+                </div>
+            </div>		
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <hr class="header-separator"/>
+            </div>
+        </div>
+        <div id="photonav-filter" class="row collapse">
+            <div class="col-12">
+                <div style="height: 200px">
+                    I'm the filter - Placeholder
+                </div>					
+                <hr class="header-separator"/>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="photos">
+    <div class="container">
+        <div class="row">       
+            {% block photos_section %}     
+
+            {% endblock %}
+        </div>
+    </div>		
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                Loading ...
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+
+{% block cart_modal_block %}
+    {{lib.cart_modal(url_for('shop.cart_detail', url=current_url))}}
+{% endblock %}
+
+
+{% block tail_js %}
+    {{ super() }}
+    
+    <script>
+    
+
+    $(document).ready( function() {
+
+        window.fbAsyncInit = function() {
+            FB.init({
+            appId            : '{{facebook_app_id}}',
+            autoLogAppEvents : true,
+            xfbml            : true,
+            version          : 'v6.0'
+            });
+        };
+
+        /*
+        $('span.dropdown-content').shoppingCart({
+            buyButton: '.cart-add',
+            clearButton: '#shopping-cart-clear',
+            removeButton: '.clear-item-mini',
+            indicator: '#shopping-cart-items',
+            urlGetCartContent: null,
+        });
+
+
+        $('.dropdown-toggle').dropdown({
+            boundary : 'window',
+            }
+        );
+        */
+
+        $('.share-facebook').click(function(e) {
+            e.preventDefault();
+            FB.ui({
+                method: 'share',
+                href: $(this).attr('href'),
+            }, function(response){});
+        });
+       
+
+        $('.album-detail').click(function(e) {
+            //e.preventDefault();
+            var targetId = $(this).attr('data-target');
+            var url = $(this).attr('href')
+            $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'html',
+                success: function (data) {
+                    $(targetId + ' .modal-content').html(data);
+                },
+                error: function (data) {
+                    console.log(data.responseJSON);
+                }
+            }); 
+        });
+        /*
+        $('#shopping-cart-dropdown').on('show.bs.dropdown', function() {
+            $('.dropdown .dropdown-content').html("Loading ...");
+            console.log("Dropped down");
+
+            $.ajax({
+                type: 'GET',
+                url: "{{url_for('shop.cart_api')}}",
+                dataType: 'html',
+                success: function (data) {
+                    $('.dropdown .dropdown-content').html(data);
+                },
+                error: function (data) {
+                    console.log(data.responseJSON);
+                }
+            }); 
+        });        
+        */
+
+    });
+
+    </script>
+    <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
+{% endblock %}
+
+{% block document_ready %}
+{{super()}}
+
+
+{% endblock %}
+
+{% block shopping_cart_init %}
+$('#shopping-cart').shoppingCart({
+delegates : {
+    cartModal: '#shopping-cart-modal',
+    cartContent: '#shopping-cart-content',
+    buyButton: '.cart-add',	
+    removeButton: '.cart-remove',
+},
+urls: {
+    cartContent: "{{url_for('shop.cart_api')}}",
+},
+callbacks: {
+    onCounterUpdated: function(cnt) {
+        var element = $(this).find('a');
+        element.addClass('grow');
+        setTimeout(function() {
+            element.removeClass('grow');
+        }, 200);
+        this.show();
+    },
+    onCartUpdated: function(e) {
+        $('#shopping-cart-modal').modal('handleUpdate');
+    },
+    onAdd: function(e, resp) {
+        var _that = this;
+        // If item not present in the cart
+        if (this.numOfItems != resp.shopItems) {
+            // Get the defined animation if any
+            const animationClass = e.attr('data-animation');
+            // If animation defined
+            if (animationClass) {
+                // Find card image
+                var item = e.parent().parent().parent();
+                img = item.find('img');
+                
+                // Get cart offset
+                const offset = $(this).offset();                            
+                cartTopOffset = offset.top - item.offset().top,
+                cartLeftOffset = offset.left - item.offset().left;
+
+                var flyingImg = $('<img class="' +  animationClass + '">');
+                flyingImg.attr('src', img.attr('src'));
+                flyingImg.css('width', '200').css('height', '200');
+                flyingImg.animate({
+                    top: cartTopOffset,
+                    left: cartLeftOffset,
+                    width: 50,
+                    height: 50,
+                    opacity: 0.1
+                }, 800, function () {
+                    flyingImg.remove();
+                    /* Update the counter at the shopping cart. */
+                    _that.updateNumOfItems(resp.shopItems);                    
+                });                             
+                item.append(flyingImg);
+                return false;                
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+
+
+    },
+}
+});
+{% endblock %}
+

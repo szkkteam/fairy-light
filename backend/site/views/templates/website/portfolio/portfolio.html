@@ -1,0 +1,75 @@
+{% extends 'website/layout.html' %}
+{% import 'website/modules/sections.html' as section with context %}
+{% import 'website/modules/services.html' as services with context %}
+{% import 'website/modules/portfolio.html' as folio with context %}
+
+{% block custom_css %}
+    {{ super() }}
+    <link href="{{ site_static.url(filename='site/css/portfolio.css') }}" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/venobox/1.8.6/venobox.min.css">    
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/venobox/1.8.6/venobox.min.js"></script>
+{% endblock %}
+
+{% block main_block %}
+    <section id="title">
+        <div class="container mt-5">
+            {{ section.header('Portfolio', 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium') }}
+        </div>            
+    </section>
+    <section id="portfolio">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <ul id="portfolio-filters">
+                        {{ folio.filter('All', '*', is_active=True) }}
+                        {{ folio.filter('Photos', '.filter-photos') }}
+                        {{ folio.filter('Videos', '.filter-videos') }}
+                    </ul>
+                </div>
+            </div>
+            <div class="row portfolio-container">
+                {{ folio.image("http://placehold.it/800x600", "filter-photos", title='Photo 1', desc='Check out more') }}
+                {{ folio.image("http://placehold.it/800x600", "filter-photos", title='Photo 2', desc='Check out more') }}
+                {{ folio.youtube("https://img.youtube.com/vi/9fQdL5IyHys/0.jpg", "https://www.youtube.com/watch?v=9fQdL5IyHys", "filter-videos", title='Video 1', desc='Check out more') }}
+                {{ folio.youtube("https://img.youtube.com/vi/s0RGrvUell0/0.jpg", "https://www.youtube.com/watch?v=s0RGrvUell0", "filter-videos", title='Video 2', desc='Check out more') }}                
+            </div>
+        </div>
+    </section>
+    <section id="contact">
+        <div class="container">
+            {% call section.header('Are you interested?', 'We are happy to answer your questions.') %}
+                <div class="text-center">
+                    <a href="{{url_for('site.index')}}#contact" class="btn btn-primary w-25" >Write Now!</a>
+                </div>    
+            {% endcall %}
+        </div>
+    </section>
+{% endblock %}
+
+{% block tail_js %}
+    {{ super() }}
+    
+    <script>
+        $(window).on('load', function() {
+            var portfolioIsotope = $('.portfolio-container').isotope({
+                itemSelector: '.portfolio-item',
+                layoutMode: 'fitRows'
+            });
+
+            $('#portfolio-filters li').on('click', function() {
+                $("#portfolio-filters li").removeClass('filter-active');
+                $(this).addClass('filter-active');
+
+                portfolioIsotope.isotope({
+                    filter: $(this).data('filter')
+                });
+            });
+
+            $(document).ready(function() {
+                $('.venobox').venobox();
+            });
+        });
+    </script>
+{% endblock %}

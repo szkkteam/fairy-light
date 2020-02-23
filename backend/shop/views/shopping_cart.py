@@ -6,7 +6,7 @@ import traceback
 import sys
 
 # Pip package imports
-from flask import render_template, request, make_response, redirect, abort, Response, jsonify, session
+from flask import render_template, request, make_response, url_for, abort, Response, jsonify, session
 from flask.views import MethodView
 from werkzeug.exceptions import BadRequest
 from loguru import logger
@@ -36,18 +36,21 @@ def try_close_cart():
 
 @shop.route('/cart/detail')
 def cart_detail():
+    url = request.args.get('url')
+    if url is None:
+        url = url_for('shop.index_view')
     try_close_cart()
-    resp = make_response(render_template('photos_cart.html',
+    resp = make_response(render_template('website/cart/cart.html',
                            cart_items=ProductInventory.get_content(),
                            total_price=ProductInventory.get_total_price(),
-                           return_url=request.args.get('url')
+                           return_url=url
                            ))
     resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
     return resp
 
 @shop.route('/cart/detail/refresh')
 def cart_detail_refresh():
-    return render_template('cart_detail.html',
+    return render_template('website/cart/cart_detail.html',
                            cart_items=ProductInventory.get_content(),
                            total_price=ProductInventory.get_total_price()
                            )
@@ -57,10 +60,23 @@ class CartApi(MethodView):
 
     def get(self):
         try:
-            return render_template('cart_mini.html',
-                                   cart_items=ProductInventory.get_content(),
-                                   total_price=ProductInventory.get_total_price(),
-                                   )
+            print("Request: ", request.content_type, flush=True)
+            try:
+                is_json = request.content_type.startswith('application/json')
+            except Exception:
+                is_json = False
+
+            if is_json:
+                return jsonify(dict(
+                    cartItems=ProductInventory.get_content(),
+                    totalPrice=ProductInventory.get_total_price(),
+                    numOfItems=ProductInventory.get_num_of_items()
+                ))
+            else:
+                return render_template('website/cart/cart_mini.html',
+                                       cart_items=ProductInventory.get_content(),
+                                       total_price=ProductInventory.get_total_price(),
+                                       )
         except Exception as e:
             logger.error(traceback.format_exc())
             return abort(500)

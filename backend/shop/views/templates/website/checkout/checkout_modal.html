@@ -1,0 +1,124 @@
+<section id="main" class="loading">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="register-form" method="post">
+                            <fieldset id="personal" class="field-border">
+							<legend>Personal information.</legend>
+							<div class="form-group">
+								<span>Name</span>
+								<input type="text" name="name" class="form-control" placeholder="Name" autofocus required>
+								<div class="form-errors text-danger" role="alert">
+								</div>										
+							</div>		
+                            <div class="form-group">
+                                <span>Email</span>
+                                <input type="email" name="email" class="form-control" placeholder="Email" required >
+                                <div class="form-errors text-danger" role="alert">
+                                </div>																	
+							</fieldset>
+							<fieldset id="shipping-billing" class="field-border">
+								<legend>Billing information.</legend>								
+								<div class="form-group">
+									<span>Address</span>
+									<input type="text" name="address" class="form-control" placeholder="Address" required >
+									<div class="form-errors text-danger" role="alert">
+									</div>										
+								</div>
+								<div class="form-group">
+									<span>City</span>
+									<input type="text" name="city" class="form-control" placeholder="City" required >
+									<div class="form-errors text-danger" role="alert">
+									</div>										
+								</div>
+								<div class="form-group">
+									<span>Postal Code</span>
+									<input type="text" name="zip" class="form-control" placeholder="Postal Code" required >
+									<div class="form-errors text-danger" role="alert">
+									</div>										
+								</div>
+								<div class="form-group">
+									<span>Country</span>
+									<select class="form-control" name="country">
+									  <option value="BE">Belgium</option>
+									  <option value="BG">Bulgaria</option>
+									  <option value="CZ">Czechia</option>
+									  <option value="DK">Denmark</option>
+									  <option value="DE">Germany</option>
+									  <option value="EE">Estonia</option>
+									  <option value="IE">Ireland</option>
+									  <option value="EL">Greece</option>
+									  <option value="ES">Spain</option>
+									  <option value="FR">France</option>
+									  <option value="HR">Croatia</option>
+									  <option value="IT">Italy</option>
+									  <option value="CY">Cyprus</option>
+									  <option value="LV">Latvia</option>
+									  <option value="LT">Lithuania</option>
+									  <option value="LU">Luxembourg</option>
+									  <option value="HU">Hungary</option>
+									  <option value="MT">Malta</option>
+									  <option value="NL">Netherlands</option>
+									  <option value="AT">Austria</option>
+									  <option value="PL">Poland</option>
+									  <option value="PT">Portugal</option>
+									  <option value="RO">Romania</option>
+									  <option value="SI">Slovenia</option>
+									  <option value="SK">Slovakia</option>
+									  <option value="FI">Finland</option>
+									  <option value="SE" selected="selected">Sweden</option>
+									</select>
+									<div class="form-errors" role="alert">
+									</div>										
+								</div>
+								</fieldset>
+                            <fieldset id="payment-information" class="field-border">
+                                <legend>Card Details.</legend>                                
+                                <div class="form-group">
+                                    <span>Card</span>
+                                    <div id="card-element" class="form-control">
+                                    <!-- A strip Element will be inserted here. -->
+                                    </div>							
+                                    <div id="card-errors" class="text-danger" role="alert"></div>
+                                </div>
+							</fieldset>
+							<div id="terms-condition" class="form-group">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="terms-condition-check">
+									<label class="custom-control-label" for="terms-condition-check">
+										I have read and agree to the <a href="{{url_for('site.tc_shop')}}">Terms & Conditions</a>.
+									</label>
+									<div class="form-errors text-danger" role="alert"></div>
+								</div>										
+							</div>
+                            <div class="form-group mt-4">
+                                <button id="submit-btn" type="submit" class="btn btn-primary d-block mx-auto w-100">							
+									<span class="pay-btn-idle">
+										Pay {{price_amount|shop.format_price}}
+									</span>
+									<span class="pay-btn-processing">
+										<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+										Loading...
+									</span>
+								</button>
+                            </div>
+						</form>
+						<span id="payment-status">								
+						</span>						
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+
+	initPayment("{{public_key}}",
+				"{{client_secret}}",
+				"{{url_for('shop.checkout_success')}}",
+				"{{url_for('shop.checkout_processing')}}",
+				"{{url_for('shop.checkout_failed')}}");
+
+</script>

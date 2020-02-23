@@ -1,0 +1,37 @@
+/* Title
+--------------------------------*/
+#title {
+    margin-top: 80px;
+}
+
+/* Services
+--------------------------------*/
+#services .tab-menu a.active,
+#services .tab-content {
+    background-color: #303030;
+}
+
+#services .tab-menu a {
+    padding-left: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+#services .tab-menu a h4 {
+    margin-bottom: 0px;
+}   
+
+#services .tab-menu a:hover {
+    background-color: #606060;
+    text-decoration: none;
+}
+
+#services .tab-content>div {
+    padding: 20px;
+}
+
+/* Contact
+--------------------------------*/
+#contact {
+    padding: 80px 0;
+}

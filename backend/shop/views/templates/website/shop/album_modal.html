@@ -1,0 +1,47 @@
+{% import 'website/modules/cart.html' as cart with context %}
+{% import 'website/modules/price.html' as price with context %}
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">{{ data.title}}</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <p>The following products will be added to your cart:</p>
+    <table class="cart-table table-hover table w-100 {{c_class if c_class else ''}}">        
+        <tbody>
+            {% for image in data.images %}  
+                {{ cart.row(image=image.thumbnail, item_price=image.discounted_price, delete_url=None) }}
+            {% endfor %}
+            {% if data.discounted_price != data.original_price %}
+                <tr style="display: table-row">
+                    <td colspan="2" class="cart-album-remark">
+                        <span>Discount:</span>
+                    </td>
+                    <td colspan="2" class="cart-price">
+                        {{ price.percentage_from_discount(data.original_price, data.discounted_price) }}
+                    </td>
+                </tr>
+            {% endif %}
+            <tr style="display: table-row">
+                <td colspan="2" class="cart-album-remark">
+                    <span>Subtotal ({{num_items}} items):</span>
+                </td>
+                <td colspan="2" class="cart-price">
+                    {{ price.discount(data.original_price, data.discounted_price) }}
+                </td>
+            </tr>
+        </tbody>        
+    </table>
+</div>
+<div class="modal-footer">
+<a href="{{data.url_add_to_cart}}" class="btn btn-primary cart-add w-100" data-dismiss="modal">ADD TO CART</a>    
+<div class="alert d-none alert-link alert-success alert-dismissible w-100 fade show" role="alert">
+    <strong>{{data.images|length}} item</strong> has been added to your cart. Click <a href="{{url_for('shop.cart_detail')}}">HERE</a> to visit your cart.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+</div>
+

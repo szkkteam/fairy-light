@@ -1,48 +1,12 @@
+
+/* Common Styles
+---------------------------------*/
 hr.header-separator {
     border: 1px solid white;
     border-radius: 5px;
     opacity: 0.6;
     margin: 0px;
 }
-
-h1.header-text {
-    font-size: 12px;
-    letter-spacing: 1px;
-    font-weight: bold;
-    margin: 0px;
-}
-
-.nav-link-icon i {
-    vertical-align: middle;
-    padding: 8px;
-}
-
-ul.nav-link-icon li:last-child {
-	display: none !important;
-}
-
-.carousel-caption {
-    background: rgb(0, 0, 0); /* Fallback color */
-    background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
-    color: #f1f1f1;
-    text-align: left;
-    right: 50%; /* TODO: This should be somehow dynamic regarding text size + padding*/
-    left: 5px;
-    bottom: 5px;
-    padding: 5px 8px;
-    margin: 0px;
-}
-
-.carousel-control-prev {
-    top: -20% !important;
-    /* left: -5% !important; Buggy on small screen size */
-}
-
-.carousel-control-next {
-    top: -20% !important;
-    /* right: -5% !important; Buggy on small screen size */
-}
-
 
 .flex-img-fix img {
     width: 100%;
@@ -76,181 +40,144 @@ ul.nav-link-icon li:last-child {
     margin: 16px 0;
 }
 
-/* Service Section
---------------------------------*/
-#services {
-	padding-bottom: 80px;
+/* Navigation
+---------------------------------*/    
+#navbar.outer-nav {
+    padding: 0px;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 4px 5px -3px #ececec;
+    background: #303030;
 }
 
-#services .service-item {
-    margin-bottom: 20px;
+#navbar .navbar {
+    padding: 0px;
 }
 
-#services .service-pic {
-    float: left;        
+
+#navbar .main-nav {
+    width: 100%;
+    text-align:center;
+    margin:0px 0 0px;
+    padding:0;
+    list-style:none;
+    justify-content: space-around;
+
 }
 
-#services .service-title {
-    margin-left: 80px;
-    font-weight: 700px;
-    margin-bottom: 15px;
-    text-transform: uppercase;
+#navbar .main-nav li{
+    margin:0 1px;
 }
 
-#services .service-description {
-    margin-left: 80px;
-    line-height: 24px;
+#navbar .main-nav li a{
+    color:#fff;
+    text-transform:uppercase;
+    font-family: 'Montserrat', sans-serif;
+    text-decoration: none;
+    line-height:20px;        
+    margin:10px 32px;
+    /*
+    transition:all 0.3s ease-in-out;
+    -moz-transition:all 0.3s ease-in-out;
+    -webkit-transition:all 0.3s ease-in-out;
+    */
+}
+/*
+#navbar .main-nav li a:hover{ 
+    text-decoration:none;
+    color: #7cc576;
+}*/
+
+#navbar .main-nav li a.navbar-brand {
+    padding-bottom: 0px !important;
+    padding-top: 0px !important;
 }
 
-/* Subscribe Section
---------------------------------*/
-#subscribe {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(http://placehold.it/600x260) fixed center center;
-  background-size: cover;
-  padding: 80px 0;
+#navbar .navbar-brand {
+    margin-right: 0;
 }
 
-#subscribe .subscribe-title {
-	font-weight: 700;
-}
-
-#subscribe .subscribe-text {
-	
-}
-
-#subscribe .subscribe-btn-container {
-	text-align: center;
-    padding-top: 20px;
-    cursor: pointer;
-}
-
-#subscribe .subscribe-btn {
-	text-transform: uppercase;
-	font-weight: 500;
-	font-size: 16px;
-	letter-spacing: 1px;
-	display: inline-block;
-	padding: 8px 20px;
-	border-radius: 2px;
-	margin: 10px;
-	border: 2px solid #fff;
-}
-
-#subscribe .modal-body input[type="email"] {
-    border: 0;
-    padding: 6px 8px;
-    width: 65%;
-}
-
-#subscribe .modal-body input[type="submit"] {
-    background-color: #18d26e;
-    border: 0;
-    width: 35%;
-    padding: 6px 0;
-    text-align: center;
-    color: #fff;
-    transition: 0.3s;
-    cursor: pointer;
+/* Cart Icon
+---------------------------------*/    
+#shopping-cart {
+    /* margin-top: 20px;*/
     float: right;
 }
 
-#subscribe .modal-body {
-    padding: 26px 1rem;
+#shopping-cart a {
+    display:inline-block;
+    color: #fff;
+    position: relative;
+    cursor: pointer;
 }
 
-/* Team Section
+#shopping-cart .fa-stack[data-count] {
+    position: relative;
+}	
+
+#shopping-cart .fa-stack[data-count]:after{
+    transition: all .2s ease-in-out;
+    position:absolute;
+    right:0%;
+    top:1%;
+    content: attr(data-count);
+    font-size:40%;
+    padding:.6em .7em;
+    border-radius:50%;
+    line-height:.8em;
+    color: white;
+    background:rgba(255,0,0,.85);
+    text-align:center;
+    min-width: 1em;
+    font-weight:bold;
+}
+
+#shopping-cart .fa-shopping-cart::before {
+    color: #000;
+}
+
+#shopping-cart .grow .fa-stack[data-count]:after{
+    -webkit-transform: scale(1.3);
+    -moz-transform: scale(1.3);
+    -ms-transform: scale(1.3);
+    transform: scale(1.3);
+}
+        
+#spacer {
+    height: 10px;
+}
+        
+/* Cart Modal
 --------------------------------*/
-#team {
-	padding: 80px;
+#shopping-cart-modal .amount-title {
+			padding-right: 25px;
 }
 
-#team .team-member {
-	text-align: center;
-	margin-bottom: 20px;
+#shopping-cart-modal .amount-amount {
+    padding-right: 0 10px;
 }
 
-#team .team-member h4 {
-    font-weight: 700;
-    margin-bottom: 2px;
+
+#shopping-cart-modal table.cart-table thead, tr, tbody, th, td {
+    /* text-align: center;*/
+    vertical-align: middle !important;
 }
 
-#team .team-member span {
-    font-style: italic; 
-    font-size: 13px;
+#shopping-cart-modal table.cart-table {
+    margin-bottom: 5px !important;
 }
 
-#team .team-pic {
-	margin-bottom: 15px;
-	height: 150px;
+#shopping-cart-modal button.clear-item {
+    padding: 0.25rem 0.5rem !important;
 }
 
-#team .team-social {
-	margin-top: 15px;
+#shopping-cart-modal button.clear-item-mini {
+    padding: 0.0rem 0.25rem !important;
 }
 
-#team .team-social i {
-    font-size: 18px;
-    margin: 0 2px;
-    color: #fff;
+#shopping-cart-modal .title-price-same span {
+    font-size: 0.9375rem !important;
 }
 
-/* Contact Section
---------------------------------*/
-#contact {
-    padding: 80px 0;
-}
-
-#contact .info {
-    color: #3333;
-}
-
-#contact .info i {
-    font-size: 18px;
-    margin: 0 2px;
-    color: #fff;
-    float: left;
-}
-
-#contact .info p {
-    padding: 0 0 10px 50px;
-    line-height: 24px;
-    color: #fff;
-}
-
-#contact .map {
-    width: 80%;
-    /*margin-bottom: 40px; */
-}
-
-#contact .form #sendmessage {
-    color: #fff;
-    border: 1px solid #333;
-    display: none;
-    text-align: center;
-    padding: 15px;
-    font-weight: 600;
-    margin-bottom: 15px; 
-}
-
-#contact .from input, #contact .from textarea {
-    border-radius: 0;
-    box-shadow: none;
-}
-
-#contact .from .validation {
-    color: red;
-    display: none;
-    margin: 0 0 20px;
-    font-weight: 400;
-    font-size: 13px;
-}
-
-#contact .from button[type="submit"] {
-    border: 0;
-    padding: 10px 24px;
-    color: #fff;
-    transition: 0.4s;
-}
 
 /* Footer Section
 --------------------------------*/
@@ -367,4 +294,33 @@ ul.nav-link-icon li:last-child {
 #footer .copyright {
     text-align: center;
     padding-top: 30px;
+}
+
+
+/* Discounted price
+--------------------------------*/
+.price-discount del {
+    color: grey;
+    text-decoration: none;
+    position: relative;
+    margin-right: 1em;
+}
+.price-discount del::before {
+    content: " ";
+    display: block;
+    width: 100%;
+    border-top: 2px solid rgba(255,0,0, 0.8);
+    height: 12px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    visibility: inherit;
+    transform: rotate(-7deg);
+}
+.price-discount ins {
+    color: white;
+    font-weight: 400;
+    font-size: 1.2rem;
+    text-decoration: none;
+    padding-right: 0.5em;
 }

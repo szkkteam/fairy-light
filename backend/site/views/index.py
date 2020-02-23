@@ -6,6 +6,7 @@
 from flask import render_template
 
 # Internal package imports
+from backend.shop.inventory import ProductInventory
 from backend.site.views.blueprint import site
 
 def carousel_test():
@@ -20,6 +21,10 @@ def carousel_test():
 @site.route('/')
 @site.route('/index')
 def index():
-    return render_template('index.html', carousel_slides=carousel_test())
+    return render_template('website/index/index.html',
+                           # Shopping Cart
+                           cart_num_of_items=ProductInventory.get_num_of_items(),
+
+                           carousel_slides=carousel_test())
 
 

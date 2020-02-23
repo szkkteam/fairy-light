@@ -1,0 +1,155 @@
+
+/* Photonav Section
+--------------------------------*/
+#photonav {
+    margin-top: 40px;
+    margin-bottom: 80px;
+}
+
+#photonav .breadcrumb {
+    margin-bottom: 0;
+    background-color: inherit;
+}
+
+#photonav button[type="button"] {
+    width: 100%;
+    height: 100%;
+    border: 0px solid transparent;
+}
+
+/* Photos Section
+--------------------------------*/
+#photos {
+    margin-bottom: 40px;
+}
+/*
+#photos .photos-img-size {
+    max-width: 285px !important;
+    max-height: 200px !important;
+}
+*/
+
+#photos .price-drop {
+    margin: 1em 0;
+}
+
+#photos .price-hidden {
+    visibility: hidden !important;
+}
+
+#photos .price-drop del {
+    color: rgba(199, 35, 35, 0.5);
+    text-decoration: none;
+    font-size: 15px;
+    position: relative;
+}
+
+#photos .price-drop del::before {
+      content: " ";
+      display: block;
+      width: 100%;
+      border-top: 2px solid rgba(255, 0, 0, 0.8);
+      height: 12px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      transform: rotate(-7deg);
+}
+
+#photos .price-drop ins {
+    color: green;
+    font-weight: 400;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+#photos .album-cover {
+    position: relative;
+}
+
+#photos .album-title-overlay {
+    position: absolute;
+    top: 60%;
+    right: 0;
+    left: 0;
+    background: rgba(0,0,0,0.5);
+    color: #f1f1f1;
+    padding: 0.35rem 0.35rem;            
+}
+
+#photos .album-social-overlay {
+    position: absolute;
+    top: 5px;
+    right: 10px;   
+    left: 10px;
+}
+
+#photos .album-social-overlay .pictures-number {
+    float: right;
+}
+
+#photos .album-social-overlay .pictures-share a {
+    color: #fff;
+}
+
+#photos .card-cart-add {
+    word-spacing: 0.2em;
+}
+
+#photos .card-body {
+    padding: 1rem;
+}
+
+/* Page Navigation Section
+--------------------------------*/
+#pagenav {
+    margin-bottom: 40px;
+}
+
+#pagenav .pagenav-links {
+    margin: 0 auto;
+    width: 50%;
+}
+
+#pagenav .pagination {
+    justify-content: center;
+}
+
+/* Lightbox
+--------------------------------*/
+.photo-lightbox hr {
+    border-top: 2px solid rgba(255, 255, 255, 0.7);
+}
+
+.photo-lightbox .photo-lightbox-title h4 {
+   margin-bottom: 50px;
+}
+
+button.mfp-close {
+   color:white !important;
+   font-size: 50px;
+   right: 17px;
+   top: 5px;
+}
+
+.mfp-gallery .mfp-first .mfp-arrow-left,
+.mfp-gallery .mfp-last .mfp-arrow-right {
+    visibility: hidden;
+}
+
+.btn-arrow-left {
+    margin-top: 7px;
+    margin-right: 20px;
+    padding: 4px 10px;
+}
+
+.photo-lightbox-price span {
+    font-size: 1rem !important;
+}
+
+/* Lightbox
+--------------------------------*/
+
+.title-price-same span {
+    font-size: 0.9375rem !important;
+}

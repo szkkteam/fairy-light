@@ -1,0 +1,184 @@
+{% extends 'website/layout.html' %}
+{% import 'website/modules/carousel.html' as carousel with context %}
+{% import 'website/modules/sections.html' as section with context %}
+{% import 'website/modules/services.html' as services with context %}
+{% import 'website/macros.html' as macro with context %}
+{% import 'website/modules/modals.html' as modal with context %}
+{% import 'website/modules/teams.html' as team with context %}
+{% import 'website/modules/hero.html' as hero_img with context %}
+
+{% block custom_css %}
+    {{ super() }}
+    <link href="{{ site_static.url(filename='site/css/index.css') }}" rel="stylesheet">
+
+{% endblock %}
+
+{% block hero_block %}
+    {%- if request.endpoint == 'site.index' -%}
+        {{ hero_img.hero_section( url_for('site.index') ) }}
+    {%- endif -%}
+{% endblock %}
+
+{% block main_block %}
+    <section id="quote">
+        <div class="container px-0 mb-1" >
+            <div class="row">
+                <div class="col">
+                    <div class="w-50 mx-auto my-5">
+                        <hr class="header-separator my-3"/>
+                        <blockquote class="blockquote">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                            <footer class="blockquote-footer mt-3">From WWF's website</footer>
+                        </blockquote>
+                        <hr class="header-separator my-3"/>
+                    </div>
+                </div>
+            </div>
+    </section>
+    <section id="slideshow">
+        <div class="container px-0 mb-5" >
+            <div class="row justify-content-center align-items-center">
+                <div class="col px-0">
+                    <!-- TODO: Remove data-interval="false" tag to enable automatic scrolling. Set time in [ms] to adjust the timing -->
+                    <div id="slideshow-img" class="carousel slide" data-ride="carousel" data-interval=6000>
+    
+                        <!-- The slideshow -->
+                        <div class="carousel-inner">
+                            {% for category, title, text in carousel_slides %}
+                                {{ carousel.render_items(category, title, text, loop.first) }}
+                            {% endfor %}
+                        </div>
+                    
+                        <!-- Indicators -->
+                        <ul class="carousel-indicators position-relative">
+                            {% for _ in carousel_slides %}
+                                <li data-target="#slideshow-img" data-slide-to="{{loop.index -1 }}" class="{{ 'active' if loop.first }} "></li>    
+                            {% endfor %}
+                        </ul>
+                                        
+                        <!-- Left and right controls -->
+                        <a class="carousel-control-prev" href="#slideshow-img" data-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </a>
+                        <a class="carousel-control-next" href="#slideshow-img" data-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="services">
+        <div class="container">
+            {{ section.header('Our Services', 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium') }}
+            <div class="row mt-5">
+                {{ services.item('http://placehold.it/60x60', 'Lorem Ipsum', 'Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident', link=url_for('site.services') + '#service-service1') }}
+                {{ services.item('http://placehold.it/60x60', 'Dolor Sitema', 'Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata', link=url_for('site.services') + '#service-service2') }}
+                {{ services.item('http://placehold.it/60x60', 'SED UT PERSPICIATIS', 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur', link=url_for('site.services') + '#service-service3') }}
+                {{ services.item('http://placehold.it/60x60', 'MAGNI DOLORES', 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum', link=url_for('site.services') + '#service-service4' ) }}
+                {{ services.item('http://placehold.it/60x60', 'NEMO ENIM', 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque', link=url_for('site.services') + '#service-service1' ) }}
+                {{ services.item('http://placehold.it/60x60', 'EIUSMOD TEMPOR', 'Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi', link=url_for('site.services') + '#service-service2' ) }}
+            </div>
+        </div>
+    </section>
+    <section id="subscribe">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h3 class="subscribe-title">
+                        Subscribe For Updates
+                    </h3>
+                    <p class="subscribe-text">
+                        Join our 1000+ subscribers and get informed about the latest events, photos and much more!
+                    </p>
+                </div>
+                <div class="col-md-4 subscribe-btn-container">
+                    <a class="subscribe-btn" data-toggle="modal" data-target="#subscribe-modal">Subscribe Now</a>						
+                </div>
+                {% call modal.base('subscribe-modal', 'fade', 'modal-dialog-centered')  %}
+                    {% call modal.header('text-center') %}
+                        <h4 class="modal-title w-100">
+                            Get Email Updates
+                        </h4>
+                    {% endcall %}
+                    {% call modal.body() %}
+                        {{ macro.subscribe() }}
+                    {% endcall %}
+                {% endcall %}
+            </div>
+        </div>
+    </section>
+    <section id="team">
+        <div class="container">
+            {{ section.header('Our Team', 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium') }}
+            <div class="row col-md-12">
+                <div class="col-md-5 offset-md-1">
+                    {{ team.member('http://placehold.it/150x150', 'Anna Toth', 'Photographer', '#', '#') }}
+                </div>
+                <div class="col-md-5">
+                    {{ team.member('http://placehold.it/150x150', 'Eszter Pap', 'Photographer', '#', '#') }}
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="contact">
+        <div class="container">
+            {{ section.header('Contact Us', 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium') }}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="map embed-responsive embed-responsive-16by9 mx-auto">
+                        <iframe class="embed-responsive-item" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621" style="border: 0; width: 100%; height: 400px;">
+                        </iframe>
+                    </div>                    
+                </div>
+                <div class="col-md-3 offset-md-2">
+                    <div class="info">
+                        <div>
+                            <i class="fa fa-map-marker"></i>
+                            <p>
+                                1111 Street Street
+                                <br>
+                                City city, 9999
+                            </p>
+                        </div>
+                        <div>
+                            <i class="fa fa-envelope"></i>
+                            <a href="mailto:example@test.com">
+                                <p>example@test.com</p>                            
+                            </a>
+                        </div>
+                        <div>
+                            <i class="fa fa-phone"></i>
+                            <a href="tel:0036111111111">
+                                <p>+36 99 9999 999</p>
+                            </a>
+                        </div>
+                        <div>
+                        <i class="fa fa-phone"></i>
+                        <a href="tel:0036111111111">
+                            <p>+36 99 9999 999</p>
+                        </a>
+                        </div>
+                    </div>
+                    <ul class="social-link">
+                        <li class="facebook">
+                            <a href="">
+                                <i class="fa fa-facebook"></i>
+                            </a>
+                        </li>
+                        <li class="instagram">
+                            <a href="">
+                                <i class="fa fa-instagram"></i>
+                            </a>
+                        </li>
+                    </ul>   
+                </div>
+                <div class="col-md-5">
+                    <div class="form">
+                        {{ macro.contact() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}    

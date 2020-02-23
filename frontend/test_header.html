@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css"> from: https://bootswatch.com/darkly/#top -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <script src="https://bigspotteddog.github.io/ScrollToFixed/jquery-scrolltofixed.js"></script>
+    
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="animations.css"> 
+    <link rel="stylesheet" href="styles.css"> 
+    <!-- Must be always at the end. Don't decalre inline responsive styles. -->
+    <link rel="stylesheet" href="media_queries.css"> 
+
+    <style>
+        /* Header Styles
+---------------------------------*/
+		#header {
+			background: url(http://placehold.it/1140x350);
+			/* Image is centered vertically and horizontally at all times */
+			background-position: center center;
+			/* Image doesn't repeat */
+			background-repeat: no-repeat;
+			/* Makes the image fixed in the viewport so that it doesn't move when 
+			the content height is greater than the image height */
+			background-attachment: fixed;
+			/* This is what makes the background image rescale based on its container's size */
+			background-size: cover;
+			/* Pick a solid background color that will be displayed while the background image is loading */
+			background-color:#464646;
+			
+			/* SHORTHAND CSS NOTATION
+			* background: url(background-photo.jpg) center center cover no-repeat fixed;
+			*/
+			padding: 160px 0px;
+			
+		}
+
+
+        /* Navigation
+        ---------------------------------*/    
+        #navbar.outer-nav {
+            padding: 0px;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 4px 5px -3px #ececec;
+            background: #303030;
+        }
+
+        #navbar .navbar {
+            padding: 0px;
+        }
+
+
+		#navbar .main-nav {
+			width: 100%;
+			text-align:center;
+            margin:0px 0 0px;
+            padding:0;
+            list-style:none;
+            justify-content: space-around;
+
+		}
+		
+		#navbar .main-nav li{
+            margin:0 1px;
+        }
+		
+		#navbar .main-nav li a{
+            color:#fff;
+            text-transform:uppercase;
+            font-family: 'Montserrat', sans-serif;
+            text-decoration: none;
+            line-height:20px;        
+            margin:10px 32px;
+            transition:all 0.3s ease-in-out;
+            -moz-transition:all 0.3s ease-in-out;
+            -webkit-transition:all 0.3s ease-in-out;
+        }
+
+        #navbar .main-nav li a:hover{ 
+            text-decoration:none;
+            color: #7cc576;
+        }
+		
+        #navbar .main-nav li a.navbar-brand {
+            padding-bottom: 0px !important;
+            padding-top: 0px !important;
+        }
+
+        /* Cart Icon
+        ---------------------------------*/    
+        #shopping-cart {
+            float: right;
+        }
+
+        #shopping-cart a {
+			display:inline-block;
+            color: #fff;
+			position: relative;
+			cursor: pointer;
+        }
+		
+		#shopping-cart .fa-stack[data-count] {
+			position: relative;
+		}	
+
+        #shopping-cart .fa-stack[data-count]:after{
+            position:absolute;
+            right:0%;
+            top:1%;
+            content: attr(data-count);
+            font-size:40%;
+            padding:.6em .7em;
+            border-radius:50%;
+            line-height:.8em;
+            color: white;
+            background:rgba(255,0,0,.85);
+            text-align:center;
+            min-width: 1em;
+            font-weight:bold;
+        }
+
+        #shopping-cart .fa-shopping-cart::before {
+            color: #000;
+        }
+				
+				
+		#shopping-cart .hi-icon-archive:before {
+		  content: "\e00f";
+		}
+
+		#shopping-cart .hi-icon:after {
+		  pointer-events: none;
+		  position: absolute;
+		  width: 100%;
+		  height: 100%;
+		  border-radius: 50%;
+		  top: 0px;
+		  left: 0px;
+		  content: '';
+		  -webkit-box-sizing: content-box;
+		  -moz-box-sizing: content-box;
+		  box-sizing: content-box;
+		}
+
+		#shopping-cart .hi-icon-active {
+		  background: rgba(255, 255, 255, 0.05);
+		  -webkit-transform: scale(0.93);
+		  -moz-transform: scale(0.93);
+		  -ms-transform: scale(0.93);
+		  transform: scale(0.93);
+		  color: #fff;
+		}
+
+		#shopping-cart .hi-icon-active:after {
+		  animation: sonarEffect 1.3s ease-out 75ms;
+		}
+
+		@-webkit-keyframes sonarEffect {
+		  0% {
+			opacity: 0.3;
+		  }
+		  40% {
+			opacity: 0.5;
+			box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 0 0 10px 10px #d1cfcb, 0 0 0 10px rgba(255, 255, 255, 0.5);
+		  }
+		  100% {
+			box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 0 0 10px 10px #d1cfcb, 0 0 0 10px rgba(255, 255, 255, 0.5);
+			-webkit-transform: scale(1.5);
+			opacity: 0;
+		  }
+		}
+		
+		#shopping-cart-modal .amount-title {
+			padding-right: 25px;
+		}
+
+		#shopping-cart-modal .amount-amount {
+			padding-right: 0 10px;
+		}
+            
+    @media only screen and (min-width: 992px) {
+        /****Ipad Landscape 1024 Container 970 ****/
+
+        .service-list{ margin-bottom:30px;}
+        .c-logo-part ul li{ margin:0 15px;}
+        .form{ margin:0 0 0 20px}
+        /*.portfolioContainer{ width:800px; margin:0px auto !important; } */
+
+    }
+
+    @media only screen and (min-width: 768px) and (max-width: 991px) {
+        /****Ipad Portrait 768 Container 750 ****/
+        body{ font-size:13px;}
+        p{ line-height:20px ;}
+        .header h1{ font-size:46px;}
+        .main-nav ul li a{ padding:14px;}
+        .small-logo{ padding:0 20px;}
+        h2{ font-size:30px}
+        h6{ font-size:16px;}
+        h3{ font-size:15px;}
+        .service-list{ margin-bottom:20px; font-size:15px;}
+        .featured-work p.padding-b{ padding-bottom:15px;}
+        .main-section{ padding:70px 0;}
+        .c-logo-part ul li{ margin:0 1%; float:left; width:18%;}
+        .c-logo-part ul li a{ display:block;}
+        .c-logo-part ul li a img{ display:block;}
+        .form{ margin:0;}
+        .contact-info-box{ margin:0 ;}
+        .social-link{ margin:0;}
+    }
+
+    @media only screen and (max-width: 767px) {
+        /****Mobile Landscape 480 Container 100% ****/
+        body{ font-size:12px;}
+        h2{ font-size:26px;}
+        h3{ font-size:14px;}
+        h6{ font-size:16px; margin-bottom:40px;}
+        p{ line-height:18px;}
+        .service-list{ font-size:12px; margin-bottom:20px;}
+        .we-create li{ font-size:13px; padding:0 0 0 8px}
+        .header h1{ font-size:28px;}
+        /*.header{ padding:60px 0;}*/
+        .main-section{ padding:60px 0 70px;}        
+    }
+
+    @media only screen and (max-width: 479px) {
+        /****Mobile Portrait 320 ****/
+        .contact-info-box{ margin-left:0px;}
+        /* .header{ padding:40px;} */
+        .social-link{ margin-left:0px;}
+        .form{ margin:0}
+        .c-logo-part ul li{ display:block;}
+        .Portfolio-box{  max-width:300px !important; width:96.4% !important; margin:0 !important}
+        .Portfolio-box img { max-width:100%;}
+        .portfolioContainer{ width:280px !important; margin:0 auto !important }
+
+    }
+    @media (min-width: 768px) {
+		#navbar .small-logo-mobile {
+			display: none;
+		}
+    }
+    @media (max-width: 767px) {
+		#navbar .small-logo-mobile {
+			
+		}
+		
+		#navbar .large-logo {
+			display: none;
+		}
+    
+		#navbar .small-logo-mobile img  {
+			height: 50px;
+		}
+		
+		#header {
+			/* The file size of this background image is 93% smaller
+			* to improve page load speed on mobile internet connections */
+			background-image: url(http://placehold.it/1140x350);
+		}
+    }
+	
+	@media (max-width: 1203px) {
+		#navbar .main-nav li a{
+				margin:10px 16px;
+			}
+	}
+	
+	@media (max-width: 993px) {
+		#navbar .main-nav li a{
+				margin:5px 8px;
+			}
+	}
+
+    .navbar-right {
+        float:right;
+    }
+
+    .navbar-right{
+        text-align:center;
+        margin:10px 0 0px;
+        padding:0;
+        list-style:none;
+    }
+    .navbar-right li{
+        display:inline;
+        margin:0 1px;
+    }
+	
+	#outer-cart {
+		margin-top: 10px;
+	}
+	
+	#cart {
+	  border: 1px solid #dddddd;
+	  width: 150px;
+	  list-style: none;
+	  padding-left: 0px;
+	}
+
+	#cart .title {
+	  border-bottom: 1px solid #dddddd;
+	  width: 100%;
+	  background-color: #dddddd;
+	  font-size: 12pt;
+	  font-weight: bold;
+	}
+
+	#cart .contents {
+	  margin: 1px;
+	}
+
+	#cart .contents ul {
+	  padding: 10px;
+	}
+
+	#cart .contents li {
+	  display: block;
+	}
+
+	#cart .label {
+	  font-weight: bold;
+	  color: #999999;
+	}
+
+	#cart .total {
+	  font-weight: bold;
+	  font-size: 14pt;
+	}
+
+
+    </style>
+</head>
+<body>
+    <header class="header" id="header">
+        <!--header-start-->
+        <div class="container">
+            <figure class="logo">
+                <a href="#"><img src="http://placehold.it/100x100" alt=""></a>
+            </figure>
+            <h1 class="">Fairy Light</h1>
+			<h2>Event</h2>
+			<h2>Photograpgy</h2>
+        </div>
+    </header>
+    <!--header-end-->
+	<div id="navbar" class="outer-nav">
+        <div class="container">
+        		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        		  <a class="navbar-brand small-logo-mobile" href="#">
+                      <img src="http://placehold.it/50x50" alt="logo small">
+                  </a>
+        		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        			<span class="navbar-toggler-icon"></span>
+        		  </button>
+        		  <div class="collapse navbar-collapse" id="navbarNav">
+        			<ul class="navbar-nav main-nav nav-fill align-items-center">
+        			  <li class="nav-item active">
+        				<a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
+        			  </li>
+        			  <li class="nav-item">
+        				<a class="nav-link" href="#">Shop</a>
+        			  </li>
+        			  <li class="nav-item">
+        				<a class="nav-link" href="#">Services</a>
+        			  </li>
+        			  <li class="nav-item">
+        				<a class="navbar-brand large-logo" href="#">
+                            <img src="http://placehold.it/60x60" alt="logo">
+                        </a>
+        			  </li>
+        			  <li class="nav-item">
+        				<a class="nav-link" href="#">Portfolio</a>
+        			  </li>
+        			  <li class="nav-item">
+        				<a class="nav-link" href="#">About</a>
+        			  </li>
+        			  <li class="nav-item">
+        				<a class="nav-link" href="#">Contact</a>
+        			  </li>
+        			</ul>
+        		  </div>
+        		</nav>
+        	</div>
+    </div>
+    <!--main-nav-end-->   
+	<div id="outer-cart" class="container">
+        <div id="shopping-cart">
+            <a class="hi-icon" data-toggle="modal" data-target="#shopping-cart-modal">
+                <span class="fa-stack fa-2x has-badge" data-count="3">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i>
+                </span>
+            </a>
+        </div>		
+	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="shopping-cart-modal" tabindex="-1" role="dialog" aria-labelledby="shopping-cart-modal-label" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h5 class="modal-title" id="shopping-cart-modal-label">Shopping Cart</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+		  <div id="shopping-cart-content" class="modal-body">
+			...
+		  </div>
+		  <div class="modal-footer justify-content-end">
+			<span class="amount-title">
+				Total:
+			</span>
+			<span class="amount-amount">
+				$20
+			</span>
+		  </div>
+		  <div class="modal-footer justify-content-between">
+			<button type="button" class="btn btn-secondary " data-dismiss="modal">Back</button>
+			<a class="btn btn-primary " href="#">View Cart</a>
+		  </div>
+		</div>
+	  </div>
+	</div>
+    <main id="main">        
+        <div style="height: 1000px;">
+
+        </div>
+    </main>
+    <footer id="footer">
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 footer-info">
+                        <h3>
+                            Fairy Light
+                        </h3>
+                        <p>
+                            Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus. Scelerisque felis imperdiet proin fermentum leo. Amet volutpat consequat mauris nunc congue.
+                        </p>
+                    </div>
+                    <div class="col-lg-3 col-md-6 footer-links">
+                        <h4>
+                            Useful Links                        
+                        </h4>
+                        <ul>
+                            <li>
+                                <a href="#">Home</a>
+                            </li>
+                            <li>
+                                <a href="#">About Us</a>
+                            </li>
+                            <li>
+                                <a href="#">Services</a>
+                            </li>
+                            <li>
+                                <a href="#">Terms of service</a>
+                            </li>
+                            <li>
+                                <a href="#">Privacy policy</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6 footer-contact">
+                        <h4>
+                            Contact Us
+                        </h4>
+                        <p>
+                            1111 Street Street
+                            <br>
+                            City cty, 9999
+                            <br>
+                            Country
+                            <br>
+                            <strong>Phone:</strong>
+                            <a href="tel:0036111111111">
+                                +36 11 1111 111
+                            </a>
+                            <br>
+                            <strong>Email:</strong>
+                            <a href="mailto:example@test.com">
+                                example@test.com
+                            </a>
+                            <br>
+                        </p>
+                        <div class="social-links">
+                            <a href="" class="facebook">
+                                <i class="fa fa-facebook"></i>
+                            </a>
+                            <a href="" class="instagram">
+                                <i class="fa fa-instagram"></i>
+                            </a>
+                            <a href="" class="linkedin">
+                                <i class="fa fa-linkedin"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 footer-newsletter">
+                        <h4>
+                            Our Newsletter
+                        </h4>
+                        <p>
+                            Tamen quem nulla quae legam multos aute sint culpa legam noster magna veniam enim veniam illum dolore legam minim quorum culpa amet magna export quem marada parida nodela caramase seza. 
+                        </p>
+                        <form action method="post">
+                            <input type="email" name="email">
+                            <input type="submit" value="Subscribe">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">                
+                © Copyright 
+                <strong>Fairy Light</strong>
+                . All Rights Reserved
+            </div>
+        </div>
+    </footer>
+    <!-- For the footer: https://bootstrapmade.com/demo/TheEvent/ or https://bootstrapmade.com/demo/BizPage/ -->
+
+    <script>
+    $(document).ready(function() {
+		$('#navbar').scrollToFixed();
+		$('#outer-cart').scrollToFixed({
+			marginTop : $('#navbar').outerHeight() + 20,
+			//marginTop : 95 , // outherHeight is not working probably because of the transitions
+			zIndex : 500,
+		});
+	
+        $('.res-nav_click').click(function() {
+            $('.main-nav').slideToggle();
+            return false
+
+        });
+		$('.hi-icon').click(function (){
+		  $(this).addClass('hi-icon-active');
+		  setTimeout(function() {
+			$('.hi-icon').removeClass('hi-icon-active');
+		  }, 600);
+
+		});
+    });
+
+    </script>
+</body>
+</html>

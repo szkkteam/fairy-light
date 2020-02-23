@@ -1,0 +1,38 @@
+{% extends 'website/checkout/checkout.html' %}
+
+{% block result_title %}
+    <div class="result-container mx-auto d-none d-sm-block">
+        <div class="clearfix mx-auto">
+            <div class="pull-left">
+                <img src="{{site_static.url(filename='site/img/success-png-image.png')}}" class="rounded-circle img-fluid" width="100" height="100" alt="payment success">
+            </div>
+            <div class="result-message">
+                <h2>
+                    The order is pending.
+                </h2>
+            </div>                                
+        </div>
+    </div>
+    <div class="result-container mx-auto d-sm-none">
+        <div class="">
+            <img src="{{site_static.url(filename='site/img/success-png-image.png')}}" class="rounded-circle img-fluid" width="100" height="100" alt="payment success">
+        </div>
+        <div class="result-message">
+            <h4>
+                    The order is pending.
+            </h4>
+        </div>                                
+    </div>
+{% endblock %}
+{% block result_body %}
+    <h4>
+        Your bank will process the payment. As it is ready your order will be delivered.
+    </h4>
+                            
+    <div class="description">
+        <p>
+            You will receive an e-mail soon with your ordered products. If this is not happening within a few hour
+            you can write to our customer <a href="mailto:example@support.com">support</a>. 
+            We are happy to answer your question.</p>
+    </div>
+{% endblock %}
