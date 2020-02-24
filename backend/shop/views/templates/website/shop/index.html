@@ -52,7 +52,7 @@
                         </a>
                     </div>
                     <div class="col">
-                        <a href="{{url_for('shop.cart_api')}}" class="btn btn-primary" id="shopping-cart-clear">
+                        <a href="{{url_for('shop_api.cart_api')}}" class="btn btn-primary" id="shopping-cart-clear">
                             <span class="text-nowrap">Clear Cart</span>
                         </a>
                     </div>
@@ -190,25 +190,7 @@
                     console.log(data.responseJSON);
                 }
             }); 
-        });
-        /*
-        $('#shopping-cart-dropdown').on('show.bs.dropdown', function() {
-            $('.dropdown .dropdown-content').html("Loading ...");
-            console.log("Dropped down");
-
-            $.ajax({
-                type: 'GET',
-                url: "{{url_for('shop.cart_api')}}",
-                dataType: 'html',
-                success: function (data) {
-                    $('.dropdown .dropdown-content').html(data);
-                },
-                error: function (data) {
-                    console.log(data.responseJSON);
-                }
-            }); 
-        });        
-        */
+        });       
 
     });
 

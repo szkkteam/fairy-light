@@ -4,7 +4,7 @@
 # Common Python library imports
 # Pip package imports
 # Internal package imports
-from .blueprint import shop
+from .blueprint import shop, shop_api, shop_lang
 
 from .list import (
     index_view

@@ -47,7 +47,7 @@ def image_lightbox(photo_id):
         title=element.title,
         size=element.image_size,
         discounted_price=element.price,
-        url_add_to_cart=url_for('shop.cart_item_api', item_id=element.id),
+        url_add_to_cart=url_for('shop_api.cart_item_api', item_id=element.id),
         url_image=element.get_path(),
         url_facebook_share=url_for('shop.index_view', root=element.id, _external=True),
     )
@@ -148,7 +148,7 @@ def image_data(data, category_title=None):
             thumbnail=element.get_thumbnail_path(),
             title=element.title,
             discounted_price=element.price,
-            url_add_to_cart=url_for('shop.cart_item_api', item_id=element.id),
+            url_add_to_cart=url_for('shop_api.cart_item_api', item_id=element.id),
             url_image=url_for('shop.image_lightbox', photo_id=element.id, category=category_title),
             #url_image=element.get_path(),
             url_external=url_for('shop.index_view', root=element.category_id, _external=True),
@@ -162,7 +162,7 @@ def category_detail(category_id):
     data = dict(
         original_price=original_price,
         discounted_price=discounted_price,
-        url_add_to_cart = url_for('shop.cart_category_api', category_id=element.id),
+        url_add_to_cart = url_for('shop_api.cart_category_api', category_id=element.id),
         title=element.title,
         images=image_data(element.images, category_title=element.title)
     )
