@@ -5,7 +5,7 @@
 import inspect
 import os
 import sys
-import StringIO
+from io import StringIO
 import json
 
 # Pip package imports
@@ -30,7 +30,7 @@ def local_init(lang):
     os.system('pybabel init -i ' + MESSAGES_POT + ' -d ' + TRANSLATIONS_FOLDER + ' -l ' + lang)
 
 def local_update():
-    os.system('pybabel update -i ' + MESSAGES_POT)
+    os.system('pybabel update -i ' + MESSAGES_POT + ' -d ' + TRANSLATIONS_FOLDER)
 
 def local_compile():
     os.system('pybabel compile -d ' + TRANSLATIONS_FOLDER)
@@ -39,7 +39,7 @@ def local_compile():
 def babel():
     pass
 
-@babel.command
+@babel.command()
 @click.option('--lang', '-l', default='en', expose_value=True,
               help='Initialise a the message pot for a specific language.')
 def init(lang):
@@ -48,17 +48,17 @@ def init(lang):
     local_init(lang)
     os.unlink(MESSAGES_POT)
 
-@babel.command
+@babel.command()
 def update():
     local_extract()
     local_update()
     os.unlink(MESSAGES_POT)
 
-@babel.command
+@babel.command()
 def compile():
     local_compile()
 
-@babel.command
+@babel.command()
 @click.option('--source', '-s', default='en', expose_value=True,
               help='Source language.')
 @click.option('--target', '-t', default=None, expose_value=True,
@@ -95,7 +95,7 @@ def t_export(source, target):
      encoding='utf-8') as outfile:
         json.dump(for_tron, outfile, ensure_ascii=False)
 
-@babel.command
+@babel.command()
 @click.option('--filename', '-f', default=None, expose_value=True,
               help='Input file name.')
 @click.option('--source', '-s', default='en', expose_value=True,

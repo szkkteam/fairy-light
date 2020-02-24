@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-02-23 19:56+0100\n"
+"POT-Creation-Date: 2020-02-24 17:28+0100\n"
 "PO-Revision-Date: 2020-02-23 18:16+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -40,7 +40,27 @@ msgstr ""
 msgid "Invalid file extension"
 msgstr ""
 
-#: backend/templates/website/lib.html:55
+#: backend/templates/website/lib.html:5 backend/templates/website/lib.html:55
 msgid "Home"
 msgstr "Home"
+
+#: backend/templates/website/lib.html:6
+msgid "Photos"
+msgstr ""
+
+#: backend/templates/website/lib.html:7
+msgid "Services"
+msgstr ""
+
+#: backend/templates/website/lib.html:11
+msgid "Portfolio"
+msgstr ""
+
+#: backend/templates/website/lib.html:12
+msgid "About"
+msgstr ""
+
+#: backend/templates/website/lib.html:13
+msgid "Contact"
+msgstr ""
 
