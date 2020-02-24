@@ -1,21 +1,24 @@
 {% import 'website/static.html' as site_static with context %}
+{% import 'website/seo.html' as seo with context %}
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
-
-    
     <title>
         {% block title %}
-
         {% endblock %}
     </title>
     {% block head_meta %}
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="">
         <meta name="author" content="">
+    {% endblock %}
+    {% block seo_common %}
+        {{ seo.hreflang_link() }}
+    {% endblock %}
+    {% block seo_specific %}
+        <meta name="description" content="">
     {% endblock %}
     {% block head_css %}
         <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">

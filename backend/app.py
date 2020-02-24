@@ -135,15 +135,10 @@ def configure_app(app, config_object):
     @app.context_processor
     def inject_conf_var():
         return dict(
-            AVAILABLE_LANGUAGES=current_app.config.get('LANGUAGES'),
-            CURRENT_LANGUAGE=session.get('language',
+            lurl_for=lambda ep, **kwargs: url_for('/' + session.get('language', current_app.config.get('BABEL_DEFAULT_LOCALE')) +ep, **kwargs  ),
+            languages=current_app.config.get('LANGUAGES'),
+            language=session.get('language',
                                          request.accept_languages.best_match(current_app.config['LANGUAGES'].keys())))
-
-    @app.route('/language/<language>')
-    def set_language(language=None):
-        session['language'] = language
-        print("Insert lang to session: ", language, flush=True)
-        return redirect(url_for('site.index'))
 
     # Configure the bundles
     for bundle in app.bundles:

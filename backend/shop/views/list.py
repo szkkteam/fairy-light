@@ -13,7 +13,7 @@ from loguru import logger
 # Internal package imports
 from backend.extensions import db
 
-from .blueprint import shop
+from .blueprint import shop, shop_lang
 from ..models import Category, Order, PaymentStatus, Image
 from ..inventory import ProductInventory
 from .shopping_cart import try_close_cart
@@ -31,11 +31,13 @@ def get_breadcrumbs(root_id):
     return breadcrumbs
 
 @shop.route('/category/<int:category_id>')
+@shop_lang.route('/category/<int:category_id>')
 def category_detail(category_id):
     return render_template('website/shop/album_modal.html',
                            data=category_detail(category_id))
 
 @shop.route('/photo/<int:photo_id>')
+@shop_lang.route('/photo/<int:photo_id>')
 def image_lightbox(photo_id):
     element = Image.get(photo_id)
     category_title = request.args.get('category')
@@ -58,6 +60,8 @@ def image_lightbox(photo_id):
 
 @shop.route('/')
 @shop.route('/<int:root>')
+@shop_lang.route('/')
+@shop_lang.route('/<int:root>')
 def index_view(root=None):
     # Calculate the breadcrumbs relative to the current view
     breadcrumbs = get_breadcrumbs(root)

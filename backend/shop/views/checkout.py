@@ -18,7 +18,7 @@ import stripe
 from backend.extensions import db
 from backend.extensions import csrf
 
-from .blueprint import shop
+from .blueprint import shop, shop_api, shop_lang
 from ..models import StripeUser, Order, PaymentStatus
 from ..webhook import StripeEvents, StripeWebhook
 
@@ -90,18 +90,21 @@ def get_or_create_user(**kwargs):
     return user
 
 @shop.route('/checkout/success')
+@shop_lang.route('/checkout/success')
 def checkout_success():
     resp =  make_response(render_template('website/checkout/checkout_success.html'))
     resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
     return resp
 
 @shop.route('/checkout/processing')
+@shop_lang.route('/checkout/processing')
 def checkout_processing():
     resp = make_response(render_template('website/checkout/checkout_processing.html'))
     resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
     return resp
 
 @shop.route('/checkout/failed')
+@shop_lang.route('/checkout/failed')
 def checkout_failed():
     resp = make_response(render_template('website/checkout/checkout_failed.html'))
     resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
@@ -109,6 +112,7 @@ def checkout_failed():
 
 #@payment.route('/')
 @shop.route('/checkout', methods=['GET', 'POST'])
+@shop_lang.route('/checkout', methods=['GET', 'POST'])
 @csrf.exempt
 def checkout():
     # If the cart's total price is 0 it means the customer selected only free products.
@@ -215,4 +219,4 @@ class PaymentWebhook(StripeWebhook):
         logger.debug("Payment Charge status: failed.")
         return self.return_success()
 
-shop.add_url_rule('/checkout-webhook', view_func=PaymentWebhook.as_view('checkout_webhook'))
+shop_api.add_url_rule('/checkout-webhook', view_func=PaymentWebhook.as_view('checkout_webhook'))

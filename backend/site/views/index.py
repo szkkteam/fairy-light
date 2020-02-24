@@ -4,10 +4,11 @@
 # Common Python library imports
 # Pip package imports
 from flask import render_template
+from flask_babel import refresh
 
 # Internal package imports
 from backend.shop.inventory import ProductInventory
-from backend.site.views.blueprint import site
+from backend.site.views.blueprint import site, site_lang
 
 def carousel_test():
     title = 'Album %s'
@@ -20,6 +21,8 @@ def carousel_test():
 
 @site.route('/')
 @site.route('/index')
+@site_lang.route('/')
+@site_lang.route('/index')
 def index():
     return render_template('website/index/index.html',
                            # Shopping Cart
@@ -28,3 +31,9 @@ def index():
                            carousel_slides=carousel_test())
 
 
+@site.route('/lang/<lang_code>')
+def set_language(lang_code=None):
+    session['language'] = lang_code
+    # Refresh the babel cache
+    refresh()
+    return redirect(url_for('site.index'))
