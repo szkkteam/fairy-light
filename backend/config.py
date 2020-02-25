@@ -119,11 +119,11 @@ class BaseConfig(object):
     ##########################################################################
     # celery                                                                 #
     ##########################################################################
-    CELERY_BROKER_URL = 'redis://{host}:{port}/0'.format(
+    CELERY_BROKER_URL = os.environ.get('REDIS_URL') if 'REDIS_URL' in os.environ else 'redis://{host}:{port}/0'.format(
         host=os.getenv('FLASK_REDIS_HOST', '127.0.0.1'),
         port=os.getenv('FLASK_REDIS_PORT', 6379),
     )
-    CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+    CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL') if 'REDIS_URL' in os.environ else CELERY_BROKER_URL
     CELERY_ACCEPT_CONTENT = ('json', 'pickle')
 
     ##########################################################################
