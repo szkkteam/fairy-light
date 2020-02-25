@@ -163,7 +163,7 @@
 			onClear: function(e, resp) { return true; },
 		},
 		urls: {
-			numberOfItems: '/shop/cart',
+			numberOfItems: '/shop-api/cart',
 			cartContent: '/shop/cart/mini',
 		},
 		messages: {

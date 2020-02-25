@@ -25,6 +25,7 @@ class StripeEvents(enum.Enum):
     payment_intent_created = "payment_intent.created"
     payment_intent_failed = "payment_intent.failed"
     payment_intent_succeeded = "payment_intent.succeeded"
+    payment_intent_payment_failed = "payment_intent.payment_failed"
 
     # Charge events
     charge_succeeded = "charge.succeeded"
@@ -51,6 +52,9 @@ class StripeWebhook(MethodView):
     def handle_payment_intent_failed(self, data):
         return self.return_success()
 
+    def handle_payment_intent_payment_failed(self, data):
+        return self.return_success()
+
     # Charge handlers
     def handle_charge_succeeded(self, data):
         return self.return_success()
@@ -67,6 +71,8 @@ class StripeWebhook(MethodView):
             return self.handle_payment_intent_succeeded(data)
         elif event == StripeEvents.payment_intent_failed:
             return self.handle_payment_intent_failed(data)
+        elif event == StripeEvents.payment_intent_payment_failed:
+            return self.handle_payment_intent_payment_failed(data)
         else:
             logger.error('Sub event: \'%s\' not handled.' % event)
             return self.return_success()
@@ -89,8 +95,6 @@ class StripeWebhook(MethodView):
             if webhook_secret:
                 # Retrieve the event by verifying the signature using the raw body and secret if webhook signing is configured.
                 signature = request.headers.get('stripe-signature')
-                print("signature: ", signature, flush=True)
-                print("Request data: ", request.data, flush=True)
                 try:
                     event = stripe.Webhook.construct_event(
                         payload=request.data, sig_header=signature, secret=webhook_secret)
@@ -109,15 +113,19 @@ class StripeWebhook(MethodView):
             data_object = data['object']
 
             if data_object['object'] == 'payment_intent':
-                ev = StripeEvents(event_type)
-                return self.handle_payment_intent(ev, data_object)
+                try:
+                    ev = StripeEvents(event_type)
+                except ValueError as e:
+                    logger.error(e)
+                    self.return_error('Payment event not handled', 404)
+                else:
+                    return self.handle_payment_intent(ev, data_object)
 
             if data_object['object'] == 'charge':
                 ev = StripeEvents(event_type)
                 return self.handle_charge(ev, data_object)
 
             else:
-                #print("data_object: ", data_object, flush=True)
                 logger.error('event \'%s\' not handled' % event_type)
                 self.return_success()
 

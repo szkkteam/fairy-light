@@ -4,7 +4,7 @@
 {% call cart.table_mini() %}
     {% for category_id, category in cart_items.items() %}
         {% for key, item in category['products'].items() %}    
-            {{ cart.row_mini(image=item['thumb'], price=item['price'], delete_url=url_for('shop.cart_item_api', item_id=item['id'])) }}
+            {{ cart.row_mini(image=item['thumb'], price=item['price'], delete_url=url_for('shop_api.cart_item_api', item_id=item['id'])) }}
         {% endfor %}
     {% endfor %}
     <tr class="title-price-same">        

@@ -21,7 +21,6 @@ def carousel_test():
 
 @site.route('/')
 @site.route('/index')
-@site_lang.route('/')
 @site_lang.route('/index')
 def index():
     return render_template('website/index/index.html',

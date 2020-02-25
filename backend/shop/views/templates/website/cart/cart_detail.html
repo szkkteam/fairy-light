@@ -6,7 +6,7 @@
         {% call cart.table_album(category['title'], category['discount'], category['subTotal'], category['products'].keys()|length) %}
 
             {% for key, item in category['products'].items() %}  
-                {{ cart.row(image=item['thumb'], item_price=item['price'], delete_url=url_for('shop.cart_item_api', item_id=item['id'])) }}
+                {{ cart.row(image=item['thumb'], item_price=item['price'], delete_url=url_for('shop_api.cart_item_api', item_id=item['id'])) }}
             {% endfor %}
 
         {% endcall %}
