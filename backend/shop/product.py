@@ -68,9 +68,10 @@ def prepare_mail(**kwargs):
         token = encode_token(order.id)
         external_url = safe_url_for_external('shop.product_download', token=token, _external=True)
 
-        subject = "Product order: %s ready to download" % order.id
+        subject = "Product delivery %s." % order.id
         template = 'email/product_deliver.html'
         mail_data = dict(order_id=order.id,
+                         name=order.user.name,
                          download_link=external_url,
                   )
 
