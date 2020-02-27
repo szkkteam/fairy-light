@@ -14,5 +14,5 @@ def generate_resubscribe_link(email):
     return url_for('newsletter_subscribe.resubscribe', token=token)
 
 def generate_unsubscribe_link(email):
-    token = decode_token(email)
+    token = encode_token(email)
     return url_for('newsletter_subscribe.unsubscribe', token=token)
