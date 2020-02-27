@@ -1,6 +1,27 @@
 {% extends 'email/layout.html' %}
+{% import 'email/lib.html' as lib with context %}
 
 {% block preview %}
-  <p>Product: {{order_id}} ready for download!</p>
+  <p>Product delivery: {{order_id}}.</p>
 {% endblock %}
 
+{% block greeting %}
+  <p>Dear {{name}},</p>
+  {% endblock %}
+
+{% block introduction %}
+<p>
+  We would like to inform you, your purchase order <b>Fairy Light ord. {{order_id}}</b> is ready for download.
+  We would like to thank you for your purchase.
+</p>
+{% endblock %}
+
+{% block maincontent %}
+{{ lib.call_to_action('Download Now', url=download_link) }}
+{% endblock %}
+
+{% block lastwords %}
+<p>
+  If you are statisfied with our service you visit our site by clicking <a href="https://wwww.fairy-light.herokupapp.com">HERE</a>.
+</p>
+{% endblock %}

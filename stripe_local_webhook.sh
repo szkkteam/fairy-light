@@ -2,7 +2,7 @@
 
 LOCAL_WEBHOOK_DEBUG="$(stripe listen --events payment_intent.created,payment_intent.completed,charge.succeeded,charge.failed,payment_intent.payment_failed --log-level=debug)"
 #FORWARD_WEBHOOK_DEBUG="$(stripe listen --events payment_intent.created,payment_intent.completed,charge.succeeded,charge.failed,payment_intent.payment_failed --forward-to localhost:5000/shop/checkout-webhook --log-level=debug)"
-FORWARD_WEBHOOK_DEBUG="$(stripe listen --forward-to localhost:5000/shop/checkout-webhook --log-level=debug)"
+FORWARD_WEBHOOK_DEBUG="$(stripe listen --forward-to localhost:5000/shop-api/checkout-webhook --log-level=debug)"
 
 # Run the selected command
 

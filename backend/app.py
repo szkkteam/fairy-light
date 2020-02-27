@@ -11,7 +11,7 @@ import os
 import sys
 
 # Pip package imports
-from flask import Flask as BaseFlask, session, Blueprint
+from flask import Flask as BaseFlask, session, Blueprint, request, g, redirect, url_for, current_app
 from flask.helpers import get_debug_flag
 from flask_wtf.csrf import generate_csrf
 from loguru import logger
@@ -36,6 +36,8 @@ from .magic import (
     get_commands,
     get_extensions,
 )
+
+from backend.extensions.babel import babel
 
 class Flask(BaseFlask):
     bundles = []
@@ -104,6 +106,7 @@ def configure_app(app, config_object):
     app.config.from_object(config_object)
 
     app.jinja_env.add_extension('jinja2_time.TimeExtension')
+    app.jinja_env.add_extension('jinja2.ext.i18n')
 
     @app.before_request
     def enable_session_timeout():
@@ -115,7 +118,28 @@ def configure_app(app, config_object):
         if response:
             response.set_cookie('csrf_token', generate_csrf())
         return response
-        
+
+    @babel.localeselector
+    def get_locale():
+        print("Locales: ", babel. list_translations(), flush=True)
+        try:
+            language = session.get('language')
+            print('Getting lang from session: ', language, flush=True)
+        except KeyError:
+            language = None
+        if language is None:
+            language = request.accept_languages.best_match(current_app.config.get('LANGUAGES').keys())
+            print('Getting lang from browser: ', language, flush=True)
+        return language
+
+    @app.context_processor
+    def inject_conf_var():
+        return dict(
+            lurl_for=lambda ep, **kwargs: url_for('/' + session.get('language', current_app.config.get('BABEL_DEFAULT_LOCALE')) +ep, **kwargs  ),
+            languages=current_app.config.get('LANGUAGES'),
+            language=session.get('language',
+                                         request.accept_languages.best_match(current_app.config['LANGUAGES'].keys())))
+
     # Configure the bundles
     for bundle in app.bundles:
         for config_name, config in bundle.configs:

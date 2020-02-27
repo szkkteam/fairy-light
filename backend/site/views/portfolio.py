@@ -7,9 +7,10 @@ from flask import render_template
 
 # Internal package imports
 from backend.shop.inventory import ProductInventory
-from backend.site.views.blueprint import site
+from backend.site.views.blueprint import site, site_lang
 
 @site.route('/portfolio')
+@site_lang.route('/portfolio')
 def portfolio():
     return render_template('website/portfolio/portfolio.html',
                            # Shopping Cart

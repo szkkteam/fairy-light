@@ -5,7 +5,9 @@
 import re
 
 # Pip package imports
+from flask import current_app
 from bs4 import BeautifulSoup
+from loguru import logger
 
 # Internal package imports
 from backend.extensions.celery import celery
@@ -25,11 +27,19 @@ def send_mail_async_task(msg):
 
     mail.send(msg)
 
-@celery.task(serializer='picke')
+@celery.task(serializer='pickle')
 def prepare_product_async_task(order_id):
+    from backend.utils.mail import prepare_send_mail
     try:
         order = create_archive(order_id)
-        mail_data = prepare_mail(order=order)
+        subject, recipients, template, kwargs = prepare_mail(order=order)
+        # Send mail
+        # TODO: This is a bit ugly but currently dont know how to render template outside of request context
+        with current_app.test_request_context():
+            msg = prepare_send_mail(subject, recipients, template, **kwargs)
+            mail.send(msg)
+
+        logger.debug("Order: \'{id}\' has been delivered to: \'{email}\' address.".format(id=order.id, email=recipients))
     except Exception as e:
-        # TOOD: What to do with exceptions?
-        pass
+        logger.error(e)
+        raise

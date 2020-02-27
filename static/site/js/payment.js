@@ -197,7 +197,9 @@ var initPayment = function(stripe_key, client_secret, success_url, processing_ur
 				
 				console.log(result.error.message);
 				// Re-enable the Pay button.
-				//$(submitButton).prop('disabled', false);
+                submitButton.prop('disabled', false);
+                $('.pay-btn-idle').css('display', 'block');
+		        $('.pay-btn-processing').css('display', 'none');
 			} else {
 				cardErrors.text("");
 				// The payment has been processed!

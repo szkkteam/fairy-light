@@ -64,6 +64,7 @@ EXTENSIONS = [
     'backend.extensions.debug:toolbar',
     'backend.extensions.mediamanager:storage',
     'backend.extensions.stripe:stripe',
+    'backend.extensions.babel:babel',
 ]
 
 # list of extensions to register after the bundles
@@ -118,17 +119,17 @@ class BaseConfig(object):
     ##########################################################################
     # celery                                                                 #
     ##########################################################################
-    CELERY_BROKER_URL = 'redis://{host}:{port}/0'.format(
+    CELERY_BROKER_URL = os.environ.get('REDIS_URL') if 'REDIS_URL' in os.environ else 'redis://{host}:{port}/0'.format(
         host=os.getenv('FLASK_REDIS_HOST', '127.0.0.1'),
         port=os.getenv('FLASK_REDIS_PORT', 6379),
     )
-    CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+    CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL') if 'REDIS_URL' in os.environ else CELERY_BROKER_URL
     CELERY_ACCEPT_CONTENT = ('json', 'pickle')
 
     ##########################################################################
     # mail                                                                   #
     ##########################################################################
-    MAIL_ADMINS = ('admin@example.com',)  # FIXME
+    MAIL_ADMINS = ('fairylight.event@gmail.com',)  # FIXME
     MAIL_SERVER = os.environ.get('FLASK_MAIL_HOST', 'localhost')
     MAIL_PORT = int(os.environ.get('FLASK_MAIL_PORT', 25))
     MAIL_USE_TLS = get_boolean_env('FLASK_MAIL_USE_TLS', False)
@@ -189,6 +190,16 @@ class BaseConfig(object):
     STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
     STRIPE_WEBHOOK_SECRET = os.environ['STRIPE_WEBOOK_SECRET']
     STRIPE_PUBLISHABLE_KEY = os.environ['STRIPE_PUBLISHABLE_KEY']
+
+    ##########################################################################
+    # Babel                                                                  #
+    ##########################################################################
+    LANGUAGES =  {
+        'en': 'English',
+        'hu': 'Magyar',
+        'de': 'Deutsch',
+    }
+    BABEL_TRANSLATION_DIRECTORIES = 'backend/i18n'
 
 class ProdConfig(BaseConfig):
     ##########################################################################

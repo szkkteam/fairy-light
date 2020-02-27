@@ -1,0 +1,66 @@
+# English translations for PROJECT.
+# Copyright (C) 2020 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2020-02-24 17:28+0100\n"
+"PO-Revision-Date: 2020-02-23 18:16+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.7.0\n"
+
+#: backend/contrib/admin/form.py:54
+msgid "Not a valid choice"
+msgstr ""
+
+#: backend/shop/admins/category_admin.py:183
+msgid "Record was successfully created."
+msgstr ""
+
+#: backend/shop/admins/category_admin.py:252
+#, python-format
+msgid "Failed to delete record. %(error)s"
+msgstr ""
+
+#: backend/shop/admins/category_admin.py:280
+#, python-format
+msgid "Failed to create record. %(error)s"
+msgstr ""
+
+#: backend/shop/admins/field.py:78
+msgid "Invalid file extension"
+msgstr ""
+
+#: backend/templates/website/lib.html:5 backend/templates/website/lib.html:55
+msgid "Home"
+msgstr "Home"
+
+#: backend/templates/website/lib.html:6
+msgid "Photos"
+msgstr ""
+
+#: backend/templates/website/lib.html:7
+msgid "Services"
+msgstr ""
+
+#: backend/templates/website/lib.html:11
+msgid "Portfolio"
+msgstr ""
+
+#: backend/templates/website/lib.html:12
+msgid "About"
+msgstr ""
+
+#: backend/templates/website/lib.html:13
+msgid "Contact"
+msgstr ""
+

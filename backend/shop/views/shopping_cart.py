@@ -16,7 +16,7 @@ from backend.extensions import db
 from ..models import Category, Image, PaymentStatus, Order
 
 from ..inventory import ProductInventory
-from .blueprint import shop
+from .blueprint import shop, shop_api, shop_lang
 from .checkout import is_intent_success, is_order_success
 
 
@@ -35,6 +35,7 @@ def try_close_cart():
 
 
 @shop.route('/cart/detail')
+@shop_lang.route('/cart/detail')
 def cart_detail():
     url = request.args.get('url')
     if url is None:
@@ -49,10 +50,19 @@ def cart_detail():
     return resp
 
 @shop.route('/cart/detail/refresh')
+@shop_lang.route('/cart/detail/refresh')
 def cart_detail_refresh():
     return render_template('website/cart/cart_detail.html',
                            cart_items=ProductInventory.get_content(),
                            total_price=ProductInventory.get_total_price()
+                           )
+
+@shop.route('/cart/refresh')
+@shop_lang.route('/cart/refresh')
+def cart_mini_refresh():
+    return render_template('website/cart/cart_mini.html',
+                           cart_items=ProductInventory.get_content(),
+                           total_price=ProductInventory.get_total_price(),
                            )
 
 
@@ -60,23 +70,11 @@ class CartApi(MethodView):
 
     def get(self):
         try:
-            print("Request: ", request.content_type, flush=True)
-            try:
-                is_json = request.content_type.startswith('application/json')
-            except Exception:
-                is_json = False
-
-            if is_json:
-                return jsonify(dict(
-                    cartItems=ProductInventory.get_content(),
-                    totalPrice=ProductInventory.get_total_price(),
-                    numOfItems=ProductInventory.get_num_of_items()
-                ))
-            else:
-                return render_template('website/cart/cart_mini.html',
-                                       cart_items=ProductInventory.get_content(),
-                                       total_price=ProductInventory.get_total_price(),
-                                       )
+            return jsonify(dict(
+                cartItems=ProductInventory.get_content(),
+                totalPrice=ProductInventory.get_total_price(),
+                numOfItems=ProductInventory.get_num_of_items()
+            ))
         except Exception as e:
             logger.error(traceback.format_exc())
             return abort(500)
@@ -126,6 +124,6 @@ class CartItemApi(MethodView):
             return jsonify({'error': 'Unknown error occured.'}), 500
 
 
-shop.add_url_rule("/cart/", view_func=CartApi.as_view("cart_api"))
-shop.add_url_rule("/cart/<int:item_id>", view_func=CartItemApi.as_view("cart_item_api"))
-shop.add_url_rule("/cart/category/<int:category_id>", view_func=CartCategoryApi.as_view("cart_category_api"))
+shop_api.add_url_rule("/cart/", view_func=CartApi.as_view("cart_api"))
+shop_api.add_url_rule("/cart/<int:item_id>", view_func=CartItemApi.as_view("cart_item_api"))
+shop_api.add_url_rule("/cart/category/<int:category_id>", view_func=CartCategoryApi.as_view("cart_category_api"))

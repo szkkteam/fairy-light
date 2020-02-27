@@ -18,7 +18,7 @@ import stripe
 from backend.extensions import db
 from backend.extensions import csrf
 
-from .blueprint import shop
+from .blueprint import shop, shop_api, shop_lang
 from ..models import StripeUser, Order, PaymentStatus
 from ..webhook import StripeEvents, StripeWebhook
 
@@ -90,18 +90,21 @@ def get_or_create_user(**kwargs):
     return user
 
 @shop.route('/checkout/success')
+@shop_lang.route('/checkout/success')
 def checkout_success():
     resp =  make_response(render_template('website/checkout/checkout_success.html'))
     resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
     return resp
 
 @shop.route('/checkout/processing')
+@shop_lang.route('/checkout/processing')
 def checkout_processing():
     resp = make_response(render_template('website/checkout/checkout_processing.html'))
     resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
     return resp
 
 @shop.route('/checkout/failed')
+@shop_lang.route('/checkout/failed')
 def checkout_failed():
     resp = make_response(render_template('website/checkout/checkout_failed.html'))
     resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
@@ -109,6 +112,7 @@ def checkout_failed():
 
 #@payment.route('/')
 @shop.route('/checkout', methods=['GET', 'POST'])
+@shop_lang.route('/checkout', methods=['GET', 'POST'])
 @csrf.exempt
 def checkout():
     # If the cart's total price is 0 it means the customer selected only free products.
@@ -150,6 +154,47 @@ class PaymentWebhook(StripeWebhook):
     def _get_order(self, data):
         return Order.get(data['metadata']['order_id'])
 
+    def _get_user(self, data):
+        user = None
+        name = None
+        email = None
+        try:
+            # print(data['charges']['data'], flush=True)
+            name = data['charges']['data'][0]['billing_details']['name']
+            email = data['charges']['data'][0]['billing_details']['email']
+        except Exception as e:
+            try:
+                name = data['billing_details']['name']
+                email = data['billing_details']['email']
+            except Exception as e:
+                logger.error(traceback.format_exc())
+                print(data, flush=True)
+        if name and email:
+            user = get_or_create_user(name=name, email=email)
+        return user
+
+    def _prepare_data(self, data, payment_status, commit=True):
+        order = self._get_order(data)
+        user = self._get_user(data)
+        if user is None:
+            logger.error('Billing details is missing.')
+            return self.return_error('Billing details is missing.', 400)
+
+        if user is None:
+            logger.error('Billing details is missing.')
+            return None, None
+
+        user.orders.append(order)
+        order.set_payment_status(payment_status, commit=False)
+
+        db.session.add(user)
+        db.session.add(order)
+        if commit:
+            db.session.commit()
+
+        return order, user
+
+
     def handle_payment_intent_created(self, data):
         order = self._get_order(data)
         order.set_payment_status(PaymentStatus.requested)
@@ -157,62 +202,36 @@ class PaymentWebhook(StripeWebhook):
         return self.return_success()
 
     def handle_payment_intent_succeeded(self, data):
-        order = self._get_order(data)
-        user = None
-        try:
-            # print(data['charges']['data'], flush=True)
-            name = data['charges']['data'][0]['billing_details']['name']
-            email = data['charges']['data'][0]['billing_details']['email']
-        except Exception as e:
-            logger.error(e)
-        else:
-            user = get_or_create_user(name=name, email=email)
-
-        if user is None:
-            logger.error('Billing details is missing.')
+        # Preapre the user and order data
+        order, user = self._prepare_data(data, PaymentStatus.confirmed)
+        if not order or not user:
             return self.return_error('Billing details is missing.', 400)
-
-        user.orders.append(order)
-        order.set_payment_status(PaymentStatus.confirmed, commit=False)
-
         logger.debug("Payment Intent status: confirmed.")
-
-        db.session.add(user)
-        db.session.add(order)
-        db.session.commit()
         # TODO: Start the async process
         return self.return_success()
 
     def handle_payment_intent_failed(self, data):
-        order = self._get_order(data)
-        order.set_payment_status(PaymentStatus.error)
+        # Preapre the user and order data
+        order, user = self._prepare_data(data, PaymentStatus.error)
+        if not order or not user:
+            return self.return_error('Billing details is missing.', 400)
         logger.debug("Payment Intent status: failed.")
         return self.return_success()
 
     def handle_charge_succeeded(self, data):
-        order = self._get_order(data)
-        order.set_payment_status(PaymentStatus.confirmed, commit=False)
-        logger.debug("Payment Charge status: confirmed.")
-
-        try:
-            name = data['billing_details']['name']
-            email = data['billing_details']['email']
-        except KeyError as err:
-            logger.error(err)
-        else:
-            user = get_or_create_user(name=name, email=email)
-            user.orders.append(order)
-            db.session.add(user)
-
-        db.session.add(order)
-        db.session.commit()
-
+        # Preapre the user and order data
+        order, user = self._prepare_data(data, PaymentStatus.confirmed)
+        if not order or not user:
+            return self.return_error('Billing details is missing.', 400)
+        logger.debug("Payment Intent status: succeed.")
         return self.return_success()
 
     def handle_charge_failed(self, data):
-        order = self._get_order(data)
-        order.set_payment_status(PaymentStatus.error)
+        # Preapre the user and order data
+        order, user = self._prepare_data(data, PaymentStatus.error)
+        if not order or not user:
+            return self.return_error('Billing details is missing.', 400)
         logger.debug("Payment Charge status: failed.")
         return self.return_success()
 
-shop.add_url_rule('/checkout-webhook', view_func=PaymentWebhook.as_view('checkout_webhook'))
+shop_api.add_url_rule('/checkout-webhook', view_func=PaymentWebhook.as_view('checkout_webhook'))

@@ -10,13 +10,12 @@
 {% block custom_css %}
     {{ super() }}
     <link href="{{ site_static.url(filename='site/css/index.css') }}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.1.0/css/flag-icon.min.css" rel="stylesheet">
 
 {% endblock %}
 
 {% block hero_block %}
-    {%- if request.endpoint == 'site.index' -%}
-        {{ hero_img.hero_section( url_for('site.index') ) }}
-    {%- endif -%}
+    {{ hero_img.hero_section( url_for('site.index') ) }}
 {% endblock %}
 
 {% block main_block %}

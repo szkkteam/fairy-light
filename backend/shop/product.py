@@ -35,17 +35,20 @@ def create_archive(id):
         try:
             # Update the Shipping Status
             order.set_shipping_status(ShippingStatus.ongoing, False)
-            # Get the image paths
-            img_paths = [ image.path for image in order.product ]
-            logger.debug("Archiving: [{paths}].".format(paths=img_paths))
-            # Archive files
-            archive_path = st.archive_files(st.generate_name("product_%s.zip" % order.id), img_paths)
-            order.update(path=archive_path)
-            logger.debug("Order: \'{id}\' archiving finished.".format(id=order.id))
-
+            # If archive not exists yet
+            if not order.path:
+                # Get the image paths
+                img_paths = [ image.path for image in order.product ]
+                logger.debug("Archiving: [{paths}].".format(paths=img_paths))
+                # Archive files
+                archive_path = st.archive_files(st.generate_name("product_%s.zip" % order.id), img_paths)
+                order.update(path=archive_path)
+                logger.debug("Order: \'{id}\' archiving finished.".format(id=order.id))
         except Exception as e:
             logger.error(e)
             order.set_shipping_status(ShippingStatus.failed, False)
+            raise
+
         finally:
             db.session.add(order)
             db.session.commit()
@@ -53,6 +56,7 @@ def create_archive(id):
         return order
 
 def prepare_mail(**kwargs):
+    from backend.utils.url_helpers import safe_url_for_external
     print(kwargs)
     order = kwargs.get('order', None)
     if order is None:
@@ -62,21 +66,24 @@ def prepare_mail(**kwargs):
         email = order.user.email
         # Generate the unique download url
         token = encode_token(order.id)
+        external_url = safe_url_for_external('shop.product_download', token=token, _external=True)
 
-        subject = "Product order: %s ready to download" % order.id
+        subject = "Product delivery %s." % order.id
         template = 'email/product_deliver.html'
         mail_data = dict(order_id=order.id,
-                         download_link=url_for('shop.product_download', token=token, _external=True),
+                         name=order.user.name,
+                         download_link=external_url,
                   )
 
         order.set_shipping_status(ShippingStatus.succeeded, False)
-        logger.debug("Order: \'{id}\' can be accessed at the following url: {url}".format(id=order.id, url=url_for('shop.product_download', token=token)))
+        logger.debug("Order: \'{id}\' can be accessed at the following url: {url}".format(id=order.id, url=external_url))
 
         return subject, email, template, mail_data
 
     except Exception as e:
         logger.error(e)
         order.set_shipping_status(ShippingStatus.failed, False)
+        raise
 
     finally:
         db.session.add(order)

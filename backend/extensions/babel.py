@@ -3,7 +3,7 @@
 
 # Common Python library imports
 # Pip package imports
+from flask_babelex import Babel
 # Internal package imports
-from backend.magic import Bundle
 
-site_bundle = Bundle(__name__, blueprint_names=['site', 'site_lang'])
+babel = Babel()

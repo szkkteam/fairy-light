@@ -13,7 +13,7 @@ from loguru import logger
 # Internal package imports
 from backend.extensions import db
 
-from .blueprint import shop
+from .blueprint import shop, shop_lang
 from ..models import Category, Order, PaymentStatus, Image
 from ..inventory import ProductInventory
 from .shopping_cart import try_close_cart
@@ -31,11 +31,13 @@ def get_breadcrumbs(root_id):
     return breadcrumbs
 
 @shop.route('/category/<int:category_id>')
+@shop_lang.route('/category/<int:category_id>')
 def category_detail(category_id):
     return render_template('website/shop/album_modal.html',
                            data=category_detail(category_id))
 
 @shop.route('/photo/<int:photo_id>')
+@shop_lang.route('/photo/<int:photo_id>')
 def image_lightbox(photo_id):
     element = Image.get(photo_id)
     category_title = request.args.get('category')
@@ -45,7 +47,7 @@ def image_lightbox(photo_id):
         title=element.title,
         size=element.image_size,
         discounted_price=element.price,
-        url_add_to_cart=url_for('shop.cart_item_api', item_id=element.id),
+        url_add_to_cart=url_for('shop_api.cart_item_api', item_id=element.id),
         url_image=element.get_path(),
         url_facebook_share=url_for('shop.index_view', root=element.id, _external=True),
     )
@@ -58,6 +60,8 @@ def image_lightbox(photo_id):
 
 @shop.route('/')
 @shop.route('/<int:root>')
+@shop_lang.route('/')
+@shop_lang.route('/<int:root>')
 def index_view(root=None):
     # Calculate the breadcrumbs relative to the current view
     breadcrumbs = get_breadcrumbs(root)
@@ -144,7 +148,7 @@ def image_data(data, category_title=None):
             thumbnail=element.get_thumbnail_path(),
             title=element.title,
             discounted_price=element.price,
-            url_add_to_cart=url_for('shop.cart_item_api', item_id=element.id),
+            url_add_to_cart=url_for('shop_api.cart_item_api', item_id=element.id),
             url_image=url_for('shop.image_lightbox', photo_id=element.id, category=category_title),
             #url_image=element.get_path(),
             url_external=url_for('shop.index_view', root=element.category_id, _external=True),
@@ -158,7 +162,7 @@ def category_detail(category_id):
     data = dict(
         original_price=original_price,
         discounted_price=discounted_price,
-        url_add_to_cart = url_for('shop.cart_category_api', category_id=element.id),
+        url_add_to_cart = url_for('shop_api.cart_category_api', category_id=element.id),
         title=element.title,
         images=image_data(element.images, category_title=element.title)
     )

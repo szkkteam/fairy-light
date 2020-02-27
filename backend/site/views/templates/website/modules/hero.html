@@ -1,7 +1,32 @@
+{% macro lang_select(lang_code, description, url, is_active=False) %}
+    {% if is_active %}
+        <a class="dropdown-toggle" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="flag-icon flag-icon-{{'us' if lang_code == 'en' else lang_code}}"> </span>{{description}}
+        </a>
+    {% else %}
+        <a class="dropdown-item" href="{{url}}">
+            <span class="flag-icon flag-icon-{{'us' if lang_code == 'en' else lang_code}}"> </span>{{description}}
+        </a>
+    {% endif %}
+
+{% endmacro %}
+
 {% macro hero_section(index_link, bg_img='http://placehold.it/1140x350', logo_img='http://placehold.it/100x100') %}
     <section id="hero">
         <div class="container">
             <div class="row">
+                <div style="top:10px; position: absolute; z-index: 1000; left: 17%;">
+                    <div class="dropdown" style="cursor: pointer;">
+                        {{lang_select(language, languages[language], url_for('site_lang.index', lang_code=language), is_active=True)}}
+                        <div class="dropdown-menu" aria-labelledby="dropdown09">
+                            {% for key, desc in languages.items() %}
+                                {% if key != language %}
+                                    {{lang_select(key, desc, url_for('site_lang.index', lang_code=key))}}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
                 <div class="card" style="width:100%">
                     <img class="card-img-top gradient-fade img-fluid" src="{{ bg_img }}" alt="Fairy Light" style="width:100%">
                     <div class="card-img-overlay h-100 d-flex flex-column justify-content-end align-items-center pb-0">

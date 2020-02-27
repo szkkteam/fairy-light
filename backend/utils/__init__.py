@@ -54,7 +54,8 @@ def decode_token(token):
     s = URLSafeSerializer(current_app.secret_key, salt=current_app.config['SECURITY_PASSWORD_SALT'])
     try:
         return s.loads(token)
-    except BadData:
+    except BadData as e:
+        logger.error(e)
         return None
 
 def encode_token(data):

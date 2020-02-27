@@ -1,0 +1,6 @@
+{% macro hreflang_link() %}
+    {% for lang, desc in languages.items() %}
+        <link rel="alternate" hreflang="{{lang}}" href="{{ url_for(request.endpoint, lang_code=lang, _external=True)}}"/>
+    {% endfor %}
+{% endmacro %}
+

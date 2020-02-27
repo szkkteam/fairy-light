@@ -3,11 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>
-        {% block title %}
-
-        {% endblock %}
-    </title>
+    <title>Simple Transactional Email</title>
     <style>
       /* -------------------------------------
           GLOBAL RESETS
@@ -239,6 +235,11 @@
         width: 0;
       }
 
+      .img-fluid {
+        max-width: 100%;
+        height: auto;
+      }
+
       .powered-by a {
         text-decoration: none;
       }
@@ -250,19 +251,16 @@
       }
 
       /* -------------------------------------
-            CUSTOM STYLES
-        ------------------------------------- */
-        .social-icon {
-          padding-right: 10px;
-        }
+          CUSTOM STYLES
+      ------------------------------------- */
+      .social-icon {
+        padding-right: 10px;
+      }
 
-        hr.line-separator,
-        .line-separator hr {
-          width: 20%;
-        }
-      {% block css %}
-
-      {% endblock %}
+      hr.line-separator,
+      .line-separator hr {
+        width: 20%;
+      }
 
       /* -------------------------------------
           RESPONSIVE AND MOBILE FRIENDLY STYLES
@@ -348,17 +346,11 @@
           border-color: #34495e !important;
         }
       }
-      {% block css_resp %}
-
-      {% endblock %}
 
     </style>
   </head>
   <body class="">
-    <span class="preheader">
-        {% block preview %}
-        {% endblock %}
-    </span>
+    <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
       <tr>
         <td>&nbsp;</td>
@@ -371,11 +363,59 @@
               <!-- START MAIN CONTENT AREA -->
               <tr>
                 <td class="wrapper">
-                    {% block main %}
-                    {% endblock %}
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td>
+                        <span class="greetings">
+                          <p>Dear Customer,</p>
+                        </span>
+                        <span class="introduction">
+                          <p>
+                            We would like to inform you, your purchase order <b>Fairy Light ord. 18</b> is ready for download.
+                            We would like to thank you for your purchase.
+                          </p>
+                        </span>
+                        <span class="maincontent">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                          <tbody>
+                            <tr>
+                              <td align="center">
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td> <a href="http://htmlemail.io" target="_blank">Download</a> </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        </span>
+                        <span class="lastwords">
+                          <p>
+                            If you are statisfied with our service you visit our site by clicking <a href="#">HERE</a>.
+                          </p>
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span>
+                          <p>Sinceresly,</p>
+                        </span>
+                        <span class="line-separator">
+                         <hr/>
+                        </span>
+                        <span class="signature">
+                          <p>Anna Toth & Eszter Pap</p>
+                          <p>Photographers at Fairy Light</p>
+                        </span>
+                      </td>
+                    </tr>
+                  </table>
                 </td>
               </tr>
-
             <!-- END MAIN CONTENT AREA -->
             </table>
             <!-- END CENTERED WHITE CONTAINER -->
@@ -383,12 +423,43 @@
             <!-- START FOOTER -->
             <div class="footer">
               <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                  {% block footer %}
-                  {% endblock %}
+                <tr>
+                  <td class="content-block">
+                    <span class="apple-link">Fairy Light Event Photography, 9999 Street street, City city ZIP</span>
+                  </td>
+                </tr>
+                  <tr>
+                  <td class="content-block">
+                    <span> You are receiving this email because you are subscribed to to Fairy Light mailing list. You can <a href="http://i.imgur.com/CScmqnj.gif">Unsubscribe</a> any time from all future events.</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="content-block powered-by">
+                    Powered by <a href="http://htmlemail.io">&copy; Copyright 2020 Fairy Light</a>.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="social-icon">
+                      <a rel="nofollow" href="#">
+                        <img class="img-fluid" width="45" height="45" src="http://placehold.it/45x45" alt="facebook page of fairy light event photography">
+                      </a>
+                    </span>
+                    <span class="social-icon">
+                      <a rel="nofollow" href="#">
+                        <img class="img-fluid" width="45" height="45" src="http://placehold.it/45x45" alt="instagram page of fairy light event photography">
+                      </a>
+                    </span>
+                    <span class="social-icon">
+                      <a rel="nofollow" href="#">
+                        <img class="img-fluid" width="45" height="45" src="http://placehold.it/45x45" alt="twitter page of fairy light event photography">
+                      </a>
+                    </span>
+                  </td>
+                </tr>
               </table>
             </div>
             <!-- END FOOTER -->
-
           </div>
         </td>
         <td>&nbsp;</td>
