@@ -15,8 +15,8 @@
     <section id="hero">
         <div class="container">
             <div class="row">
-                <div style="top:10px; position: absolute; z-index: 1000; left: 17%;">
-                    <div class="dropdown" style="cursor: pointer;">
+                <div style="top:10px; position: absolute; z-index: 1000;">
+                    <div class="dropdown" style="cursor: pointer; left: 10px;">
                         {{lang_select(language, languages[language], url_for('site_lang.index', lang_code=language), is_active=True)}}
                         <div class="dropdown-menu" aria-labelledby="dropdown09">
                             {% for key, desc in languages.items() %}
