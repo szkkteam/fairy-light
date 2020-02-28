@@ -7,18 +7,12 @@ import io
 # Pip package imports
 from flask import render_template, request, url_for, redirect, abort, send_file
 
-from sqlalchemy import asc
-
 from loguru import logger
 # Internal package imports
-from backend.extensions import db
 from backend.utils import decode_token
-from backend.extensions.mediamanager import storage as mm
 
 from .blueprint import shop
 from ..models import Order
-from ..inventory import ProductInventory
-from .checkout import is_intent_success, is_order_success
 from ..storage import get_protected
 
 
@@ -34,7 +28,7 @@ def product_download(token):
         st = get_protected()
         order = Order.get(order_id)
         # Read the zipfile as binary
-        with open(st.path(order.path), 'rb') as arch_in:
+        with st.open(order.path, mode='rb') as arch_in:
             byte_stream = io.BytesIO(arch_in.read())
 
         byte_stream.seek(0)
