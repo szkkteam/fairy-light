@@ -24,7 +24,6 @@ from ..models import StripeUser, Order, PaymentStatus
 from ..webhook import StripeEvents, StripeWebhook
 
 from ..inventory import ProductInventory
-from ..models import Image
 
 def is_intent_success():
     intent_id = ProductInventory.get_intent_id()
@@ -93,6 +92,7 @@ def get_or_create_user(**kwargs):
 @shop.route('/checkout/success')
 @shop_lang.route('/checkout/success')
 def checkout_success():
+    ProductInventory.reset()
     resp =  make_response(render_template('website/checkout/checkout_success.html'))
     resp.headers.add('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
     return resp

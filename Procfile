@@ -1,2 +1,2 @@
 web: gunicorn wsgi:app
-worker: python manage.py celery worker
+worker: python manage.py --env "prod" celery worker
