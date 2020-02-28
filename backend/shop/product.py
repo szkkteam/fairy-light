@@ -5,9 +5,7 @@
 import os
 
 # Pip package imports
-from flask import url_for
-import click
-from flask.cli import with_appcontext
+from flask import current_app
 
 from loguru import logger
 
@@ -19,8 +17,6 @@ from backend.utils import encode_token
 
 from .models import ShippingStatus, Order
 from .storage import get_protected
-
-
 
 def create_archive(id):
     try:

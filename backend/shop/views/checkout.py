@@ -17,6 +17,7 @@ import stripe
 # Internal package imports
 from backend.extensions import db
 from backend.extensions import csrf
+from backend.tasks import prepare_product_async_task
 
 from .blueprint import shop, shop_api, shop_lang
 from ..models import StripeUser, Order, PaymentStatus
@@ -207,7 +208,10 @@ class PaymentWebhook(StripeWebhook):
         if not order or not user:
             return self.return_error('Billing details is missing.', 400)
         logger.debug("Payment Intent status: confirmed.")
-        # TODO: Start the async process
+
+        # Deliver product
+        prepare_product_async_task.delay(order.id)
+
         return self.return_success()
 
     def handle_payment_intent_failed(self, data):
