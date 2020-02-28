@@ -9,7 +9,7 @@ amqp==2.5.2               # via kombu
 aniso8601==8.0.0          # via flask-restful
 appdirs==1.4.3
 arrow==0.15.4             # via jinja2-time
-babel==2.7.0              # via flask-babelex
+babel==2.7.0              # via flask-babel, flask-babelex
 bcrypt==3.1.7
 beautifulsoup4==4.8.1
 billiard==3.6.1.0         # via celery
@@ -21,6 +21,7 @@ chardet==3.0.4            # via requests
 click==7.0                # via flask
 flask-admin==1.5.4
 flask-alembic==2.0.1
+flask-babel==1.0.0
 flask-babelex==0.9.3      # via flask-security
 flask-breadcrumbs==0.4.0
 flask-debugtoolbar==0.10.1
@@ -28,7 +29,7 @@ flask-login==0.4.1        # via flask-security
 flask-mail==0.9.1
 flask-marshmallow==0.10.1
 flask-menu==0.7.1         # via flask-breadcrumbs
-flask-mm==0.0.12.dev0
+flask-mm==0.0.13.dev0
 flask-principal==0.4.0    # via flask-security
 flask-restful==0.3.7
 flask-security==3.0.0
@@ -82,4 +83,4 @@ wtforms==2.2.1            # via flask-admin, flask-wtf
 zipp==0.6.0               # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools==45.1.0        # via gunicorn, markdown
+# setuptools==45.2.0        # via gunicorn, markdown
