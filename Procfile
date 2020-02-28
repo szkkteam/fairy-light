@@ -1,2 +1,2 @@
 web: gunicorn wsgi:app
-worker: python manage.py celery worker --loglevel=debug
+worker: python manage.py celery worker
