@@ -53,7 +53,6 @@ def create_archive(id):
 
 def prepare_mail(**kwargs):
     from backend.utils.url_helpers import safe_url_for_external
-    print(kwargs)
     order = kwargs.get('order', None)
     if order is None:
         order = Order.get(kwargs.get('id'))
@@ -63,6 +62,7 @@ def prepare_mail(**kwargs):
         # Generate the unique download url
         token = encode_token(order.id)
         external_url = safe_url_for_external('shop.product_download', token=token, _external=True)
+        logger.warning("Url: %s" % external_url)
 
         subject = "Product delivery %s." % order.id
         template = 'email/product_deliver.html'
