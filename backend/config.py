@@ -132,6 +132,7 @@ class BaseConfig(object):
     MAIL_ADMINS = ('fairylight.event@gmail.com',)  # FIXME
     MAIL_SERVER = os.environ.get('FLASK_MAIL_HOST', 'localhost')
     MAIL_PORT = int(os.environ.get('FLASK_MAIL_PORT', 25))
+    MAIL_DEBUG = False # To prevent celery outputting warning messages
     MAIL_USE_TLS = get_boolean_env('FLASK_MAIL_USE_TLS', False)
     MAIL_USE_SSL = get_boolean_env('FLASK_MAIL_USE_SSL', False)
     MAIL_USERNAME = os.environ.get('FLASK_MAIL_USERNAME', None)
@@ -139,7 +140,7 @@ class BaseConfig(object):
     MAIL_DEFAULT_SENDER = (
         os.environ.get('FLASK_MAIL_DEFAULT_SENDER_NAME', 'Fairy Light'),
         os.environ.get('FLASK_MAIL_DEFAULT_SENDER_EMAIL',
-                       f"noreply@{os.environ.get('FLASK_DOMAIN', 'localhost')}")
+                       f"noreply@{os.environ.get('FLASK_DOMAIN', 'localhost:5000')}")
     )
 
     ##########################################################################

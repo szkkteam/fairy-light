@@ -37,6 +37,12 @@ def prepare_product_async_task(order_id):
         # TODO: This is a bit ugly but currently dont know how to render template outside of request context
         with current_app.test_request_context():
             msg = prepare_send_mail(subject, recipients, template, **kwargs)
+            if not msg.body:
+                plain_text = '\n'.join(map(
+                    str.strip,
+                    BeautifulSoup(msg.html, 'lxml').text.splitlines()
+                ))
+                msg.body = re.sub(r'\n\n+', '\n\n', plain_text).strip()
             mail.send(msg)
 
         logger.debug("Order: \'{id}\' has been delivered to: \'{email}\' address.".format(id=order.id, email=recipients))

@@ -23,7 +23,6 @@ def prepare_send_mail(subject, recipients, template, sender=None, **ctx):
 
     if sender is None:
         sender = current_app.config['MAIL_DEFAULT_SENDER']
-        print("Sender: ", sender)
     msg = Message(subject=subject, recipients=recipients, sender=sender)
     msg.html = render_template(template, **ctx)
 
