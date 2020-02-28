@@ -15,12 +15,16 @@ def celery():
 
 
 @celery.command()
-def worker():
+@click.option('--loglevel', '-l', default='debug', expose_value=True,
+              help='Specify celery log level')
+def worker(loglevel):
     """Start the celery worker."""
-    subprocess.run('celery worker -A wsgi.celery -l debug', shell=True)
+    subprocess.run('celery worker -A wsgi.celery -l %s' % loglevel, shell=True)
 
 
 @celery.command()
-def beat():
+@click.option('--loglevel', '-l', default='debug', expose_value=True,
+              help='Specify celery log level')
+def beat(loglevel):
     """Start the celery beat."""
-    subprocess.run('celery beat -A wsgi.celery -l debug', shell=True)
+    subprocess.run('celery beat -A wsgi.celery -l %s' % loglevel, shell=True)
