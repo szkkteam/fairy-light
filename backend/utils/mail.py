@@ -27,3 +27,18 @@ def prepare_send_mail(subject, recipients, template, sender=None, **ctx):
     msg.html = render_template(template, **ctx)
 
     return msg
+
+def get_mail_static_content():
+    from .url_helpers import safe_url_for_external
+    return dict(
+        facebook_icon=safe_url_for_external('static', 'site/img/icons/icon_facebook_35x35.png', _external=True),
+        instagram_icon=safe_url_for_external('static', 'site/img/icons/icon_instagram_35x35.png', _external=True),
+        twitter_icon=safe_url_for_external('static', 'site/img/icons/icon_twitter_35x35.png', _external=True),
+        facebook_link=safe_url_for_external('static', 'site/img/icons/icon_twitter_35x35.png', _external=True),
+        instagram_link=safe_url_for_external('static', 'site/img/icons/icon_twitter_35x35.png', _external=True),
+        twitter_link=safe_url_for_external('static', 'site/img/icons/icon_twitter_35x35.png', _external=True),
+        site_index=safe_url_for_external('site.index', _external=True),
+        service_1=safe_url_for_external('site.services', _external=True) + '#service-service1',
+        service_2=safe_url_for_external('site.services', _external=True) + '#service-service2',
+        service_3=safe_url_for_external('site.services', _external=True) + '#service-service3',
+    )

@@ -53,6 +53,7 @@ def create_archive(id):
 
 def prepare_mail(**kwargs):
     from backend.utils.url_helpers import safe_url_for_external
+    from backend.utils.mail import get_mail_static_content
     order = kwargs.get('order', None)
     if order is None:
         order = Order.get(kwargs.get('id'))
@@ -65,10 +66,13 @@ def prepare_mail(**kwargs):
         logger.warning("Url: %s" % external_url)
 
         subject = "Product delivery %s." % order.id
-        template = 'email/product_deliver.html'
+        template = 'email/generated_product_deliver.html'
+        #template = 'email/product_deliver.html'
+
         mail_data = dict(order_id=order.id,
                          name=order.user.name,
                          download_link=external_url,
+                         **get_mail_static_content(),
                   )
 
         order.set_shipping_status(ShippingStatus.succeeded, False)

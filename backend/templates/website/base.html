@@ -42,6 +42,10 @@
     {% block head_tail %}
 
     {% endblock %}
+        {% if config['GOOGLE_ANALYTICS_TRACKING_ID'] %}
+            {{seo.google_analytics_lib(config['GOOGLE_ANALYTICS_TRACKING_ID'])}}
+        {% endif %}
+        
         
     </head>
     <body>

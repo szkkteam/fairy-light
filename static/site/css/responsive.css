@@ -9,7 +9,9 @@
     h2{ font-size:30px}
     h6{ font-size:16px;}
     h3{ font-size:15px;}
+    #header .list-group-item.logo { padding: 12px 20px; }
 }
+
 
 @media only screen and (max-width: 767px) {
     /****Mobile Landscape 480 Container 100% ****/
@@ -18,6 +20,11 @@
     h3{ font-size:14px;}
     h6{ font-size:16px; margin-bottom:40px;}
     p{ line-height:18px;}
+    #header .list-group-item.logo { padding: 12px 0px; }
+    #header .title-description { font-size: 1.5rem; }
+    #header .title-description::before,
+    #header .title-description::after { width: 1rem; transform: translateY(-0.5rem); }
+    #header .list-group-item h1 { font-size: 2.25rem;}
 }
 
 @media only screen and (max-width: 479px) {
@@ -25,6 +32,7 @@
     #quote .blockquote { font-size: 0.75rem; }
     h1.section-title { font-size: 2rem; }
     p.section-description { margin-bottom: 1rem; }
+    #header .list-group-item h1 { letter-spacing: initial; /*margin-top: 0px;*/ }
     #services { margin-bottom: 1rem; }
     #subscribe { padding: 30px 0; }
     #subscribe .subscribe-btn-container { padding-top: 0px; }
@@ -42,6 +50,13 @@
     #contact a.w-25 { width: inherit !important; }
     #portfolio .portfolio-filters li { font-size:  1rem; }
     #portfolio .portfolio-filters { margin-bottom: 2rem; }
+}
+
+@media only screen and (max-width: 360px) {
+    /****Small devices 320 ****/
+    #header .list-group-item h1 { letter-spacing: initial; /*margin-top: 0px;*/ font-size: 2.25rem;}
+    #header .title-description { font-size: 1.25rem; }
+    #header .title-description::after { width: 1rem; transform: translateY(-0.35rem); }
 }
 
 /* Small devices (landscape phones, 544px and up) */
