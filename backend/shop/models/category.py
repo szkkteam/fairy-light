@@ -127,7 +127,7 @@ class Category(Model, BaseNestedSets):
     def get_list_from_root(cls, root_id, only_public=False):
         if not root_id:
             # Query Nodes which are root nodes (Default level = 1)
-            base_query = db.session.query(Category).filter(cls.level == cls.get_default_level(), cls.public)
+            base_query = db.session.query(Category).filter(cls.level == cls.get_default_level())
         else:
             # Get all the childrens for that given Node.
             base_query = Category.get(root_id).get_children(db.session)

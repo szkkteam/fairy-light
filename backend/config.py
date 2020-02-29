@@ -196,11 +196,16 @@ class BaseConfig(object):
     # Babel                                                                  #
     ##########################################################################
     LANGUAGES =  {
-        'en': 'English',
-        'hu': 'Magyar',
-        'de': 'Deutsch',
+        'en': 'EN',
+        'hu': 'HU',
+        'de': 'DE',
     }
     BABEL_TRANSLATION_DIRECTORIES = 'backend/i18n'
+
+    ##########################################################################
+    # Google Analytics                                                       #
+    ##########################################################################
+    GOOGLE_ANALYTICS_TRACKING_ID = os.environ.get('GOOGLE_ANALYTICS_TRACKING_ID', '')
 
 class ProdConfig(BaseConfig):
     ##########################################################################

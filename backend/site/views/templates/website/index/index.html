@@ -6,6 +6,7 @@
 {% import 'website/modules/modals.html' as modal with context %}
 {% import 'website/modules/teams.html' as team with context %}
 {% import 'website/modules/hero.html' as hero_img with context %}
+{% import 'website/static.html' as static with context %}
 
 {% block custom_css %}
     {{ super() }}
@@ -80,7 +81,7 @@
             </div>
         </div>
     </section>
-    <section id="subscribe">
+    <section id="subscribe" style="background:url({{static.url(filename='site/img/maze_black_2X.png')}}) ">
         <div class="container">
             <div class="row">
                 <div class="col-md-8">

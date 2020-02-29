@@ -4,9 +4,9 @@
 #header {
     background: url(http://placehold.it/1140x350);
     /* Image is centered vertically and horizontally at all times */
-    background-position: center center;
+    background-position: left top;
     /* Image doesn't repeat */
-    background-repeat: no-repeat;
+    background-repeat: repeat;
     /* Makes the image fixed in the viewport so that it doesn't move when 
     the content height is greater than the image height */
     background-attachment: fixed;
@@ -18,10 +18,46 @@
     /* SHORTHAND CSS NOTATION
     * background: url(background-photo.jpg) center center cover no-repeat fixed;
     */
-    padding: 160px 0px;
+    padding: 40px 0px;
     
+    text-align: center;
 }
 
+#header .list-group-item {
+    background: none;
+    border: none;
+}
+
+#header .list-group-item h1 {
+    /*margin-top: 10px; */
+    text-transform: uppercase;
+    letter-spacing: 1.25rem;
+}
+
+#header .title-description::before,
+#header .title-description::after {
+    display: inline-block;
+    content: "";
+    border-top: .1rem solid white;
+    width: 2rem;
+    margin: 0 1rem;
+    transform: translateY(-1rem);
+
+    /* text-transform: uppercase;*/
+}
+
+#header .list-group-item.logo {
+    padding: 0 60px;
+}
+
+#header .list-group-item.logo img {
+    min-height: 50px;
+    min-width: 50px;
+}
+
+#header #lang-select a {
+    font-weight: bold;
+}
 
 /* Carousel
 ---------------------------------*/   
@@ -77,9 +113,19 @@
 /* Subscribe Section
 --------------------------------*/
 #subscribe {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(http://placehold.it/600x260) fixed center center;
-  background-size: cover;
-  padding: 80px 0;
+    /*background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(http://placehold.it/600x260) fixed center center;*/
+    /* Image is centered vertically and horizontally at all times */
+    background-position: left top;
+    /* Image doesn't repeat */
+    background-repeat: repeat;
+    /* Makes the image fixed in the viewport so that it doesn't move when 
+    the content height is greater than the image height */
+    background-attachment: fixed;
+    /* This is what makes the background image rescale based on its container's size */
+    background-size: cover;
+    /* Pick a solid background color that will be displayed while the background image is loading */
+    background-color:#464646;
+    padding: 80px 0;
 }
 
 #subscribe .subscribe-title {
@@ -190,7 +236,7 @@
 }
 
 #contact .map {
-    width: 80%;
+    width: 70%;
     /*margin-bottom: 40px; */
 }
 
