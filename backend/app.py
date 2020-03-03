@@ -38,6 +38,7 @@ from .magic import (
 )
 
 from backend.extensions.babel import babel
+from backend.extensions.assets import assets as flask_assets
 
 class Flask(BaseFlask):
     bundles = []
@@ -79,6 +80,7 @@ def _create_app(config_object: BaseConfig, **kwargs):
     register_serializers(app)
     register_admins(app)
     register_filters(app)
+    register_assets(app)
 
     deferred_extensions = dict(get_extensions(DEFERRED_EXTENSIONS))
     extensions.update(deferred_extensions)
@@ -158,6 +160,12 @@ def register_filters(app):
         # <bundle_name>.<filter_name>
         for name, filter in bundle.filters:
             app.jinja_env.filters[name] = filter
+
+def register_assets(app):
+    """Register bundle assets."""
+    for bundle in app.bundles:
+        for asset in bundle.assets:
+            flask_assets.register(asset)
 
 def register_blueprints(app):
     """Register bundle views."""

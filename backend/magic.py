@@ -238,6 +238,7 @@ class Bundle(object):
                  views_module_name=sentinel,
                  blueprint_names=sentinel,
                  filter_names=sentinel,
+                 assets=sentinel,
                  ):
         self.module_name = module_name
 
@@ -270,6 +271,7 @@ class Bundle(object):
         if filter_names != sentinel:
             self._filter_names = filter_names
 
+        self._assets = assets
 
     @property
     def _name(self):
@@ -371,6 +373,13 @@ class Bundle(object):
         blueprints = dict(inspect.getmembers(module, is_blueprint))
         for name in self.blueprint_names:
             yield blueprints[name]
+
+    @property
+    def assets(self):
+        if not self._assets:
+            return
+
+        yield self._assets
 
     @property
     def commands_module_name(self):

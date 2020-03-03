@@ -16,8 +16,11 @@ flask-debugtoolbar
 flask-breadcrumbs
 flask-mm
 flask-babel
+flask-assets
 
 
+jsmin
+cssmin
 sqlalchemy-mptt
 gunicorn
 sqlalchemy-utils

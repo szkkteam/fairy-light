@@ -211,7 +211,6 @@ class CategoryAdmin(ModelAdmin):
     """    
     # Adding the JS file to handle multiple image upload
     def render(self, template, **kwargs):
-        self.extra_js = [url_for("static", filename="js/form_upload_imgs_preview.js")]
         return super(PhotoAlbumAdmin, self).render(template, **kwargs)
     """
 

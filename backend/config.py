@@ -65,6 +65,7 @@ EXTENSIONS = [
     'backend.extensions.mediamanager:storage',
     'backend.extensions.stripe:stripe',
     'backend.extensions.babel:babel',
+    'backend.extensions.assets:assets',
 ]
 
 # list of extensions to register after the bundles
@@ -206,6 +207,11 @@ class BaseConfig(object):
     # Google Analytics                                                       #
     ##########################################################################
     GOOGLE_ANALYTICS_TRACKING_ID = os.environ.get('GOOGLE_ANALYTICS_TRACKING_ID', '')
+
+    ##########################################################################
+    # Flask - Assets                                                         #
+    ##########################################################################
+    ASSETS_DEBUG = get_boolean_env('FLASK_DEBUG', False)
 
 class ProdConfig(BaseConfig):
     ##########################################################################
