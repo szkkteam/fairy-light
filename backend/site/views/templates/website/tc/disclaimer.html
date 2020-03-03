@@ -5,7 +5,13 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <h1>Disclaimer</h1>            
+            {% if language == 'hu' %}
+                {% include 'website/tc/hu/disclaimer.html' %}
+            {% elif language == 'hu' %}
+                {% include 'website/tc/de/disclaimer.html' %}
+            {% else %}
+                {% include 'website/tc/en/disclaimer.html' %}
+            {% endif %}
         </div>
     </div>
 </div>

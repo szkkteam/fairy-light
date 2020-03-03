@@ -74,87 +74,85 @@
 {% endmacro %}
 
 {% macro footer(facebook='', instagram='') %}
-    <footer id="footer">
-        <div class="footer-top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-3 col-md-6 footer-info">
-                        <h3>
-                            Fairy Light
-                        </h3>
-                        <p>
-                            Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus. Scelerisque felis imperdiet proin fermentum leo. Amet volutpat consequat mauris nunc congue.
-                        </p>
-                    </div>
-                    <div class="col-lg-3 col-md-6 footer-links">
-                        <h4>
-                            Useful Links
-                        </h4>
-                        <ul>
-                            {{ caller() }}
-                        </ul>
-                    </div>
-                    <div class="col-lg-3 col-md-6 footer-contact">
-                        <h4>
-                            Contact Us
-                        </h4>
-                        <p>
-                            1111 Street Street
-                            <br>
-                            City cty, 9999
-                            <br>
-                            Country
-                            <br>
-                            <strong>Phone:</strong>
-                            <a href="tel:0036111111111">
-                                +36 11 1111 111
+    <div class="footer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 footer-info">
+                    <h3>
+                        Fairy Light
+                    </h3>
+                    <p>
+                        Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus. Scelerisque felis imperdiet proin fermentum leo. Amet volutpat consequat mauris nunc congue.
+                    </p>
+                </div>
+                <div class="col-lg-3 col-md-6 footer-links">
+                    <h4>
+                        Useful Links
+                    </h4>
+                    <ul>
+                        {{ caller() }}
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 footer-contact">
+                    <h4>
+                        Contact Us
+                    </h4>
+                    <p>
+                        1111 Street Street
+                        <br>
+                        City cty, 9999
+                        <br>
+                        Country
+                        <br>
+                        <strong>Phone:</strong>
+                        <a href="tel:0036111111111">
+                            +36 11 1111 111
+                        </a>
+                        <br>
+                        <strong>Email:</strong>
+                        <a href="mailto:example@test.com">
+                            example@test.com
+                        </a>
+                        <br>
+                    </p>
+                    <div class="social-links">
+                        {% if facebook %}
+                            <a href="{{ facebook }}" class="facebook">
+                                <i class="fa fa-facebook"></i>
                             </a>
-                            <br>
-                            <strong>Email:</strong>
-                            <a href="mailto:example@test.com">
-                                example@test.com
-                            </a>
-                            <br>
-                        </p>
-                        <div class="social-links">
-                            {% if facebook %}
-                                <a href="{{ facebook }}" class="facebook">
-                                    <i class="fa fa-facebook"></i>
-                                </a>
-                            {% endif %}
-                            {% if instagram %}
-                            <a href="{{ instagram }}" class="instagram">
-                                <i class="fa fa-instagram"></i>
-                            </a>
-                            {% endif %}
-                        </div>
+                        {% endif %}
+                        {% if instagram %}
+                        <a href="{{ instagram }}" class="instagram">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        {% endif %}
                     </div>
-                    <div class="col-lg-3 col-md-6 footer-newsletter">
-                        <h4>
-                            Our Newsletter
-                        </h4>
-                        <p>
-                            Tamen quem nulla quae legam multos aute sint culpa legam noster magna veniam enim veniam illum dolore legam minim quorum culpa amet magna export quem marada parida nodela caramase seza.
-                        </p>
-                        {{ macro.subscribe() }}
-                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 footer-newsletter">
+                    <h4>
+                        Our Newsletter
+                    </h4>
+                    <p>
+                        Tamen quem nulla quae legam multos aute sint culpa legam noster magna veniam enim veniam illum dolore legam minim quorum culpa amet magna export quem marada parida nodela caramase seza.
+                    </p>
+                    {{ macro.subscribe() }}
                 </div>
             </div>
         </div>
-        <div class="container">
-            <div class="copyright">
-                © Copyright
-                <strong>Fairy Light</strong>
-                . All Rights Reserved
-            </div>
+    </div>
+    <div class="container">
+        <div class="copyright">
+            © Copyright
+            <strong>Fairy Light</strong>
+            . All Rights Reserved
         </div>
-    </footer>
+    </div>
 {% endmacro %}
 
 {% macro cart(url, counter=0, hide_if_empty=True, always_hide=False) %}
     <div id="outer-cart" class="container" >
         <div id="shopping-cart" style="display: {{'none' if ((counter == 0) and hide_if_empty) or always_hide else 'block'}};">
-            <a class="anim--shrink-09" data-toggle="modal" data-target="#shopping-cart-modal">
+            <a rel="nofollow" class="anim--shrink-09" data-toggle="modal" data-target="#shopping-cart-modal">
                 <span class="fa-stack fa-2x has-badge" data-count="{{counter}}">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i>
@@ -208,4 +206,4 @@
     <div class="modal-footer {{class if class is iterable and class is not string else [class] |join(' ') }}">
         {{ caller() }}
       </div>
-{% endmacro %} 
+{% endmacro %}

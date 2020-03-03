@@ -12,6 +12,10 @@
     background-attachment: fixed;
     /* This is what makes the background image rescale based on its container's size */
     background-size: cover;
+    /* background-attachment: fixed; removed for Android */
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     /* Pick a solid background color that will be displayed while the background image is loading */
     background-color:#464646;
     

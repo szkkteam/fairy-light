@@ -6,10 +6,7 @@
 {% block custom_css %}
     {{ super() }}
     <link href="{{ site_static.url(filename='site/css/portfolio.css') }}" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/venobox/1.8.6/venobox.min.css">    
-    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/venobox/1.8.6/venobox.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/venobox/1.8.6/venobox.min.css">
 {% endblock %}
 
 {% block main_block %}
@@ -46,6 +43,12 @@
             {% endcall %}
         </div>
     </section>
+{% endblock %}
+
+{% block import_js %}
+    {{ super() }}
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/venobox/1.8.6/venobox.min.js"></script>
 {% endblock %}
 
 {% block tail_js %}

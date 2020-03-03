@@ -7,12 +7,14 @@
 {% endblock %}
 
 {% block page_body %}
-	{{ super() }}
-	{% block hero_block %}
-	{% endblock %}
-	{% block header_block %}
-		{{lib.render_navbar()}}
-	{% endblock %}
+	<header>
+		{{ super() }}
+		{% block hero_block %}
+		{% endblock %}
+		{% block header_block %}
+			{{lib.render_navbar()}}
+		{% endblock %}
+	</header>
 	{% block cart_block %}
 		{{lib.cart(None, cart_num_of_items)}}
 	{% endblock %}
@@ -27,7 +29,9 @@
 	</main>
 	
 	{% block footer_block %}
-		{{lib.render_footer()}}
+    	<footer id="footer">
+			{{lib.render_footer()}}
+		</footer>
 	{% endblock %}    	
 {% endblock %}
 

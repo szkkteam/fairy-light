@@ -10,6 +10,8 @@ from flask_babelex import refresh
 from backend.shop.inventory import ProductInventory
 from backend.site.views.blueprint import site, site_lang
 
+from ..social import get_facebook_meta, get_twitter_meta
+
 def carousel_test():
     title = 'Album %s'
     text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
@@ -27,7 +29,11 @@ def index():
                            # Shopping Cart
                            cart_num_of_items=ProductInventory.get_num_of_items(),
 
-                           carousel_slides=carousel_test())
+                           carousel_slides=carousel_test(),
+                           # Social
+                           facebook=get_facebook_meta(),
+                           twitter=get_twitter_meta(),
+                           )
 
 
 @site.route('/lang/<lang_code>')

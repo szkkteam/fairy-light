@@ -4,29 +4,9 @@
 {% import 'website/modules/breadcrumb_m.html' as breadcrumb_m with context %}
 {% import 'website/modules/cards.html' as card with context %}
 
-{% block head_meta %}
-    {{ super() }}
-    {% if facebook %}
-        <meta property="fb:app_id" content="{{facebook_app_id}}" />
-        <meta property="og:url" content="{{facebook.url}}" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Fairy Light - Event Photography" />
-        <meta property="og:description" content="Check out our new pictures in {{facebook.title}}" />
-        <meta property="og:locale" content="en_EN">
-        <meta property="og:image" content="{{facebook.thumbnail}}" />
-        <meta property="og:image:type" content="image/jpeg" />
-        <meta property="og:image:width" content="253" />
-        <meta property="og:image:height" content="220" />
-        <meta property="og:image:alt" content="{{facebook.title|lower}}" />
-    {% endif %}
-{% endblock %}
-
 {% block custom_css %}
     {{ super() }}
     <link href="{{ site_static.url(filename='site/css/shop.css') }}" rel="stylesheet">
-    <script src="http://code.jquery.com/color/jquery.color-2.1.2.min.js"></script>
-    <style>
-    </style>
 {% endblock %}
 
 
@@ -132,6 +112,10 @@
     {{lib.cart_modal(url_for('shop.cart_detail', url=current_url))}}
 {% endblock %}
 
+{% block import_js %}
+    {{ super() }}
+    <script rel="nofollow" src="http://code.jquery.com/color/jquery.color-2.1.2.min.js"></script>
+{% endblock %}
 
 {% block tail_js %}
     {{ super() }}

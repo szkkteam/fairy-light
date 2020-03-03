@@ -4,9 +4,6 @@
     {{ super() }}
     <!-- Magnific Popup core CSS file -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js"></script>
-    <style>
-    </style>
 {% endblock %}
 
 {% block photos_section %}     
@@ -15,6 +12,11 @@
         {{ card.image(element)}}
     </div>    
     {% endfor %}
+{% endblock %}
+
+{% block import_js %}
+    {{ super() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js"></script>
 {% endblock %}
 
 {% block tail_js %}
