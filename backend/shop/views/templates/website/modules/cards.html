@@ -28,7 +28,7 @@
                 <p class="mb-1">Buy {{element.num_of_images}} picture now for</p>
                 <div>{{ price.discount(element.original_price, element.discounted_price) }}</div>
                 <div class="mt-2">
-                    <a href="{{element.url_add_to_cart}}" class="btn btn-primary album-detail w-100" data-toggle="modal" data-target="#exampleModalLong">ADD ALBUM TO CART</a>    
+                    <a rel="nofollow" href="{{element.url_add_to_cart}}" class="btn btn-primary album-detail w-100" data-toggle="modal" data-target="#exampleModalLong">ADD ALBUM TO CART</a>
                 </div>                        
             </div>
         {% endif %}
@@ -50,7 +50,7 @@
         <div class="card-body text-left">
             <div>{{ price.discount(element.discounted_price, element.discounted_price) }}</div>
             <div class="mt-2">
-                <a href="{{element.url_add_to_cart}}" data-animation="b-flying-img" class="btn btn-primary cart-add w-100">ADD TO CART</a>    
+                <a rel="nofollow" href="{{element.url_add_to_cart}}" data-animation="b-flying-img" class="btn btn-primary cart-add w-100">ADD TO CART</a>
             </div>                        
         </div>
     </div>

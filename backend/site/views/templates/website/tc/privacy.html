@@ -5,7 +5,13 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <h1>Privacy Policy</h1>            
+            {% if language == 'hu' %}
+                {% include 'website/tc/hu/privacy.html' %}
+            {% elif language == 'hu' %}
+                {% include 'website/tc/de/privacy.html' %}
+            {% else %}
+                {% include 'website/tc/en/privacy.html' %}
+            {% endif %}
         </div>
     </div>
 </div>

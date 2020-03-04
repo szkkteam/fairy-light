@@ -5,7 +5,13 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <h1>Cookie Policy</h1>            
+            {% if language == 'hu' %}
+                {% include 'website/tc/hu/cookie.html' %}
+            {% elif language == 'hu' %}
+                {% include 'website/tc/de/cookie.html' %}
+            {% else %}
+                {% include 'website/tc/en/cookie.html' %}
+            {% endif %}
         </div>
     </div>
 </div>

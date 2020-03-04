@@ -1,11 +1,11 @@
 {% macro facebook_share(app_id, page_url) %}
-    <a class="share-facebook" href="{{page_url}}">
+    <a class="share-facebook" rel="noopener noreferrer" href="{{page_url}}">
         <i class="fa fa-share-alt" aria-hidden="true"></i>
     </a>    
 {% endmacro %}
 
 {% macro not_used_facebook_share(app_id, page_url) %}
-    <a class="share-facebook" href="https://www.facebook.com/dialog/share?app_id={{app_id}}&amp;display=popup&amp;href={{page_url|shop.urlencode}}&amp;redirect_uri={{page_url|shop.urlencode}}" target="_blank">
+    <a class="share-facebook" rel="noopener noreferrer" href="https://www.facebook.com/dialog/share?app_id={{app_id}}&amp;display=popup&amp;href={{page_url|shop.urlencode}}&amp;redirect_uri={{page_url|shop.urlencode}}" target="_blank">
         <i class="fa fa-share-alt" aria-hidden="true"></i>
     </a>    
 {% endmacro %}

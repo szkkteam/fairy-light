@@ -5,11 +5,14 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <h1>Terms of Service</h1>            
+            {% if language == 'hu' %}
+                {% include 'website/tc/hu/service.html' %}
+            {% elif language == 'hu' %}
+                {% include 'website/tc/de/service.html' %}
+            {% else %}
+                {% include 'website/tc/en/service.html' %}
+            {% endif %}
         </div>
     </div>
 </div>
-
-
-
 {% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'website/layout.html' %}
+
+{% block head_css %}
+    <style>
+        body {
+          /* Set "my-sec-counter" to 0 */
+          counter-reset: my-sec-counter;
+        }
+
+        h3::before {
+          /* Decrement "my-sec-counter" by 1 */
+          counter-increment: my-sec-counter;
+          content: "" counter(my-sec-counter) ". ";
+        }
+    </style>
+{% endblock %}
+
+{% block main_block %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            {% if language == 'hu' %}
+                {% include 'website/tc/hu/tc.html' %}
+            {% elif language == 'hu' %}
+                {% include 'website/tc/de/tc.html' %}
+            {% else %}
+                {% include 'website/tc/en/tc.html' %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -5,7 +5,13 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <h1>Return & Refund Policy</h1>            
+            {% if language == 'hu' %}
+                {% include 'website/tc/hu/refund.html' %}
+            {% elif language == 'hu' %}
+                {% include 'website/tc/de/refund.html' %}
+            {% else %}
+                {% include 'website/tc/en/refund.html' %}
+            {% endif %}
         </div>
     </div>
 </div>
