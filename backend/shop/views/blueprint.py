@@ -10,7 +10,7 @@ from flask import Blueprint, session, current_app
 shop_lang = Blueprint('shop_lang', __name__, url_prefix='/<lang_code>/shop',
                      template_folder='templates')
 shop = Blueprint('shop', __name__, url_prefix='/shop',
-                     template_folder='templates')
+                     template_folder='templates', static_folder='static', static_url_path='/static/shop')
 
 shop_api = Blueprint('shop_api', __name__, url_prefix='/shop-api',
                      template_folder='templates')

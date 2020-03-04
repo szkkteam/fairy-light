@@ -379,6 +379,7 @@ class DevConfig(BaseConfig):
     # Flask - S3                                                         #
     ##########################################################################
     FLASKS3_USE_HTTPS = False
+    FLASKS3_ACTIVE = False # TODO: Remove this when testing S3
     FLASKS3_GZIP = False
 
 class TestConfig(BaseConfig):

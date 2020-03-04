@@ -6,4 +6,4 @@
 from flask_assets import Environment
 # Internal package imports
 
-assets = flask_assets.Environment()
+assets = Environment()

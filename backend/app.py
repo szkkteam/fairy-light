@@ -181,6 +181,7 @@ def register_blueprints(app):
             # will end up looking like '/prefix//endpoint', which is no good
             url_prefix = (blueprint.url_prefix or '').rstrip('/')
             if is_blueprint(blueprint):
+                #app.register_blueprint(blueprint, url_prefix=url_prefix, static_folder='static', static_url_path='/static/' + blueprint.name)
                 app.register_blueprint(blueprint, url_prefix=url_prefix)
 
 def register_models(app):

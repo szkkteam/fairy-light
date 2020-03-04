@@ -98,10 +98,10 @@
 
         {% block import_js %}
         {% assets "site.vendor_js" %}
-            <script async defer type="text/javascript" src="{{ ASSET_URL }}"></script>
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
         {% endassets %}
         {% assets "site.js" %}
-            <script async defer type="text/javascript" src="{{ ASSET_URL }}"></script>
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
         {% endassets %}
         {% endblock %}
 
