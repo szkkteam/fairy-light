@@ -201,6 +201,7 @@ class BaseConfig(object):
         'de': 'DE',
     }
     BABEL_TRANSLATION_DIRECTORIES = 'backend/i18n'
+    BABEL_DEFAULT_LOCALE = 'en'
 
     ##########################################################################
     # Google Analytics                                                       #

@@ -90,7 +90,7 @@ def index_view(root=None, slug=''):
         # Prepare Twitter social data
         twitter = get_twitter_meta(
             url=url_for('shop.index_view', root=root, slug=parent.slug, _external=True),
-            title=paren.title,
+            title=parent.title,
             thumbnail=parent.get_thumbnail_path())
     else:
         facebook = None
