@@ -164,8 +164,8 @@ def register_filters(app):
 def register_assets(app):
     """Register bundle assets."""
     for bundle in app.bundles:
-        for asset in bundle.assets:
-            flask_assets.register(asset)
+        for asset_key, asset in bundle.assets:
+            flask_assets.register(asset_key, asset)
 
 def register_blueprints(app):
     """Register bundle views."""

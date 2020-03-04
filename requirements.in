@@ -17,6 +17,7 @@ flask-breadcrumbs
 flask-mm
 flask-babel
 flask-assets
+flask-s3
 
 
 jsmin

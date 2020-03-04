@@ -62,31 +62,22 @@
             <meta name="twitter:image" content="{{twitter.thumbnail}}">
         {% endif %}
     {% endblock %}
+    {% assets "site.vendor_css" %}
+        <link rel="preload" href="{{ ASSET_URL }}" as="style" onload="this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="{{ ASSET_URL }}"></noscript>
+    {% endassets %}
+    {% assets "site.css" %}
+        <link rel="preload" href="{{ ASSET_URL }}" as="style" onload="this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="{{ ASSET_URL }}"></noscript>
+    {% endassets %}
     {% block head_css %}
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
-        <!-- Font files -->
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <!-- Site specific CSS -->
-        <link href="{{ site_static.url(filename='css/styles.css') }}" rel="stylesheet">
-        <link href="{{ site_static.url(filename='css/animations.css') }}" rel="stylesheet">
-        {% block custom_css %}
-        {% endblock %}
-        <!-- Responsive CSS -->
-        <link href="{{ site_static.url(filename='css/responsive.css') }}" rel="stylesheet">
     {% endblock %}
-    {% if minified_css %}
-      <link rel="preload" href="{{ site_static.url(filename='css/global.min.css') }}" as="style" onload="this.rel='stylesheet'">
-      <noscript><link rel="stylesheet" href="{{ site_static.url(filename='css/global.min.css') }}"></noscript>
-
-      <script>
-        /*! loadCSS. */
-        !function(a){"use strict";var b=function(b,c,d){function j(a){if(e.body)return a();setTimeout(function(){j(a)})}function l(){f.addEventListener&&f.removeEventListener("load",l),f.media=d||"all"}var g,e=a.document,f=e.createElement("link");if(c)g=c;else{var h=(e.body||e.getElementsByTagName("head")[0]).childNodes;g=h[h.length-1]}var i=e.styleSheets;f.rel="stylesheet",f.href=b,f.media="only x",j(function(){g.parentNode.insertBefore(f,c?g:g.nextSibling)});var k=function(a){for(var b=f.href,c=i.length;c--;)if(i[c].href===b)return a();setTimeout(function(){k(a)})};return f.addEventListener&&f.addEventListener("load",l),f.onloadcssdefined=k,k(l),f};"undefined"!=typeof exports?exports.loadCSS=b:a.loadCSS=b}("undefined"!=typeof global?global:this);
-        /*! loadCSS rel=preload polyfill. */
-        !function(a){if(a.loadCSS){var b=loadCSS.relpreload={};if(b.support=function(){try{return a.document.createElement("link").relList.supports("preload")}catch(a){return!1}},b.poly=function(){for(var b=a.document.getElementsByTagName("link"),c=0;c<b.length;c++){var d=b[c];"preload"===d.rel&&"style"===d.getAttribute("as")&&(a.loadCSS(d.href,d,d.getAttribute("media")),d.rel=null)}},!b.support()){b.poly();var c=a.setInterval(b.poly,300);a.addEventListener&&a.addEventListener("load",function(){b.poly(),a.clearInterval(c)}),a.attachEvent&&a.attachEvent("onload",function(){a.clearInterval(c)})}}}(this);
-      </script>
-    {% endif %}
+  <script>
+    /*! loadCSS. */
+    !function(a){"use strict";var b=function(b,c,d){function j(a){if(e.body)return a();setTimeout(function(){j(a)})}function l(){f.addEventListener&&f.removeEventListener("load",l),f.media=d||"all"}var g,e=a.document,f=e.createElement("link");if(c)g=c;else{var h=(e.body||e.getElementsByTagName("head")[0]).childNodes;g=h[h.length-1]}var i=e.styleSheets;f.rel="stylesheet",f.href=b,f.media="only x",j(function(){g.parentNode.insertBefore(f,c?g:g.nextSibling)});var k=function(a){for(var b=f.href,c=i.length;c--;)if(i[c].href===b)return a();setTimeout(function(){k(a)})};return f.addEventListener&&f.addEventListener("load",l),f.onloadcssdefined=k,k(l),f};"undefined"!=typeof exports?exports.loadCSS=b:a.loadCSS=b}("undefined"!=typeof global?global:this);
+    /*! loadCSS rel=preload polyfill. */
+    !function(a){if(a.loadCSS){var b=loadCSS.relpreload={};if(b.support=function(){try{return a.document.createElement("link").relList.supports("preload")}catch(a){return!1}},b.poly=function(){for(var b=a.document.getElementsByTagName("link"),c=0;c<b.length;c++){var d=b[c];"preload"===d.rel&&"style"===d.getAttribute("as")&&(a.loadCSS(d.href,d,d.getAttribute("media")),d.rel=null)}},!b.support()){b.poly();var c=a.setInterval(b.poly,300);a.addEventListener&&a.addEventListener("load",function(){b.poly(),a.clearInterval(c)}),a.attachEvent&&a.attachEvent("onload",function(){a.clearInterval(c)})}}}(this);
+  </script>
     {% block head %}
 
     {% endblock %}
@@ -105,13 +96,12 @@
         {% endblock %}
 
         {% block import_js %}
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-        <!-- TODO: This is temporary, has to be served by the App -->
-        <script rel="nofollow" src="https://bigspotteddog.github.io/ScrollToFixed/jquery-scrolltofixed.js"></script>
-        <script rel="nofollow" src="{{ site_static.url(filename='js/shopping_cart.js') }}" type="text/javascript"></script>
-        <script src="{{ site_static.url(filename='js/app.js') }}" type="text/javascript"></script>
+        {% assets "site.vendor_js" %}
+            <script async defer type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+        {% assets "site.js" %}
+            <script async defer type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
         {% endblock %}
 
         <script type="text/javascript">

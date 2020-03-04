@@ -3,8 +3,7 @@
 
 # Common Python library imports
 # Pip package imports
+from flask_s3 import FlaskS3
 # Internal package imports
-from backend.magic import Bundle
 
-
-site_bundle = Bundle(__name__, blueprint_names=['site', 'site_lang'])
+s3 = FlaskS3()

@@ -3,12 +3,6 @@
 {% import 'website/modules/services.html' as services with context %}
 {% import 'website/modules/portfolio.html' as folio with context %}
 
-{% block custom_css %}
-    {{ super() }}
-    <link href="{{ site_static.url(filename='css/portfolio.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/venobox/1.8.6/venobox.min.css">
-{% endblock %}
-
 {% block main_block %}
     <section id="title">
         <div class="container mt-5">
@@ -43,12 +37,6 @@
             {% endcall %}
         </div>
     </section>
-{% endblock %}
-
-{% block import_js %}
-    {{ super() }}
-    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/venobox/1.8.6/venobox.min.js"></script>
 {% endblock %}
 
 {% block tail_js %}

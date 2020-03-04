@@ -1,12 +1,12 @@
 {% extends 'website/base.html' %}
 
-{% block custom_css %}
+{% block head_css %}
     {{ super() }}
-    <link href="{{ site_static.url(filename='css/shop.css') }}" rel="stylesheet">
-    <link href="{{ site_static.url(filename='css/checkout.css') }}" rel="stylesheet">
-
+    {% assets "shop.css" %}
+        <link rel="preload" href="{{ ASSET_URL }}" as="style" onload="this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="{{ ASSET_URL }}"></noscript>
+    {% endassets %}
 {% endblock %}
-
 {% block page_body %}
   <main id="main">
       <section id="result">

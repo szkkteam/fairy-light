@@ -8,13 +8,6 @@
 {% import 'website/modules/hero.html' as hero_img with context %}
 {% import 'website/static.html' as static with context %}
 
-{% block custom_css %}
-    {{ super() }}
-    <link href="{{ site_static.url(filename='css/index.css') }}" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.1.0/css/flag-icon.min.css" rel="stylesheet">
-
-{% endblock %}
-
 {% block hero_block %}
     {{ hero_img.hero_section( url_for('site.index') ) }}
 {% endblock %}

@@ -1,11 +1,5 @@
 {% extends 'website/shop/index.html' %}
 
-{% block custom_css %}
-    {{ super() }}
-    <!-- Magnific Popup core CSS file -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css">
-{% endblock %}
-
 {% block photos_section %}     
     {% for element in data %}
     <div class="col-6 col-md-3 popup-parent">
@@ -14,16 +8,8 @@
     {% endfor %}
 {% endblock %}
 
-{% block import_js %}
-    {{ super() }}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js"></script>
-{% endblock %}
-
 {% block tail_js %}
     {{ super() }}
-
-
-
     <script>
         $(document).ready(function() {
 

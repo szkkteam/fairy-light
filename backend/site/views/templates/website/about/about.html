@@ -2,11 +2,6 @@
 {% import 'website/modules/sections.html' as section with context %}
 {% import 'website/modules/services.html' as services with context %}
 
-{% block custom_css %}
-    {{ super() }}
-    <link href="{{ site_static.url(filename='css/about.css') }}" rel="stylesheet">
-{% endblock %}
-
 {% block main_block %}
     <section id="title">
         <div class="container mt-5">

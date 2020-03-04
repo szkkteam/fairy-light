@@ -4,9 +4,12 @@
 {% import 'website/modules/breadcrumb_m.html' as breadcrumb_m with context %}
 {% import 'website/modules/cards.html' as card with context %}
 
-{% block custom_css %}
+{% block head_css %}
     {{ super() }}
-    <link href="{{ site_static.url(filename='css/shop.css') }}" rel="stylesheet">
+    {% assets "shop.css" %}
+        <link rel="preload" href="{{ ASSET_URL }}" as="style" onload="this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="{{ ASSET_URL }}"></noscript>
+    {% endassets %}
 {% endblock %}
 
 
@@ -114,7 +117,10 @@
 
 {% block import_js %}
     {{ super() }}
-    <script rel="nofollow" src="http://code.jquery.com/color/jquery.color-2.1.2.min.js"></script>
+    <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
+    {% assets "shop.js" %}
+        <script async defer type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 {% endblock %}
 
 {% block tail_js %}
@@ -179,7 +185,6 @@
     });
 
     </script>
-    <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 {% endblock %}
 
 {% block document_ready %}

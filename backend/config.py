@@ -45,8 +45,6 @@ BUNDLES = [
     'backend.contrib.newsletter_subscribe',
     'backend.shop',
     'backend.site',
-
-    'backend.contrib.test_file',
     #'backend.site',
 ]
 
@@ -66,6 +64,7 @@ EXTENSIONS = [
     'backend.extensions.stripe:stripe',
     'backend.extensions.babel:babel',
     'backend.extensions.assets:assets',
+    'backend.extensions.flask_s3:s3',
 ]
 
 # list of extensions to register after the bundles
@@ -213,6 +212,17 @@ class BaseConfig(object):
     ##########################################################################
     ASSETS_DEBUG = get_boolean_env('FLASK_DEBUG', False)
 
+    ##########################################################################
+    # Flask - S3                                                         #
+    ##########################################################################
+    FLASKS3_BUCKET_NAME = os.environ.get('ASSETS_BUCKET_NAME', 'fairy-light-assets')
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    FLASKS3_REGION = os.environ.get('AWS_REGION')
+    FLASKS3_USE_HTTPS = get_boolean_env('SESSION_COOKIE_SECURE', True)
+    FLASKS3_DEBUG = get_boolean_env('FLASK_DEBUG', True)
+    FLASKS3_GZIP_ONLY_EXTS = ['.js', '.css']
+
 class ProdConfig(BaseConfig):
     ##########################################################################
     # flask                                                                  #
@@ -265,6 +275,7 @@ class ProdConfig(BaseConfig):
         'THUMBNAIL_SIZE': (253, 220, True),  # Generate strict thumbnails
         'MAX_SIZE': (1280, 1720, False),  # Optimise the image size for the watermarked image
         'POSTPROCESS': Watermarker(os.path.join(STATIC_FOLDER, 'site', 'img', 'wm_fllogof_rs.png'), position='c'),
+        #'POSTPROCESS': Watermarker(os.path.join(STATIC_FOLDER, 'site', 'img', 'wm_fllogof_rs.png'), opacity=0.5, scale="R%80", position="c"), It will be supported in the new MM version
     }
 
     MM_PRODUCT = {
@@ -274,6 +285,13 @@ class ProdConfig(BaseConfig):
         'MANAGER': 'image',
         'THUMBNAIL_SIZE': None,  # Do not generate thumbnails
     }
+
+    ##########################################################################
+    # Flask - Assets                                                         #
+    ##########################################################################
+    ASSETS_AUTO_BUILD = False
+    FLASK_ASSETS_USE_S3 = True
+
 
 class DevConfig(BaseConfig):
     ##########################################################################
@@ -340,6 +358,7 @@ class DevConfig(BaseConfig):
         'THUMBNAIL_SIZE': (253, 220, True),  # Generate strict thumbnails
         'MAX_SIZE': (1280, 1720, False),  # Optimise the image size for the watermarked image
         'POSTPROCESS': Watermarker(os.path.join(STATIC_FOLDER, 'site', 'img', 'wm_fllogof_rs.png'), position='c'),
+        #'POSTPROCESS': Watermarker(os.path.join(STATIC_FOLDER, 'site', 'img', 'wm_fllogof_rs.png'), opacity=0.5, scale="R%80", position="c"), It will be supported in the new MM version
     }
 
     MM_PRODUCT = {
@@ -349,6 +368,17 @@ class DevConfig(BaseConfig):
         'MANAGER': 'image',
         'THUMBNAIL_SIZE': None,  # Do not generate thumbnails
     }
+
+    ##########################################################################
+    # Flask - Assets                                                         #
+    ##########################################################################
+    ASSETS_AUTO_BUILD = True
+
+    ##########################################################################
+    # Flask - S3                                                         #
+    ##########################################################################
+    FLASKS3_USE_HTTPS = False
+    FLASKS3_GZIP = False
 
 class TestConfig(BaseConfig):
     TESTING = True
