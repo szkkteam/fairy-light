@@ -19,7 +19,8 @@
     {% endblock %}
     <!-- Meta Description -->
     {% block description_meta %}
-        {{_('meta.description')}}
+        <meta name="description" content="{{_('meta.description')}}">
+        <meta name="keywords" content="{{_('meta.keywords')}}">
     {% endblock %}
         <!-- Standard favicon -->
         <link rel="icon" type="image/x-icon" href="{{ site_static.url(filename='img/favicon.ico') }}">

@@ -4,7 +4,7 @@
 # Common Python library imports
 import os
 # Pip package imports
-from flask import session, url_for
+from flask import session, url_for, current_app, request
 from flask_babelex import lazy_gettext as _l
 from flask_babelex import gettext as _g
 
@@ -16,12 +16,9 @@ FACEBOOK_LOCALE_CONST = {
 }
 
 def get_facebook_meta(**kwargs):
-    locale = session['language']
-    if locale:
-        # Convert locale to language_REGION code
-        locale = locale + FACEBOOK_LOCALE_CONST[FACEBOOK_LOCALE_CONST]
-    else:
-        locale = 'en_GB' # Default locale
+    locale = session.get('language', current_app.config.get('BABEL_DEFAULT_LOCALE'))
+    # Convert locale to language_REGION code
+    locale = locale + FACEBOOK_LOCALE_CONST[locale]
     data = dict(
         url=request.url,
         description=_g('social.facebook.description'),
