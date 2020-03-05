@@ -43,7 +43,7 @@ delegates : {
     removeButton: '.clear-item',
 },
 urls: {
-    cartContent: "{{url_for('shop.cart_detail_refresh')}}",
+    cartContent: cartContentUrl,
 },
 callbacks: {
     onCounterUpdated: function(cnt) {

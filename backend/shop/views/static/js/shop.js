@@ -9,7 +9,7 @@ $('#shopping-cart').shoppingCart({
         removeButton: '.cart-remove',
     },
     urls: {
-        cartContent: "{{url_for('shop.cart_mini_refresh')}}",
+        cartContent: cartContentUrl,
     },
     callbacks: {
         onCounterUpdated: function(cnt) {

@@ -35,9 +35,8 @@
 	{% endblock %}    	
 {% endblock %}
 
-{% block document_ready %}
-	{{super()}}
-{% endblock %}
-
-{% block shopping_cart_init %}
+{% block globals_js %}
+	{% block cart_url_js %}
+		const cartContentUrl = "{{url_for('shop.cart_mini_refresh')}}";
+	{% endblock %}
 {% endblock %}

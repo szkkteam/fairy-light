@@ -60,8 +60,12 @@
     {{ super() }}
     <script async defer type="text/javascript" src="https://js.stripe.com/v3/"></script>
     {% assets "shop.cart_js" %}
-        <script async defer type="text/javascript" src="{{ ASSET_URL }}"></script>
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
+{% endblock %}
+
+{% block cart_url_js %}
+	const cartContentUrl = "{{url_for('shop.cart_detail_refresh')}}";
 {% endblock %}
 
 {% endblock %}

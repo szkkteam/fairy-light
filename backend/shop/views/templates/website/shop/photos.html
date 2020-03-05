@@ -1,9 +1,11 @@
 {% extends 'website/shop/index.html' %}
 
-{% block photos_section %}     
-    {% for element in data %}
-    <div class="col-6 col-md-3 popup-parent">
-        {{ card.image(element)}}
-    </div>    
-    {% endfor %}
+{% block photos_section %}
+    <div class="row popup-parent">
+        {% for element in data %}
+        <div class="col-6 col-md-3">
+            {{ card.image(element)}}
+        </div>    
+        {% endfor %}
+    </div>
 {% endblock %}

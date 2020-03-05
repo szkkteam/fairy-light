@@ -13,6 +13,7 @@ site = {
         'libs/bootstrap-4.4.1/css/bootstrap.css',
         'libs/bootstrap-select-1.13.9/css/bootstrap-select.css',
         'libs/font-awesome-4.7.0/css/font-awesome.css',
+        'libs/magnific-popup-1.1.0/css/magnific-popup.css',
         'libs/venobox-1.8.6/css/venobox.css',
         output='build/css/site_vendor.min.css',
         filters='cssmin'
@@ -50,7 +51,7 @@ site = {
     ),
     # Site specific JS files
     'js': AssetsBundle(
-        'site/js/shop.js',
+        'site/js/cart.js',
         'site/js/forms.js',
         'site/js/portfolio.js',
         output='build/js/site_common.min.js',
