@@ -14,10 +14,17 @@ css = AssetsBundle(
     'shop/css/checkout.css',
     'shop/css/shop.css',
     'css/responsive.css', # This should be the last
-    output='build/css/shop.css',
+    output='build/css/shop.min.css',
     filters='cssmin')
 
-js = AssetsBundle(
+shop_js = AssetsBundle(
+    'shop/js/social.js',
+    'shop/js/shop.js',
+    output='build/js/shop.min.js',
+    filters='jsmin')
+
+cart_js = AssetsBundle(
     'shop/js/payment.js',
-    output='build/js/shop.js',
+    'shop/js/cart.js',
+    output='build/js/cart.min.js',
     filters='jsmin')

@@ -42,9 +42,17 @@ site = {
         filters='jsmin'
     ),
     # Site specific JS files
-    'js': AssetsBundle(
+    'common_js': AssetsBundle(
         'js/app.js',
         'js/shopping_cart.js',
+        output='build/js/site.min.js',
+        filters='jsmin'
+    ),
+    # Site specific JS files
+    'js': AssetsBundle(
+        'site/js/shop.js',
+        'site/js/forms.js',
+        'site/js/portfolio.js',
         output='build/js/site_common.min.js',
         filters='jsmin'
     ),

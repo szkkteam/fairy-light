@@ -96,11 +96,16 @@
 
         {% endblock %}
 
+        <script type="text/javascript">
+            const csrf_token = "{{ csrf_token() }}";  // the token is set by Jinja2
+            {% block globals_js %}
+            {% endblock %}
+        </script>
         {% block import_js %}
         {% assets "site.vendor_js" %}
             <script type="text/javascript" src="{{ ASSET_URL }}"></script>
         {% endassets %}
-        {% assets "site.js" %}
+        {% assets "site.common_js" %}
             <script type="text/javascript" src="{{ ASSET_URL }}"></script>
         {% endassets %}
         {% endblock %}
@@ -117,18 +122,6 @@
         </script>
 
         {% block tail_js %}
-
-        <script type="text/javascript">
-            var csrf_token = "{{ csrf_token() }}";  // the token is set by Jinja2
-        
-            $.ajaxSetup({
-                beforeSend: function(xhr, settings) {
-                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrf_token);  // insert custom header
-                    }
-                }
-            });
-        </script>
         {% endblock %}
         {% block tail %}
         {% endblock %}

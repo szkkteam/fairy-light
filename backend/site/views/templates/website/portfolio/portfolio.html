@@ -37,6 +37,14 @@
             {% endcall %}
         </div>
     </section>
+
+{% endblock %}
+
+{% block import_js %}
+    {{ super() }}
+    {% assets "site.js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 {% endblock %}
 
 {% block tail_js %}
@@ -44,23 +52,7 @@
     
     <script>
         $(window).on('load', function() {
-            var portfolioIsotope = $('.portfolio-container').isotope({
-                itemSelector: '.portfolio-item',
-                layoutMode: 'fitRows'
-            });
 
-            $('#portfolio-filters li').on('click', function() {
-                $("#portfolio-filters li").removeClass('filter-active');
-                $(this).addClass('filter-active');
-
-                portfolioIsotope.isotope({
-                    filter: $(this).data('filter')
-                });
-            });
-
-            $(document).ready(function() {
-                $('.venobox').venobox();
-            });
         });
     </script>
 {% endblock %}

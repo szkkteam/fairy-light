@@ -65,3 +65,10 @@
         </div>
     </section>
 {% endblock %}
+
+{% block import_js %}
+    {{ super() }}
+    {% assets "site.js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+{% endblock %}
