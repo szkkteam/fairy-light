@@ -1,6 +1,12 @@
 
 /* Common Styles
 ---------------------------------*/
+body {
+    /* Body opacity set to 0 inline to prevent FOUC effect. */
+    opacity: 100 !important;
+    transition: opacity 0.3s ease;
+}
+
 hr.header-separator {
     border: 1px solid white;
     border-radius: 5px;
