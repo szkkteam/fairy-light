@@ -211,7 +211,8 @@ class BaseConfig(object):
     ##########################################################################
     # Flask - Assets                                                         #
     ##########################################################################
-    ASSETS_DEBUG = get_boolean_env('FLASK_DEBUG', False)
+    #ASSETS_DEBUG = get_boolean_env('FLASK_DEBUG', False)
+    ASSETS_DEBUG = False
 
     ##########################################################################
     # Flask - S3                                                         #
@@ -223,6 +224,15 @@ class BaseConfig(object):
     FLASKS3_USE_HTTPS = get_boolean_env('SESSION_COOKIE_SECURE', True)
     FLASKS3_DEBUG = get_boolean_env('FLASK_DEBUG', True)
     FLASKS3_GZIP_ONLY_EXTS = ['.js', '.css']
+    FLASKS3_FILEPATH_HEADERS = {
+        r'.css$': {
+            'Content-Type': 'text/css',
+        },
+        r'.js$' : {
+            'Content-Type': 'text/javascript',
+        }
+
+    }
 
 class ProdConfig(BaseConfig):
     ##########################################################################
@@ -286,6 +296,11 @@ class ProdConfig(BaseConfig):
     ##########################################################################
     ASSETS_AUTO_BUILD = False
     FLASK_ASSETS_USE_S3 = True
+
+    ##########################################################################
+    # Flask - S3                                                         #
+    ##########################################################################
+    FLASKS3_ACTIVE = True
 
 class DevConfig(BaseConfig):
     ##########################################################################
@@ -361,13 +376,13 @@ class DevConfig(BaseConfig):
     # Flask - Assets                                                         #
     ##########################################################################
     ASSETS_AUTO_BUILD = True
-    FLASK_ASSETS_USE_S3 = False
+    FLASK_ASSETS_USE_S3 = True  #False
 
     ##########################################################################
     # Flask - S3                                                         #
     ##########################################################################
     FLASKS3_USE_HTTPS = False
-    FLASKS3_ACTIVE = False # TODO: Remove this when testing S3
+    FLASKS3_ACTIVE = True # TODO: Remove this when testing S3
     FLASKS3_GZIP = False
 
 class TestConfig(BaseConfig):

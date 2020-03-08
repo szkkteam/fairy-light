@@ -12,7 +12,6 @@ site = {
     'vendor_css': AssetsBundle(
         'libs/bootstrap-4.4.1/css/bootstrap.css',
         'libs/bootstrap-select-1.13.9/css/bootstrap-select.css',
-        'libs/font-awesome-4.7.0/css/font-awesome.css',
         'libs/magnific-popup-1.1.0/css/magnific-popup.css',
         'libs/venobox-1.8.6/css/venobox.css',
         output='build/css/site_vendor.min.css',
@@ -32,7 +31,6 @@ site = {
     ),
     # Vendor specific JS files
     'vendor_js': AssetsBundle(
-        'libs/jquery-3.4.1/js/jquery.js',
         'libs/popper-1.16.0/js/popper.js',
         'libs/bootstrap-4.4.1/js/bootstrap.js',
         'libs/bootstrap-select-1.13.9/js/bootstrap-select.js',

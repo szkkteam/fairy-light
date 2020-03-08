@@ -63,6 +63,7 @@
             <meta name="twitter:image" content="{{twitter.thumbnail}}">
         {% endif %}
     {% endblock %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     {% assets "site.vendor_css" %}
         <link rel="preload" href="{{ ASSET_URL }}" as="style" onload="this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="{{ ASSET_URL }}"></noscript>
@@ -102,6 +103,7 @@
             {% endblock %}
         </script>
         {% block import_js %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         {% assets "site.vendor_js" %}
             <script type="text/javascript" src="{{ ASSET_URL }}"></script>
         {% endassets %}

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Constants
-FLASK_ENV="prod"
+FLASK_ENV="dev"
 
 echo "Start building ..."
 
@@ -10,4 +10,8 @@ echo "Start building ..."
 ###################################################
 python manage.py --env ${FLASK_ENV} assets build
 
+###################################################
+# Build Flask S3
+###################################################
+python manage.py --env ${FLASK_ENV} s3 upload
 
