@@ -8,7 +8,7 @@ from flask import Blueprint, session, current_app
 # Internal package imports
 
 site_lang = Blueprint('site_lang', __name__, url_prefix='/<lang_code>', template_folder='templates')
-site = Blueprint('site', __name__, template_folder='templates')
+site = Blueprint('site', __name__, template_folder='templates', static_folder='static', static_url_path='/static/site')
 
 
 @site_lang.url_defaults

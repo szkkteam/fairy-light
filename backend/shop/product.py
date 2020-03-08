@@ -55,6 +55,7 @@ def prepare_mail(**kwargs):
     from backend.utils.url_helpers import safe_url_for_external
     from backend.utils.mail import get_mail_static_content
     order = kwargs.get('order', None)
+    lang = kwargs.get('lang', 'en')
     if order is None:
         order = Order.get(kwargs.get('id'))
     try:
@@ -66,7 +67,7 @@ def prepare_mail(**kwargs):
         logger.warning("Url: %s" % external_url)
 
         subject = "Product delivery %s." % order.id
-        template = 'email/generated_product_deliver.html'
+        template = 'email/generated_product_deliver_%s.html' % lang
         #template = 'email/product_deliver.html'
 
         mail_data = dict(order_id=order.id,

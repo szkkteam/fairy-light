@@ -40,6 +40,10 @@ class Category(Model, BaseNestedSets):
 
     __repr_props__ = ('id', 'title')
 
+    @property
+    def slug(self):
+        return utils.slugify(self.title)
+
     def get_thumbnail_path(self):
         if not self.cover:
             return None

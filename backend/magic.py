@@ -10,6 +10,7 @@ import inspect
 from importlib import import_module
 from loguru import logger
 
+
 # Internal package imports
 from flask.helpers import get_debug_flag
 #from backend.utils import title_case
@@ -57,6 +58,15 @@ def get_extensions(import_names):
 
 def is_blueprint(obj):
     return isinstance(obj, flask.Blueprint)
+
+def is_assets(obj):
+    from flask_assets import Bundle as AssetsBundle
+    if isinstance(obj, AssetsBundle):
+        return True
+    elif isinstance(obj, dict):
+        return all(isinstance(x, AssetsBundle) for x in obj.values())
+    else:
+        return False
 
 def is_filter(obj):
     return callable(obj)
@@ -225,6 +235,7 @@ class Bundle(object):
     _views_module_name = 'views'
     _blueprint_names = sentinel
     _filter_names = 'filters'
+    _assets_name = 'assets'
 
     def __init__(self, module_name,
                  config_name=sentinel,
@@ -238,6 +249,7 @@ class Bundle(object):
                  views_module_name=sentinel,
                  blueprint_names=sentinel,
                  filter_names=sentinel,
+                 assets_name=sentinel,
                  ):
         self.module_name = module_name
 
@@ -270,6 +282,8 @@ class Bundle(object):
         if filter_names != sentinel:
             self._filter_names = filter_names
 
+        if assets_name != sentinel:
+            self._assets_name = assets_name
 
     @property
     def _name(self):
@@ -340,6 +354,7 @@ class Bundle(object):
     def filter_module_name(self):
         return self._get_full_module_name(self._filter_names)
 
+
     @property
     def has_filters(self):
         if not self.filter_module_name:
@@ -354,6 +369,30 @@ class Bundle(object):
         filters = dict(inspect.getmembers(module, is_filter))
         for key, val in filters.items():
             yield ( self._name + '.' + key, val )
+
+    @property
+    def assets_module_name(self):
+        return self._get_full_module_name(self._assets_name)
+
+    @property
+    def has_assets(self):
+        if not self.assets_module_name:
+            return False
+        return bool(safe_import_module(self.assets_module_name))
+
+
+    @property
+    def assets(self):
+        if not self.has_assets:
+            return
+        module = safe_import_module(self.assets_module_name)
+        assets = dict(inspect.getmembers(module, is_assets))
+        for key, val in assets.items():
+            if isinstance(val, dict):
+                for bundle_key, bundle_asset in val.items():
+                    yield ( self._name + '.' + bundle_key, bundle_asset )
+            else:
+                yield( self._name + '.' + key, val)
 
     @property
     def has_blueprints(self):

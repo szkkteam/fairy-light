@@ -19,9 +19,11 @@ from backend.shop.product import prepare_mail, create_archive
 @shop.command()
 @click.option('--id', '-i', expose_value=True,
               help='Product ID to deliver.')
+@click.option('--lang', '-l', expose_value=True, default='en',
+              help='Preferred language for the email.')
 @with_appcontext
-def deliver(id):
-    prepare_product_async_task.delay(id)
+def deliver(id, lang):
+    prepare_product_async_task.delay(id, lang)
 
 @shop.command()
 @click.option('--id', '-i', expose_value=True,
@@ -33,11 +35,13 @@ def archive(id):
 @shop.command()
 @click.option('--id', '-i', expose_value=True,
               help='Product ID to deliver.')
+@click.option('--lang', '-l', expose_value=True, default='en',
+              help='Preferred language for the email.')
 @with_appcontext
-def send(id):
+def send(id, lang):
     # Check the order ID
     try:
-        subject, recipients, template, kwargs = prepare_mail(id=id)
+        subject, recipients, template, kwargs = prepare_mail(id=id, lang=lang)
     except TypeError as e:
         logger.error(e)
     else:

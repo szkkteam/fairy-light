@@ -2,11 +2,6 @@
 {% import 'website/modules/sections.html' as section with context %}
 {% import 'website/modules/services.html' as services with context %}
 
-{% block custom_css %}
-    {{ super() }}
-    <link href="{{ site_static.url(filename='site/css/about.css') }}" rel="stylesheet">
-{% endblock %}
-
 {% block main_block %}
     <section id="title">
         <div class="container mt-5">
@@ -64,9 +59,16 @@
         <div class="container">
             {% call section.header('Are you interested?', 'We are happy to answer your questions.') %}
                 <div class="text-center">
-                    <a href="{{url_for('site.index')}}#contact" class="btn btn-primary w-25" >Write Now!</a>
+                    <a href="{{url_for('site.contact')}}" class="btn btn-primary w-25" >Write Now!</a>
                 </div>    
             {% endcall %}
         </div>
     </section>
+{% endblock %}
+
+{% block import_js %}
+    {{ super() }}
+    {% assets "site.js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 {% endblock %}

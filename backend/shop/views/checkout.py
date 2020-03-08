@@ -132,7 +132,7 @@ def checkout():
             description="Fairy Light ord. %d" % order.id,
             currency='eur',
             payment_method_types=['card'],
-            metadata={'order_id': order.id},
+            metadata={'order_id': order.id, 'lang': session.get('language')},
         )
     except Exception as e:
         logger.error(e)
@@ -154,6 +154,17 @@ class PaymentWebhook(StripeWebhook):
 
     def _get_order(self, data):
         return Order.get(data['metadata']['order_id'])
+
+    def _get_lang(self, data):
+        try:
+            lang = data['charges']['data'][0]['metadata']['lang']
+        except KeyError:
+            try:
+                lang = data['metadata']['lang']
+            except Exception as e:
+                logger.error(e)
+                return 'en'
+        return lang
 
     def _get_user(self, data):
         user = None
@@ -205,21 +216,24 @@ class PaymentWebhook(StripeWebhook):
     def handle_payment_intent_succeeded(self, data):
         # Preapre the user and order data
         order, user = self._prepare_data(data, PaymentStatus.confirmed)
+        lang = self._get_lang(data)
         if not order or not user:
             return self.return_error('Billing details is missing.', 400)
         logger.debug("Payment Intent status: confirmed.")
 
         # Deliver product
-        prepare_product_async_task.delay(order.id)
+        prepare_product_async_task.delay(order.id, lang)
 
         return self.return_success()
 
     def handle_payment_intent_failed(self, data):
         # Preapre the user and order data
         order, user = self._prepare_data(data, PaymentStatus.error)
+        lang = self._get_lang(data)
         if not order or not user:
             return self.return_error('Billing details is missing.', 400)
         logger.debug("Payment Intent status: failed.")
+        # TODO: Send mail about failed.
         return self.return_success()
 
     def handle_charge_succeeded(self, data):
@@ -233,9 +247,11 @@ class PaymentWebhook(StripeWebhook):
     def handle_charge_failed(self, data):
         # Preapre the user and order data
         order, user = self._prepare_data(data, PaymentStatus.error)
+        lang = self._get_lang(data)
         if not order or not user:
             return self.return_error('Billing details is missing.', 400)
         logger.debug("Payment Charge status: failed.")
+        # TODO: Send mail about failed
         return self.return_success()
 
 shop_api.add_url_rule('/checkout-webhook', view_func=PaymentWebhook.as_view('checkout_webhook'))

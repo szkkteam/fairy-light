@@ -6,4 +6,5 @@
 # Internal package imports
 from backend.magic import Bundle
 
-site_bundle = Bundle(__name__, blueprint_names=['site', 'site_lang'])
+
+site_bundle = Bundle(__name__, assets_name='assets', blueprint_names=['site', 'site_lang'])

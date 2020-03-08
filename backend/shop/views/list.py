@@ -12,6 +12,7 @@ from sqlalchemy import asc
 from loguru import logger
 # Internal package imports
 from backend.extensions import db
+from backend.site.social import get_twitter_meta, get_facebook_meta
 
 from .blueprint import shop, shop_lang
 from ..models import Category, Order, PaymentStatus, Image
@@ -25,7 +26,7 @@ def get_breadcrumbs(root_id):
         ascendent_list = Category.get(root_id).path_to_root(db.session, asc).all()
         print("ascendent_list: ", ascendent_list, flush=True)
         for ascendent in ascendent_list:
-            breadcrumbs.append( {'url': url_for('shop.index_view', root=ascendent.id), 'title': ascendent.title })
+            breadcrumbs.append( {'url': url_for('shop.index_view', root=ascendent.id, slug=ascendent.slug), 'title': ascendent.title })
 
     print("Breadcrumbs: ", breadcrumbs, flush=True)
     return breadcrumbs
@@ -59,10 +60,10 @@ def image_lightbox(photo_id):
 
 
 @shop.route('/')
-@shop.route('/<int:root>')
+@shop.route('/<int:root>/<slug>')
 @shop_lang.route('/')
-@shop_lang.route('/<int:root>')
-def index_view(root=None):
+@shop_lang.route('/<int:root>/<slug>')
+def index_view(root=None, slug=''):
     # Calculate the breadcrumbs relative to the current view
     breadcrumbs = get_breadcrumbs(root)
 
@@ -78,13 +79,22 @@ def index_view(root=None):
     # Get the parent category for social links
     if root is not None:
         parent = Category.get(root)
-        facebook = dict(
+        # Prepare facebook social data
+        facebook = get_facebook_meta(
             thumbnail=parent.get_thumbnail_path(),
+            thumbnail_width=253,
+            thumbnail_height=200,
             title=parent.title,
-            url=url_for('shop.index_view', root=root, _external=True),
-        )
+            url=url_for('shop.index_view', root=root, slug=parent.slug, _external=True))
+
+        # Prepare Twitter social data
+        twitter = get_twitter_meta(
+            url=url_for('shop.index_view', root=root, slug=parent.slug, _external=True),
+            title=parent.title,
+            thumbnail=parent.get_thumbnail_path())
     else:
         facebook = None
+        twitter = None
 
     # Query the models at given level.
     data = Category.get_list_from_root(root, only_public=True).all()
@@ -111,7 +121,7 @@ def index_view(root=None):
 
                                # Social
                                facebook=facebook,
-                               facebook_app_id=os.environ.get('FACEBOOK_APP_ID', ""),
+                               twitter=twitter,
 
                                # Shopping cart
                                cart_items=cart_items,
@@ -140,7 +150,7 @@ def index_view(root=None):
                                # Datamodel
                                data=category_data(data))
 
-def image_data(data, category_title=None):
+def image_data(data, category_title=None, slug=""):
     list_data = []
     for element in data:
 
@@ -151,7 +161,7 @@ def image_data(data, category_title=None):
             url_add_to_cart=url_for('shop_api.cart_item_api', item_id=element.id),
             url_image=url_for('shop.image_lightbox', photo_id=element.id, category=category_title),
             #url_image=element.get_path(),
-            url_external=url_for('shop.index_view', root=element.category_id, _external=True),
+            url_external=url_for('shop.index_view', root=element.category_id, slug=slug, _external=True),
         ))
     return list_data
 
@@ -164,7 +174,7 @@ def category_detail(category_id):
         discounted_price=discounted_price,
         url_add_to_cart = url_for('shop_api.cart_category_api', category_id=element.id),
         title=element.title,
-        images=image_data(element.images, category_title=element.title)
+        images=image_data(element.images, category_title=element.title, slug=element.slug)
     )
     return data
 
@@ -192,8 +202,8 @@ def category_data(data):
             original_price=original_price,
             discounted_price=discounted_price,
             url_add_to_cart=url_add_to_cart,
-            url_category=url_for('shop.index_view', root=element.id),
-            url_external=url_for('shop.index_view', root=element.id, _external=True),
+            url_category=url_for('shop.index_view', root=element.id, slug=element.slug),
+            url_external=url_for('shop.index_view', root=element.id, slug=element.slug, _external=True),
         ))
     return list_data
 

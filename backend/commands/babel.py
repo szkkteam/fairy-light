@@ -37,6 +37,7 @@ def local_compile():
 
 @click.group()
 def babel():
+    """Perform translation tasks."""
     pass
 
 @babel.command()

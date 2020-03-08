@@ -1,0 +1,18 @@
+{% extends 'website/tc/index.html' %}
+
+{% block main_block %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            {% if language == 'hu' %}
+                {% include 'website/tc/hu/tc.html' %}
+            {% elif language == 'hu' %}
+                {% include 'website/tc/de/tc.html' %}
+            {% else %}
+                {% include 'website/tc/en/tc.html' %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

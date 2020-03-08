@@ -1,0 +1,71 @@
+{% extends 'website/layout.html' %}
+{% from 'website/macros.html' import separator with context %}
+{% import 'website/lib.html' as lib with context %}
+{% import 'website/modules/breadcrumb_m.html' as breadcrumb_m with context %}
+{% import 'website/modules/cards.html' as card with context %}
+
+{% block head_css %}
+    {{ super() }}
+    {% assets "shop.css" %}
+        <link rel="preload" href="{{ ASSET_URL }}" as="style" onload="this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="{{ ASSET_URL }}"></noscript>
+    {% endassets %}
+{% endblock %}
+
+
+{% block main_block %}
+<section id="cart">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3 class="cart-title">Shopping Cart Content:</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <span id="cart-details">
+                    {% include 'website/cart/cart_detail.html' %}
+                </span>
+                <hr class="header-separator"/>
+                <div class="row my-3">
+                    <div class="col text-left">
+                        <a href="{{return_url}}" class="btn btn-primary btn-point-left" id="shopping-cart-back">
+                            <span class="text-nowrap">Continue Shopping</span>
+                        </a>
+                    </div>
+                    <div class="col text-right">
+                        <a rel="nofollow" href="{{url_for('shop.checkout')}}" class="btn btn-primary btn-point-right" aria-disabled="false" id="checkout-modal-btn" data-toggle="modal" data-target="#checkout-modal">
+                            <span class="text-nowrap">Check Out</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Modal -->
+<div class="modal fade" id="checkout-modal" tabindex="-1" role="dialog" aria-labelledby="checkout-modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            Loading ...
+        </div>
+    </div>
+</div>
+
+{% block cart_block %}
+    {{lib.cart(None, cart_num_of_items, always_hide=True)}}
+{% endblock %}
+
+{% block import_js %}
+    {{ super() }}
+    <script async defer type="text/javascript" src="https://js.stripe.com/v3/"></script>
+    {% assets "shop.cart_js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+{% endblock %}
+
+{% block cart_url_js %}
+	const cartContentUrl = "{{url_for('shop.cart_detail_refresh')}}";
+{% endblock %}
+
+{% endblock %}

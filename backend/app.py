@@ -38,6 +38,7 @@ from .magic import (
 )
 
 from backend.extensions.babel import babel
+from backend.extensions.assets import assets as flask_assets
 
 class Flask(BaseFlask):
     bundles = []
@@ -79,6 +80,7 @@ def _create_app(config_object: BaseConfig, **kwargs):
     register_serializers(app)
     register_admins(app)
     register_filters(app)
+    register_assets(app)
 
     deferred_extensions = dict(get_extensions(DEFERRED_EXTENSIONS))
     extensions.update(deferred_extensions)
@@ -159,6 +161,12 @@ def register_filters(app):
         for name, filter in bundle.filters:
             app.jinja_env.filters[name] = filter
 
+def register_assets(app):
+    """Register bundle assets."""
+    for bundle in app.bundles:
+        for asset_key, asset in bundle.assets:
+            flask_assets.register(asset_key, asset)
+
 def register_blueprints(app):
     """Register bundle views."""
     # disable strict_slashes on all routes by default
@@ -173,6 +181,7 @@ def register_blueprints(app):
             # will end up looking like '/prefix//endpoint', which is no good
             url_prefix = (blueprint.url_prefix or '').rstrip('/')
             if is_blueprint(blueprint):
+                #app.register_blueprint(blueprint, url_prefix=url_prefix, static_folder='static', static_url_path='/static/' + blueprint.name)
                 app.register_blueprint(blueprint, url_prefix=url_prefix)
 
 def register_models(app):

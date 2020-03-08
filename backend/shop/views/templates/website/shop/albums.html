@@ -2,9 +2,11 @@
 
 
 {% block photos_section %}     
-    {% for element in data %}
-    <div class="col-6 col-md-3">
-        {{ card.album(element)}}
-    </div>    
-    {% endfor %}
+    <div class="row"> 
+        {% for element in data %}
+        <div class="col-6 col-md-3">
+            {{ card.album(element)}}
+        </div>    
+        {% endfor %}
+    </div>
 {% endblock %}

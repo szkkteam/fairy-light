@@ -12,7 +12,7 @@ from backend.site.views.blueprint import site, site_lang
 @site.route('/terms-and-conditions')
 @site_lang.route('/terms-and-conditions')
 def tc_shop():
-    return render_template('website/tc/shop.html',
+    return render_template('website/tc/tc.html',
                            )
 @site.route('/privacy-policy')
 @site_lang.route('/privacy-policy')

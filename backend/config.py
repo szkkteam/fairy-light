@@ -45,8 +45,6 @@ BUNDLES = [
     'backend.contrib.newsletter_subscribe',
     'backend.shop',
     'backend.site',
-
-    'backend.contrib.test_file',
     #'backend.site',
 ]
 
@@ -65,6 +63,8 @@ EXTENSIONS = [
     'backend.extensions.mediamanager:storage',
     'backend.extensions.stripe:stripe',
     'backend.extensions.babel:babel',
+    'backend.extensions.assets:assets',
+    'backend.extensions.flask_s3:s3',
 ]
 
 # list of extensions to register after the bundles
@@ -201,11 +201,28 @@ class BaseConfig(object):
         'de': 'DE',
     }
     BABEL_TRANSLATION_DIRECTORIES = 'backend/i18n'
+    BABEL_DEFAULT_LOCALE = 'en'
 
     ##########################################################################
     # Google Analytics                                                       #
     ##########################################################################
     GOOGLE_ANALYTICS_TRACKING_ID = os.environ.get('GOOGLE_ANALYTICS_TRACKING_ID', '')
+
+    ##########################################################################
+    # Flask - Assets                                                         #
+    ##########################################################################
+    ASSETS_DEBUG = get_boolean_env('FLASK_DEBUG', False)
+
+    ##########################################################################
+    # Flask - S3                                                         #
+    ##########################################################################
+    FLASKS3_BUCKET_NAME = os.environ.get('ASSETS_BUCKET_NAME', 'fairy-light-assets')
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    FLASKS3_REGION = os.environ.get('AWS_REGION')
+    FLASKS3_USE_HTTPS = get_boolean_env('SESSION_COOKIE_SECURE', True)
+    FLASKS3_DEBUG = get_boolean_env('FLASK_DEBUG', True)
+    FLASKS3_GZIP_ONLY_EXTS = ['.js', '.css']
 
 class ProdConfig(BaseConfig):
     ##########################################################################
@@ -238,12 +255,6 @@ class ProdConfig(BaseConfig):
     PERMANENT_SESSION_LIFETIME = timedelta(days=2)
 
     ##########################################################################
-    # Flask FS - FileSystem                                            #
-    ##########################################################################
-    # Whether or not image should be compressedd/optimized by default.
-    FS_IMAGES_OPTIMIZE = True
-
-    ##########################################################################
     # Flask MM - MediaManager                                            #
     ##########################################################################
     # The global local storage root.
@@ -259,6 +270,7 @@ class ProdConfig(BaseConfig):
         'THUMBNAIL_SIZE': (253, 220, True),  # Generate strict thumbnails
         'MAX_SIZE': (1280, 1720, False),  # Optimise the image size for the watermarked image
         'POSTPROCESS': Watermarker(os.path.join(STATIC_FOLDER, 'site', 'img', 'wm_fllogof_rs.png'), position='c'),
+        #'POSTPROCESS': Watermarker(os.path.join(STATIC_FOLDER, 'site', 'img', 'wm_fllogof_rs.png'), opacity=0.5, scale="R%80", position="c"), It will be supported in the new MM version
     }
 
     MM_PRODUCT = {
@@ -268,6 +280,12 @@ class ProdConfig(BaseConfig):
         'MANAGER': 'image',
         'THUMBNAIL_SIZE': None,  # Do not generate thumbnails
     }
+
+    ##########################################################################
+    # Flask - Assets                                                         #
+    ##########################################################################
+    ASSETS_AUTO_BUILD = False
+    FLASK_ASSETS_USE_S3 = True
 
 class DevConfig(BaseConfig):
     ##########################################################################
@@ -317,32 +335,40 @@ class DevConfig(BaseConfig):
     DEBUG_TB_TEMPLATE_EDITOR_ENABLED = True
 
     ##########################################################################
-    # Flask FS - FileSystem                                            #
-    ##########################################################################
-    # Whether or not image should be compressedd/optimized by default.
-    FS_IMAGES_OPTIMIZE = False
-
-    ##########################################################################
     # Flask MM - MediaManager                                            #
     ##########################################################################
     # The global local storage root.
     MM_PHOTO = {
-        'ROOT': os.path.join(STATIC_FOLDER, 'photo'),
+        'ROOT': os.path.join(PROJECT_ROOT, '..', 'tmp', 'photo'),
         'PREFIX': '/photo',  # Serving file from S3 is not yet supported
         'STORAGE': 'local',
         'MANAGER': 'image',
         'THUMBNAIL_SIZE': (253, 220, True),  # Generate strict thumbnails
         'MAX_SIZE': (1280, 1720, False),  # Optimise the image size for the watermarked image
         'POSTPROCESS': Watermarker(os.path.join(STATIC_FOLDER, 'site', 'img', 'wm_fllogof_rs.png'), position='c'),
+        #'POSTPROCESS': Watermarker(os.path.join(STATIC_FOLDER, 'site', 'img', 'wm_fllogof_rs.png'), opacity=0.5, scale="R%80", position="c"), It will be supported in the new MM version
     }
 
     MM_PRODUCT = {
-        'ROOT': os.path.join(STATIC_FOLDER, 'product'),
+        'ROOT': os.path.join(PROJECT_ROOT, '..', 'tmp', 'product'),
         'PREFIX': '/product',  # Serving file from S3 is not yet supported
         'STORAGE': 'local',
         'MANAGER': 'image',
         'THUMBNAIL_SIZE': None,  # Do not generate thumbnails
     }
+
+    ##########################################################################
+    # Flask - Assets                                                         #
+    ##########################################################################
+    ASSETS_AUTO_BUILD = True
+    FLASK_ASSETS_USE_S3 = False
+
+    ##########################################################################
+    # Flask - S3                                                         #
+    ##########################################################################
+    FLASKS3_USE_HTTPS = False
+    FLASKS3_ACTIVE = False # TODO: Remove this when testing S3
+    FLASKS3_GZIP = False
 
 class TestConfig(BaseConfig):
     TESTING = True

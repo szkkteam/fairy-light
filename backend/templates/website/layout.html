@@ -7,12 +7,14 @@
 {% endblock %}
 
 {% block page_body %}
-	{{ super() }}
-	{% block hero_block %}
-	{% endblock %}
-	{% block header_block %}
-		{{lib.render_navbar()}}
-	{% endblock %}
+	<header>
+		{{ super() }}
+		{% block hero_block %}
+		{% endblock %}
+		{% block header_block %}
+			{{lib.render_navbar()}}
+		{% endblock %}
+	</header>
 	{% block cart_block %}
 		{{lib.cart(None, cart_num_of_items)}}
 	{% endblock %}
@@ -27,41 +29,14 @@
 	</main>
 	
 	{% block footer_block %}
-		{{lib.render_footer()}}
+    	<footer id="footer">
+			{{lib.render_footer()}}
+		</footer>
 	{% endblock %}    	
 {% endblock %}
 
-{% block document_ready %}
-	{{super()}}
-	
-	$('#navbar').scrollToFixed();
-	//#outer-cart	
-	$('#shopping-cart').scrollToFixed({
-		marginTop : $('#navbar').outerHeight(true) + 20,
-		//marginTop : 95 , // outherHeight is not working probably because of the transitions
-		zIndex : 500,
-		spacerClass: $('#spacer'),
-	});
-
-{% endblock %}
-
-{% block shopping_cart_init %}
-	$('#shopping-cart').shoppingCart({
-		delegates : {
-			cartModal: '#shopping-cart-modal',
-			cartContent: '#shopping-cart-content',
-		},
-		urls: {
-			cartContent: "{{url_for('shop.cart_mini_refresh')}}",
-		},
-		callbacks: {
-			onCounterUpdated: function(cnt) {
-				if (cnt == 0) {
-					this.hide();
-				} else {
-					this.show();
-				}
-			},
-		}
-	});
+{% block globals_js %}
+	{% block cart_url_js %}
+		const cartContentUrl = "{{url_for('shop.cart_mini_refresh')}}";
+	{% endblock %}
 {% endblock %}

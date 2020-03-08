@@ -4,17 +4,17 @@
 {% macro render_navbar() %}
     {% call navbar() %}
         <ul class="navbar-nav main-nav anim--top-bottom-borders--out">
-            {{ nav_link(_('Home'), url_for('site.index'))}}
-            {{ nav_link(_('Photos'), url_for('shop.index_view')) }}
-            {{ nav_link(_('Services'), url_for('site.services')) }}       
+            {{ nav_link(_('nav.home'), url_for('site.index'))}}
+            {{ nav_link(_('nav.photos'), url_for('shop.index_view')) }}
+            {{ nav_link(_('nav.services'), url_for('site.services')) }}       
         </ul> 
         <a class="navbar-brand large-logo" href="{{url_for('site.index')}}">
-            <img src="{{static.url(filename='site/img/nav_logo_lg_60x60.png')}}" alt="logo large fairy light event photography">
+            <img src="{{static.url(filename='img/nav_logo_lg_60x60.png')}}" alt="logo large fairy light event photography">
         </a>
         <ul class="navbar-nav main-nav anim--top-bottom-borders--out">
-            {{ nav_link(_('Portfolio'), url_for('site.portfolio')) }}
-            {{ nav_link(_('About'), url_for('site.about')) }}
-            {{ nav_link(_('Contact'), url_for('site.index') + '#contact') }}
+            {{ nav_link(_('nav.portfolio'), url_for('site.portfolio')) }}
+            {{ nav_link(_('nav.about'), url_for('site.about')) }}
+            {{ nav_link(_('nav.contact'), url_for('site.contact')) }}
         </ul> 
     {% endcall %}
 {% endmacro %}
@@ -24,7 +24,7 @@
         <div class="container">
             <nav class="navbar navbar-expand-md navbar-dark bg-dark">
                 <a class="navbar-brand small-logo-mobile" href="{{url_for('site.index')}}">
-                    <img src="{{static.url(filename='site/img/nav_logo_sm_50x50.png')}}" width="50" height="50" alt="logo small fairy light event photograhy design">
+                    <img src="{{static.url(filename='img/nav_logo_sm_50x50.png')}}" width="50" height="50" alt="logo small fairy light event photograhy design">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -55,15 +55,15 @@
 
 {% macro render_footer() %}
     {% call footer() %}
-        {{footer_link(_('Home'), url_for('site.index',))}}
-        {{footer_link('About', url_for('site.about'))}}
-        {{footer_link('Contact', url_for('site.index') + '#contact')}}
-        {{footer_link('Terms & Conditions', url_for('site.tc_shop'))}}
-        {{footer_link('Privacy Policy', url_for('site.privacy_policy'))}}
-        {{footer_link('Cookie Policy', url_for('site.cookie_policy'))}}
-        {{footer_link('Return & Refund', url_for('site.refund_policy'))}}
-        {{footer_link('Terms of Service', url_for('site.service_policy'))}}
-        {{footer_link('Disclaimer', url_for('site.disclaimer'))}}
+        {{footer_link(_('nav.home'), url_for('site.index',))}}
+        {{footer_link(_('nav.about'), url_for('site.about'))}}
+        {{footer_link(_('nav.contact'), url_for('site.index') + '#contact')}}
+        {{footer_link(_('nav.terms_and_conditions'), url_for('site.tc_shop'))}}
+        {{footer_link(_('nav.privacy_policy'), url_for('site.privacy_policy'))}}
+        {{footer_link(_('nav.cookie_policy'), url_for('site.cookie_policy'))}}
+        {{footer_link(_('nav.return_refund'), url_for('site.refund_policy'))}}
+        {{footer_link(_('nav.terms_and_service'), url_for('site.service_policy'))}}
+        {{footer_link(_('nav.disclaimer'), url_for('site.disclaimer'))}}
     {% endcall %}
 {% endmacro %}
 
@@ -74,87 +74,85 @@
 {% endmacro %}
 
 {% macro footer(facebook='', instagram='') %}
-    <footer id="footer">
-        <div class="footer-top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-3 col-md-6 footer-info">
-                        <h3>
-                            Fairy Light
-                        </h3>
-                        <p>
-                            Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus. Scelerisque felis imperdiet proin fermentum leo. Amet volutpat consequat mauris nunc congue.
-                        </p>
-                    </div>
-                    <div class="col-lg-3 col-md-6 footer-links">
-                        <h4>
-                            Useful Links
-                        </h4>
-                        <ul>
-                            {{ caller() }}
-                        </ul>
-                    </div>
-                    <div class="col-lg-3 col-md-6 footer-contact">
-                        <h4>
-                            Contact Us
-                        </h4>
-                        <p>
-                            1111 Street Street
-                            <br>
-                            City cty, 9999
-                            <br>
-                            Country
-                            <br>
-                            <strong>Phone:</strong>
-                            <a href="tel:0036111111111">
-                                +36 11 1111 111
+    <div class="footer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 footer-info">
+                    <h3>
+                        Fairy Light
+                    </h3>
+                    <p>
+                        Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus. Scelerisque felis imperdiet proin fermentum leo. Amet volutpat consequat mauris nunc congue.
+                    </p>
+                </div>
+                <div class="col-lg-3 col-md-6 footer-links">
+                    <h4>
+                        {{_('footer.links')}}
+                    </h4>
+                    <ul>
+                        {{ caller() }}
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 footer-contact">
+                    <h4>
+                        {{_('contact.contact_us')}}
+                    </h4>
+                    <p>
+                        {{_('contact.address.street')}}
+                        <br>
+                        {{_('contact.address.city')}}
+                        <br>
+                        {{_('contact.address.country')}}
+                        <br>
+                        <strong>{{_('contact.phone')}}:</strong>
+                        <a href="tel:0036111111111">
+                            +36 11 1111 111
+                        </a>
+                        <br>
+                        <strong>{{_('contact.email')}}:</strong>
+                        <a href="mailto:example@test.com">
+                            example@test.com
+                        </a>
+                        <br>
+                    </p>
+                    <div class="social-links">
+                        {% if facebook %}
+                            <a href="{{ facebook }}" class="facebook">
+                                <i class="fa fa-facebook"></i>
                             </a>
-                            <br>
-                            <strong>Email:</strong>
-                            <a href="mailto:example@test.com">
-                                example@test.com
-                            </a>
-                            <br>
-                        </p>
-                        <div class="social-links">
-                            {% if facebook %}
-                                <a href="{{ facebook }}" class="facebook">
-                                    <i class="fa fa-facebook"></i>
-                                </a>
-                            {% endif %}
-                            {% if instagram %}
-                            <a href="{{ instagram }}" class="instagram">
-                                <i class="fa fa-instagram"></i>
-                            </a>
-                            {% endif %}
-                        </div>
+                        {% endif %}
+                        {% if instagram %}
+                        <a href="{{ instagram }}" class="instagram">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        {% endif %}
                     </div>
-                    <div class="col-lg-3 col-md-6 footer-newsletter">
-                        <h4>
-                            Our Newsletter
-                        </h4>
-                        <p>
-                            Tamen quem nulla quae legam multos aute sint culpa legam noster magna veniam enim veniam illum dolore legam minim quorum culpa amet magna export quem marada parida nodela caramase seza.
-                        </p>
-                        {{ macro.subscribe() }}
-                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 footer-newsletter">
+                    <h4>
+                        Our Newsletter
+                    </h4>
+                    <p>
+                        Tamen quem nulla quae legam multos aute sint culpa legam noster magna veniam enim veniam illum dolore legam minim quorum culpa amet magna export quem marada parida nodela caramase seza.
+                    </p>
+                    {{ macro.subscribe() }}
                 </div>
             </div>
         </div>
-        <div class="container">
-            <div class="copyright">
-                © Copyright
-                <strong>Fairy Light</strong>
-                . All Rights Reserved
-            </div>
+    </div>
+    <div class="container">
+        <div class="copyright">
+            © Copyright
+            <strong>Fairy Light</strong>
+            . All Rights Reserved
         </div>
-    </footer>
+    </div>
 {% endmacro %}
 
 {% macro cart(url, counter=0, hide_if_empty=True, always_hide=False) %}
     <div id="outer-cart" class="container" >
         <div id="shopping-cart" style="display: {{'none' if ((counter == 0) and hide_if_empty) or always_hide else 'block'}};">
-            <a class="anim--shrink-09" data-toggle="modal" data-target="#shopping-cart-modal">
+            <a rel="nofollow" class="anim--shrink-09" data-toggle="modal" data-target="#shopping-cart-modal">
                 <span class="fa-stack fa-2x has-badge" data-count="{{counter}}">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i>
@@ -208,4 +206,4 @@
     <div class="modal-footer {{class if class is iterable and class is not string else [class] |join(' ') }}">
         {{ caller() }}
       </div>
-{% endmacro %} 
+{% endmacro %}
