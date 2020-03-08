@@ -255,12 +255,6 @@ class ProdConfig(BaseConfig):
     PERMANENT_SESSION_LIFETIME = timedelta(days=2)
 
     ##########################################################################
-    # Flask FS - FileSystem                                            #
-    ##########################################################################
-    # Whether or not image should be compressedd/optimized by default.
-    FS_IMAGES_OPTIMIZE = True
-
-    ##########################################################################
     # Flask MM - MediaManager                                            #
     ##########################################################################
     # The global local storage root.
@@ -292,7 +286,6 @@ class ProdConfig(BaseConfig):
     ##########################################################################
     ASSETS_AUTO_BUILD = False
     FLASK_ASSETS_USE_S3 = True
-
 
 class DevConfig(BaseConfig):
     ##########################################################################
@@ -342,17 +335,11 @@ class DevConfig(BaseConfig):
     DEBUG_TB_TEMPLATE_EDITOR_ENABLED = True
 
     ##########################################################################
-    # Flask FS - FileSystem                                            #
-    ##########################################################################
-    # Whether or not image should be compressedd/optimized by default.
-    FS_IMAGES_OPTIMIZE = False
-
-    ##########################################################################
     # Flask MM - MediaManager                                            #
     ##########################################################################
     # The global local storage root.
     MM_PHOTO = {
-        'ROOT': os.path.join(STATIC_FOLDER, 'photo'),
+        'ROOT': os.path.join(PROJECT_ROOT, '..', 'tmp', 'photo'),
         'PREFIX': '/photo',  # Serving file from S3 is not yet supported
         'STORAGE': 'local',
         'MANAGER': 'image',
@@ -363,7 +350,7 @@ class DevConfig(BaseConfig):
     }
 
     MM_PRODUCT = {
-        'ROOT': os.path.join(STATIC_FOLDER, 'product'),
+        'ROOT': os.path.join(PROJECT_ROOT, '..', 'tmp', 'product'),
         'PREFIX': '/product',  # Serving file from S3 is not yet supported
         'STORAGE': 'local',
         'MANAGER': 'image',
@@ -374,6 +361,7 @@ class DevConfig(BaseConfig):
     # Flask - Assets                                                         #
     ##########################################################################
     ASSETS_AUTO_BUILD = True
+    FLASK_ASSETS_USE_S3 = False
 
     ##########################################################################
     # Flask - S3                                                         #

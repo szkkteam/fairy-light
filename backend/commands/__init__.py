@@ -11,6 +11,7 @@ from .lint import lint
 from .shell import shell
 from .urls import url, urls
 from .babel import babel
+from .s3 import s3
 
 
 EXISTING_EXTENSION_GROUPS = ['db_cli']
