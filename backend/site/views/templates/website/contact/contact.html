@@ -1,0 +1,16 @@
+{% extends 'website/layout.html' %}
+{% import 'website/modules/sections.html' as section with context %}
+{% import 'website/modules/services.html' as services with context %}
+{% import 'website/modules/contact.html' as contact with context %}
+
+
+{% block main_block %}
+    {{ contact.render() }}
+{% endblock %}
+
+{% block import_js %}
+    {{ super() }}
+    {% assets "site.js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+{% endblock %}

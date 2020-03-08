@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-02-24 17:28+0100\n"
+"POT-Creation-Date: 2020-03-08 10:29+0100\n"
 "PO-Revision-Date: 2020-02-23 18:16+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -26,12 +26,12 @@ msgstr ""
 msgid "Record was successfully created."
 msgstr ""
 
-#: backend/shop/admins/category_admin.py:252
+#: backend/shop/admins/category_admin.py:251
 #, python-format
 msgid "Failed to delete record. %(error)s"
 msgstr ""
 
-#: backend/shop/admins/category_admin.py:280
+#: backend/shop/admins/category_admin.py:279
 #, python-format
 msgid "Failed to create record. %(error)s"
 msgstr ""
@@ -40,27 +40,125 @@ msgstr ""
 msgid "Invalid file extension"
 msgstr ""
 
-#: backend/templates/website/lib.html:5 backend/templates/website/lib.html:55
-msgid "Home"
-msgstr "Startseite"
-
-#: backend/templates/website/lib.html:6
-msgid "Photos"
+#: backend/templates/website/base.html:10
+msgid "meta.title"
 msgstr ""
 
-#: backend/templates/website/lib.html:7
-msgid "Services"
+#: backend/templates/website/base.html:22
+msgid "meta.description"
 msgstr ""
 
-#: backend/templates/website/lib.html:11
-msgid "Portfolio"
+#: backend/templates/website/base.html:23
+msgid "meta.keywords"
 msgstr ""
 
-#: backend/templates/website/lib.html:12
-msgid "About"
+#: backend/templates/website/base.html:47
+msgid "social.facebook.title"
 msgstr ""
 
-#: backend/templates/website/lib.html:13
-msgid "Contact"
+#: backend/templates/website/base.html:61
+msgid "social.twitter.title"
 msgstr ""
+
+#: backend/templates/website/lib.html:7 backend/templates/website/lib.html:58
+msgid "nav.home"
+msgstr ""
+
+#: backend/templates/website/lib.html:8
+msgid "nav.photos"
+msgstr ""
+
+#: backend/templates/website/lib.html:9
+msgid "nav.services"
+msgstr ""
+
+#: backend/templates/website/lib.html:15
+msgid "nav.portfolio"
+msgstr ""
+
+#: backend/templates/website/lib.html:16 backend/templates/website/lib.html:59
+msgid "nav.about"
+msgstr ""
+
+#: backend/templates/website/lib.html:17 backend/templates/website/lib.html:60
+msgid "nav.contact"
+msgstr ""
+
+#: backend/templates/website/lib.html:61
+msgid "nav.terms_and_conditions"
+msgstr ""
+
+#: backend/templates/website/lib.html:62
+msgid "nav.privacy_policy"
+msgstr ""
+
+#: backend/templates/website/lib.html:63
+msgid "nav.cookie_policy"
+msgstr ""
+
+#: backend/templates/website/lib.html:64
+msgid "nav.return_refund"
+msgstr ""
+
+#: backend/templates/website/lib.html:65
+msgid "nav.terms_and_service"
+msgstr ""
+
+#: backend/templates/website/lib.html:66
+msgid "nav.disclaimer"
+msgstr ""
+
+#: backend/templates/website/lib.html:90
+msgid "footer.links"
+msgstr ""
+
+#: backend/templates/website/lib.html:98
+msgid "contact.contact_us"
+msgstr ""
+
+#: backend/templates/website/lib.html:101
+msgid "contact.address.street"
+msgstr ""
+
+#: backend/templates/website/lib.html:103
+msgid "contact.address.city"
+msgstr ""
+
+#: backend/templates/website/lib.html:105
+msgid "contact.address.country"
+msgstr ""
+
+#: backend/templates/website/lib.html:107
+msgid "contact.phone"
+msgstr ""
+
+#: backend/templates/website/lib.html:112
+msgid "contact.email"
+msgstr ""
+
+#: backend/templates/website/macros.html:13
+msgid "subscribe.never_share_email"
+msgstr ""
+
+#: backend/templates/website/macros.html:39
+msgid "contact.send_message"
+msgstr ""
+
+#~ msgid "Home"
+#~ msgstr "Startseite"
+
+#~ msgid "Photos"
+#~ msgstr ""
+
+#~ msgid "Services"
+#~ msgstr ""
+
+#~ msgid "Portfolio"
+#~ msgstr ""
+
+#~ msgid "About"
+#~ msgstr ""
+
+#~ msgid "Contact"
+#~ msgstr ""
 

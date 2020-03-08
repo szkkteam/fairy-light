@@ -1,16 +1,21 @@
 /*
  * Isotope initialize for portfolio
  */
-var portfolioIsotope = $('.portfolio-container').isotope({
-    itemSelector: '.portfolio-item',
-    layoutMode: 'fitRows'
+var isoContainer = $('.portfolio-container');
+
+// Workaround: window on load event used, to make sure all media is loaded on the page
+$(window).on('load', function() {
+    isoContainer.isotope({
+        itemSelector: '.portfolio-item',
+        layoutMode: 'fitRows'
+    });
 });
 
 $('#portfolio-filters li').on('click', function() {
     $("#portfolio-filters li").removeClass('filter-active');
     $(this).addClass('filter-active');
 
-    portfolioIsotope.isotope({
+    isoContainer.isotope({
         filter: $(this).data('filter')
     });
 });

@@ -9,6 +9,7 @@ from .index import index
 from .services import services
 from .about import about
 from .portfolio import portfolio
+from .contact import contact
 from .terms_condition import (
     tc_shop,
     cookie_policy,

@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-02-24 17:28+0100\n"
-"PO-Revision-Date: 2020-02-23 18:16+0100\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2020-03-08 10:29+0100\n"
+"PO-Revision-Date: 2020-03-08 11:15+0100\n"
 "Language: hu\n"
 "Language-Team: hu <LL@li.org>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.7.0\n"
+"Last-Translator: \n"
+"X-Generator: Poedit 2.3\n"
 
 #: backend/contrib/admin/form.py:54
 msgid "Not a valid choice"
@@ -26,12 +27,12 @@ msgstr ""
 msgid "Record was successfully created."
 msgstr ""
 
-#: backend/shop/admins/category_admin.py:252
+#: backend/shop/admins/category_admin.py:251
 #, python-format
 msgid "Failed to delete record. %(error)s"
 msgstr ""
 
-#: backend/shop/admins/category_admin.py:280
+#: backend/shop/admins/category_admin.py:279
 #, python-format
 msgid "Failed to create record. %(error)s"
 msgstr ""
@@ -40,27 +41,106 @@ msgstr ""
 msgid "Invalid file extension"
 msgstr ""
 
-#: backend/templates/website/lib.html:5 backend/templates/website/lib.html:55
-msgid "Home"
+#: backend/templates/website/base.html:10
+msgid "meta.title"
+msgstr ""
+
+#: backend/templates/website/base.html:22
+msgid "meta.description"
+msgstr ""
+
+#: backend/templates/website/base.html:23
+msgid "meta.keywords"
+msgstr ""
+
+#: backend/templates/website/base.html:47
+msgid "social.facebook.title"
+msgstr ""
+
+#: backend/templates/website/base.html:61
+msgid "social.twitter.title"
+msgstr ""
+
+#: backend/templates/website/lib.html:7 backend/templates/website/lib.html:58
+msgid "nav.home"
 msgstr "Főoldal"
 
-#: backend/templates/website/lib.html:6
-msgid "Photos"
+#: backend/templates/website/lib.html:8
+msgid "nav.photos"
+msgstr "Fotók"
+
+#: backend/templates/website/lib.html:9
+msgid "nav.services"
+msgstr "Szolgáltatások"
+
+#: backend/templates/website/lib.html:15
+msgid "nav.portfolio"
+msgstr "Portfolió"
+
+#: backend/templates/website/lib.html:16 backend/templates/website/lib.html:59
+msgid "nav.about"
+msgstr "Rólunk"
+
+#: backend/templates/website/lib.html:17 backend/templates/website/lib.html:60
+msgid "nav.contact"
+msgstr "Kapcsolat"
+
+#: backend/templates/website/lib.html:61
+msgid "nav.terms_and_conditions"
 msgstr ""
 
-#: backend/templates/website/lib.html:7
-msgid "Services"
+#: backend/templates/website/lib.html:62
+msgid "nav.privacy_policy"
 msgstr ""
 
-#: backend/templates/website/lib.html:11
-msgid "Portfolio"
+#: backend/templates/website/lib.html:63
+msgid "nav.cookie_policy"
 msgstr ""
 
-#: backend/templates/website/lib.html:12
-msgid "About"
+#: backend/templates/website/lib.html:64
+msgid "nav.return_refund"
 msgstr ""
 
-#: backend/templates/website/lib.html:13
-msgid "Contact"
+#: backend/templates/website/lib.html:65
+msgid "nav.terms_and_service"
 msgstr ""
 
+#: backend/templates/website/lib.html:66
+msgid "nav.disclaimer"
+msgstr ""
+
+#: backend/templates/website/lib.html:90
+msgid "footer.links"
+msgstr "Hasznos Linkek"
+
+#: backend/templates/website/lib.html:98
+msgid "contact.contact_us"
+msgstr "Írj nekünk"
+
+#: backend/templates/website/lib.html:101
+msgid "contact.address.street"
+msgstr "1111 Utca utca"
+
+#: backend/templates/website/lib.html:103
+msgid "contact.address.city"
+msgstr "Város város, 9999"
+
+#: backend/templates/website/lib.html:105
+msgid "contact.address.country"
+msgstr "Magyarország"
+
+#: backend/templates/website/lib.html:107
+msgid "contact.phone"
+msgstr "Telefon"
+
+#: backend/templates/website/lib.html:112
+msgid "contact.email"
+msgstr "E-mail"
+
+#: backend/templates/website/macros.html:13
+msgid "subscribe.never_share_email"
+msgstr "Nem fogjuk soha megosztani az e-mail címed senkivel."
+
+#: backend/templates/website/macros.html:39
+msgid "contact.send_message"
+msgstr "Üzenet Küldése"

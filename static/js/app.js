@@ -44,10 +44,12 @@ $('#shopping-cart').scrollToFixed({
 //		marginTop : $('#navbar').outerHeight(true) + 20,
     marginTop : 75,
     zIndex : 500,
-    spacerClass: $('#spacer'),
+    /*spacerClass: $('#spacer'),*/
 });
 
-
-$(document).ready( function(){
-
+// Workaround: window on load event used to make sure all media is loaded on the page then trigger a resize
+// event to force the scollToFixed plugin to recalulate every parameter.
+$(window).on('load', function() {
+    $(window).resize();
 });
+

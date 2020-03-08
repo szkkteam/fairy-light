@@ -1,19 +1,4 @@
-{% extends 'website/layout.html' %}
-
-{% block head_css %}
-    <style>
-        body {
-          /* Set "my-sec-counter" to 0 */
-          counter-reset: my-sec-counter;
-        }
-
-        h3::before {
-          /* Decrement "my-sec-counter" by 1 */
-          counter-increment: my-sec-counter;
-          content: "" counter(my-sec-counter) ". ";
-        }
-    </style>
-{% endblock %}
+{% extends 'website/tc/index.html' %}
 
 {% block main_block %}
 <div class="container">
@@ -30,3 +15,4 @@
     </div>
 </div>
 {% endblock %}
+

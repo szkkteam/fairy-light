@@ -33,6 +33,7 @@ site = {
     # Vendor specific JS files
     'vendor_js': AssetsBundle(
         'libs/jquery-3.4.1/js/jquery.js',
+        'libs/popper-1.16.0/js/popper.js',
         'libs/bootstrap-4.4.1/js/bootstrap.js',
         'libs/bootstrap-select-1.13.9/js/bootstrap-select.js',
         'libs/isotope-3.0.5/js/isotope.pkgd.js',

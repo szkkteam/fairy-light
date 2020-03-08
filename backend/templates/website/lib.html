@@ -4,17 +4,17 @@
 {% macro render_navbar() %}
     {% call navbar() %}
         <ul class="navbar-nav main-nav anim--top-bottom-borders--out">
-            {{ nav_link(_('Home'), url_for('site.index'))}}
-            {{ nav_link(_('Photos'), url_for('shop.index_view')) }}
-            {{ nav_link(_('Services'), url_for('site.services')) }}       
+            {{ nav_link(_('nav.home'), url_for('site.index'))}}
+            {{ nav_link(_('nav.photos'), url_for('shop.index_view')) }}
+            {{ nav_link(_('nav.services'), url_for('site.services')) }}       
         </ul> 
         <a class="navbar-brand large-logo" href="{{url_for('site.index')}}">
             <img src="{{static.url(filename='img/nav_logo_lg_60x60.png')}}" alt="logo large fairy light event photography">
         </a>
         <ul class="navbar-nav main-nav anim--top-bottom-borders--out">
-            {{ nav_link(_('Portfolio'), url_for('site.portfolio')) }}
-            {{ nav_link(_('About'), url_for('site.about')) }}
-            {{ nav_link(_('Contact'), url_for('site.index') + '#contact-form') }}
+            {{ nav_link(_('nav.portfolio'), url_for('site.portfolio')) }}
+            {{ nav_link(_('nav.about'), url_for('site.about')) }}
+            {{ nav_link(_('nav.contact'), url_for('site.contact')) }}
         </ul> 
     {% endcall %}
 {% endmacro %}
@@ -55,15 +55,15 @@
 
 {% macro render_footer() %}
     {% call footer() %}
-        {{footer_link(_('Home'), url_for('site.index',))}}
-        {{footer_link('About', url_for('site.about'))}}
-        {{footer_link('Contact', url_for('site.index') + '#contact')}}
-        {{footer_link('Terms & Conditions', url_for('site.tc_shop'))}}
-        {{footer_link('Privacy Policy', url_for('site.privacy_policy'))}}
-        {{footer_link('Cookie Policy', url_for('site.cookie_policy'))}}
-        {{footer_link('Return & Refund', url_for('site.refund_policy'))}}
-        {{footer_link('Terms of Service', url_for('site.service_policy'))}}
-        {{footer_link('Disclaimer', url_for('site.disclaimer'))}}
+        {{footer_link(_('nav.home'), url_for('site.index',))}}
+        {{footer_link(_('nav.about'), url_for('site.about'))}}
+        {{footer_link(_('nav.contact'), url_for('site.index') + '#contact')}}
+        {{footer_link(_('nav.terms_and_conditions'), url_for('site.tc_shop'))}}
+        {{footer_link(_('nav.privacy_policy'), url_for('site.privacy_policy'))}}
+        {{footer_link(_('nav.cookie_policy'), url_for('site.cookie_policy'))}}
+        {{footer_link(_('nav.return_refund'), url_for('site.refund_policy'))}}
+        {{footer_link(_('nav.terms_and_service'), url_for('site.service_policy'))}}
+        {{footer_link(_('nav.disclaimer'), url_for('site.disclaimer'))}}
     {% endcall %}
 {% endmacro %}
 
@@ -87,7 +87,7 @@
                 </div>
                 <div class="col-lg-3 col-md-6 footer-links">
                     <h4>
-                        Useful Links
+                        {{_('footer.links')}}
                     </h4>
                     <ul>
                         {{ caller() }}
@@ -95,21 +95,21 @@
                 </div>
                 <div class="col-lg-3 col-md-6 footer-contact">
                     <h4>
-                        Contact Us
+                        {{_('contact.contact_us')}}
                     </h4>
                     <p>
-                        1111 Street Street
+                        {{_('contact.address.street')}}
                         <br>
-                        City cty, 9999
+                        {{_('contact.address.city')}}
                         <br>
-                        Country
+                        {{_('contact.address.country')}}
                         <br>
-                        <strong>Phone:</strong>
+                        <strong>{{_('contact.phone')}}:</strong>
                         <a href="tel:0036111111111">
                             +36 11 1111 111
                         </a>
                         <br>
-                        <strong>Email:</strong>
+                        <strong>{{_('contact.email')}}:</strong>
                         <a href="mailto:example@test.com">
                             example@test.com
                         </a>
