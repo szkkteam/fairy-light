@@ -301,6 +301,7 @@ class ProdConfig(BaseConfig):
     # Flask - S3                                                         #
     ##########################################################################
     FLASKS3_ACTIVE = True
+    FLASKS3_GZIP = False
 
 class DevConfig(BaseConfig):
     ##########################################################################
