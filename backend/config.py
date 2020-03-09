@@ -238,7 +238,7 @@ class ProdConfig(BaseConfig):
     ##########################################################################
     # flask                                                                  #
     ##########################################################################
-    SERVER_NAME = os.environ.get('SERVER_NAME', 'fairy-light.herokuapp.com')
+    SERVER_NAME = os.environ.get('FLASK_DOMAIN', 'fairy-light.herokuapp.com')
     ENV = 'prod'
     DEBUG = get_boolean_env('FLASK_DEBUG', False)
 
