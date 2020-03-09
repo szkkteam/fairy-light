@@ -26,7 +26,6 @@ def carousel_test():
 @site_lang.route('/index')
 def index():
     from flask import current_app
-    print("Flask config: ", current_app.config)
     return render_template('website/index/index.html',
                            # Shopping Cart
                            cart_num_of_items=ProductInventory.get_num_of_items(),
