@@ -113,6 +113,11 @@
     {{lib.cart_modal(url_for('shop.cart_detail', url=current_url))}}
 {% endblock %}
 
+{% block globals_js%}
+    {{super()}}
+    const facebookAppId = "{{facebook.app_id}}"
+{% endblock %}
+
 {% block import_js %}
     {{ super() }}
     <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
