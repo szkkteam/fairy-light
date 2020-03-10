@@ -13,6 +13,10 @@
 {% endblock %}
 
 
+{% block cart_block%} 
+    {{lib.cart(None, cart_num_of_items, always_hide=True)}}
+{% endblock %}
+
 {% block main_block %}
 <section id="cart">
     <div class="container">
@@ -51,9 +55,10 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
-{% block cart_block %}
-    {{lib.cart(None, cart_num_of_items, always_hide=True)}}
+{% block cart_url_js %}
+    const cartContentUrl = "{{url_for('shop.cart_detail_refresh')}}";
 {% endblock %}
 
 {% block import_js %}
@@ -64,8 +69,5 @@
     {% endassets %}
 {% endblock %}
 
-{% block cart_url_js %}
-	const cartContentUrl = "{{url_for('shop.cart_detail_refresh')}}";
-{% endblock %}
 
-{% endblock %}
+

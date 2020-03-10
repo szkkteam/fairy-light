@@ -14,14 +14,11 @@
 		{% block header_block %}
 			{{lib.render_navbar()}}
 		{% endblock %}
-	</header>
-	{% block cart_block %}
-		{{lib.cart(None, cart_num_of_items)}}
-	{% endblock %}
-	{% block cart_modal_block %}
-		{{lib.cart_modal(url_for('shop.cart_detail', url=url_for('shop.index_view')))}}
-	{% endblock %}
 
+		{% block cart_block %}
+			{{lib.cart(None, cart_num_of_items)}}
+		{% endblock %}
+	</header>
 	<main id="main">
 	{% block main_block %}
 
@@ -33,10 +30,21 @@
 			{{lib.render_footer()}}
 		</footer>
 	{% endblock %}    	
+
+
+	{% block globals_js %}
+		{% block cart_url_js %}
+			const cartContentUrl = "{{url_for('shop.cart_mini_refresh')}}";
+		{% endblock %}
+	{% endblock %}
+
+
+
+	{% block cart_modal_block %}
+		{{lib.cart_modal(url_for('shop.cart_detail', url=url_for('shop.index_view')))}}
+	{% endblock %}
+
+
 {% endblock %}
 
-{% block globals_js %}
-	{% block cart_url_js %}
-		const cartContentUrl = "{{url_for('shop.cart_mini_refresh')}}";
-	{% endblock %}
-{% endblock %}
+

@@ -123,7 +123,6 @@ def configure_app(app, config_object):
 
     @babel.localeselector
     def get_locale():
-        print("Locales: ", babel. list_translations(), flush=True)
         try:
             language = session.get('language')
             print('Getting lang from session: ', language, flush=True)
