@@ -69,7 +69,7 @@ def is_assets(obj):
         return False
 
 def is_filter(obj):
-    return callable(obj)
+    return (callable(obj) or hasattr(obj, '__html__'))
 
 def is_click_command(obj):
     return isinstance(obj, click.Command) and not isinstance(obj, click.Group)

@@ -31,6 +31,7 @@ site = {
     ),
     # Vendor specific JS files
     'vendor_js': AssetsBundle(
+        'libs/lazysizes-1.16.0/js/lazysizes.js',
         'libs/popper-1.16.0/js/popper.js',
         'libs/bootstrap-4.4.1/js/bootstrap.js',
         'libs/bootstrap-select-1.13.9/js/bootstrap-select.js',

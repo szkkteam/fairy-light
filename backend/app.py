@@ -107,6 +107,7 @@ def configure_app(app, config_object):
     ]
     app.config.from_object(config_object)
 
+    app.jinja_env.add_extension('jinja2.ext.do')
     app.jinja_env.add_extension('jinja2_time.TimeExtension')
     app.jinja_env.add_extension('jinja2.ext.i18n')
 

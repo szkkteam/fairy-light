@@ -1,3 +1,33 @@
 {% macro url() -%}
     {{ url_for('static', *varargs, **kwargs) }}
 {%- endmacro %}
+
+{% macro lazysizes_img(image, placeholder='', class='') %}
+    {% set classes = site.classlist(class) %}
+    <noscript>
+        <img {{classes}} src="{{image}}" {{kwargs|xmlattr}}>
+    </noscript>
+    {% do classes.add('lazyload') %}
+    <img {{classes}} src="{{placeholder}}" data-src="{{image}}" {{kwargs|xmlattr}}>
+{% endmacro %}
+
+{% macro lazysizes_iframe(src, class="") %}
+    {% set classes = site.classlist(class) %}
+    <noscript>
+        <iframe src="{{src}}" {{classes}} {{kwargs|xmlattr}}</iframe>
+    </noscript>
+    {% do classes.add('lazyload') %}
+    <iframe data-src="{{src}}" {{classes}} {{kwargs|xmlattr}}</iframe>
+{% endmacro %}
+
+{% macro button(text=none, style='default', type='button', class='') %}
+    {% set classes = classlist(class) %}
+    {% do classes.add('btn', 'btn-' + style) %}
+    <button type="{{type}}" {{classes}} {{kwargs|xmlattr}}>
+    {% if text is not none %}
+        {{ text }}
+    {% else %}
+        {{ caller() }}
+    {% endif %}
+    </button>
+{% endmacro %}
