@@ -1,30 +1,35 @@
-{% import 'website/modules/cart.html' as cart with context %}
 {% import 'website/modules/price.html' as price with context %}
-{% import 'website/elements.html' as element with context %}
+{% import 'website/elements.html' as html_element with context %}
 
 {% macro _album_table(list_images) %}
+    {% set original_caller = caller %}
     {% call html_element.table_base(class=["cart-table", "table-hover", "w-100"]) %}
-        {% call(image) html_element.table_body(list_images, td_class=""title-price-same", style="display: table-row") %}
-            <td class="cart-photo">
-                <img class="cart-details-img" width="70px;" src="{{image.thumbnail}}">
-            </td>
-            <td>
-                <span class="cart-album-title">
-                    Digital Photo
-                </span>
-            </td>
-            <td>
-                {{ price.discount(image.discounted_price, image.discounted_price) }}
-            </td>
-            {{caller()}}
+        {% call html_element.table_body(None) %}
+            {% for image in list_images %}
+                <tr class="title-price-same" style="display: table-row">    
+                    <td class="cart-photo">
+                        <img class="cart-details-img" width="70px;" src="{{image.thumbnail}}">
+                    </td>
+                    <td>
+                        <span class="cart-album-title">
+                            Digital Photo
+                        </span>
+                    </td>
+                    <td>
+                        {{ price.discount(image.discounted_price, image.discounted_price) }}
+                    </td>
+                </tr>
+            {% endfor %}
+            {{ original_caller() }}
         {% endcall %}
     {% endcall %}
 {% endmacro %}
 
-{% call element.modal_header() %}
+{% call html_element.modal_header() %}
     <h5 class="modal-title" id="exampleModalLabel">{{ data.title}}</h5>
 {% endcall %}
-{% call element.modal_body() %}
+
+{% call html_element.modal_body() %}
     <p>The following products will be added to your cart:</p>
     {% call _album_table(data.images) %}
         {% if data.discounted_price != data.original_price %}
@@ -47,11 +52,12 @@
         </tr>
     {% endcall %}
 {% endcall %}
-{% call element.modal_footer() %}
-    {{ element.a_button(text="ADD TO CART", style="primary", class=["cart-add", "w-100"], href="{{data.url_add_to_cart}}") }}
+
+{% call html_element.modal_footer() %}
+    {{ html_element.a_button(text="ADD TO CART", style="primary", class=["cart-add", "w-100"], href=data.url_add_to_cart, **{'data-dismiss':"modal"}) }}
     <div class="alert d-none alert-link alert-success alert-dismissible w-100 fade show" role="alert">
         <strong>{{data.images|length}} item</strong> has been added to your cart. Click <a href="{{url_for('shop.cart_detail')}}">HERE</a> to visit your cart.
-        {% call element.button(class="close", data-dismiss="alert" aria-label="Close") %}
+        {% call html_element.button(class="close", **{'data-dismiss':"alert", 'aria-label':"Close"}) %}
             <span aria-hidden="true">&times;</span>
         {% endcall %}
     </div>

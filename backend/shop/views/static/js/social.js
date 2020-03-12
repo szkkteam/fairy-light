@@ -1,14 +1,16 @@
 /*
  * Facebook SDK init
  */
-window.fbAsyncInit = function() {
-    FB.init({
-    appId            : ,
-    autoLogAppEvents : true,
-    xfbml            : true,
-    version          : 'v6.0'
-    });
-};
+if (facebookAppId) {
+    window.fbAsyncInit = function() {
+        FB.init({
+        appId            : facebookAppId,
+        autoLogAppEvents : true,
+        xfbml            : true,
+        version          : 'v6.0'
+        });
+    };
+}
 
 
 /*

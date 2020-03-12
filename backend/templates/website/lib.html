@@ -42,12 +42,12 @@
         {% call element.modal_header() %}
             <h5 class="modal-title" id="shopping-cart-modal-label">Shopping Cart</h5>
         {% endcall %}
-        {% call element.modal_body(id="shopping-cart-content") %}
+        {% call element.modal_body(**{'id':"shopping-cart-content"}) %}
             <div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>
         {% endcall %}
         {% call element.modal_footer(class='justify-content-between') %}
-            {{element.button(text="Back", style="secondary", data-dismiss="modal")}}
-            {{element.a_button(text="View Cart", style="primary")}}
+            {{ element.button(text="Back", style="secondary", **{'data-dismiss':"modal"}) }}
+            {{ element.a_button(text="View Cart", style="primary") }}
         {% endcall %}
     {% endcall %}
 {% endmacro %}

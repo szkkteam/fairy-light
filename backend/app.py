@@ -161,6 +161,10 @@ def register_filters(app):
         for name, filter in bundle.filters:
             app.jinja_env.filters[name] = filter
 
+    # TODO: This is quick and ugly
+    from backend.utils.template_helpers import ClassList
+    app.jinja_env.globals['classlist'] = ClassList
+
 def register_assets(app):
     """Register bundle assets."""
     for bundle in app.bundles:

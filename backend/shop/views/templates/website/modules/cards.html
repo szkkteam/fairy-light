@@ -29,7 +29,7 @@
                 <p class="mb-1">Buy {{element.num_of_images}} picture now for</p>
                 <div>{{ price.discount(element.original_price, element.discounted_price) }}</div>
                 <div class="mt-2">
-                    {{html_element.a_button(text="ADD ALBUM TO CART", style="primary", class=["album-detail", "w-100"], rel="nofollow" href="{{element.url_add_to_cart}}" data-toggle="modal" data-target="#album-detail-modal")}}
+                    {{html_element.a_button(text="ADD ALBUM TO CART", style="primary", class=["album-detail", "w-100"], **{'rel':"nofollow", 'href':element.url_add_to_cart, 'data-toggle':"modal", 'data-target':"#album-detail-modal"})}}
                 </div>
             {% endcall %}
         {% endif %}
@@ -51,7 +51,7 @@
         {% call html_element.card_body(class="text-left") %}
             <div>{{ price.discount(element.discounted_price, element.discounted_price) }}</div>
             <div class="mt-2">
-                {{html_element.a_button(text="ADD TO CART", style="primary", class=["cart-add", "w-100"], rel="nofollow" href="{{element.url_add_to_cart}}" data-animation="b-flying-img")}}
+                {{html_element.a_button(text="ADD TO CART", style="primary", class=["cart-add", "w-100"], **{'rel':"nofollow", 'href':element.url_add_to_cart, 'data-animation':"b-flying-img"})}}
             </div>
         {% endcall %}
     {% endcall %}

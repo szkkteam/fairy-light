@@ -20,7 +20,7 @@
             <div class="col-12 col-sm-11">
                 {% if previous_url %}
                 <div class="navigation-back clear-fix">
-                    {% call element.a_button(style="primary", class=["pull-left", "btn-arrow-left"], href="{{previous_url}}") %}
+                    {% call element.a_button(style="primary", class=["pull-left", "btn-arrow-left"], href=previous_url) %}
                         <i class="fa fa-arrow-left"></i>
                         Back
                     {% endcall %}
@@ -77,7 +77,7 @@
 
 {% block globals_js%}
     {{super()}}
-    const facebookAppId = "{{facebook.app_id}}"
+    const facebookAppId = "{{facebook.app_id if facebook.app_id else null}}"
 {% endblock %}
 
 {% block import_js %}

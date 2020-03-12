@@ -59,7 +59,7 @@
     </div>
 {% endmacro %}
 
-{% macro modal_body(id='', class='') %}
+{% macro modal_body(class='') %}
     {% set classes = classlist(class) %}
     {% do classes.add('modal-body') %}
     <div {{classes}} {{kwargs|xmlattr}}>
@@ -78,7 +78,7 @@
 {% macro table_base(class='') %}
     {% set classes = classlist(class) %}
     {% do classes.add('table') %}
-    <table>
+    <table {{classes}} {{kwargs|xmlattr}}>
         {{ caller() }}
     </table>
 {% endmacro %}
@@ -95,27 +95,19 @@
     </thead>
 {% endmacro %}
 
-{% macro table_data(class='', tr_class='') %}
-    {% set classes = classlist(class) %}
-    {% set tr_classes = classlist(tr_class) %}
-    <tbody {{classes}}>
-        {% for item in list_item %}
-            <tr {{tr_classes}} {{kwargs|xmlattr}}>
-                {{ caller(item) }}
-            </tr>
-        {% endfor %}
-    </tbody>
-{% endmacro %}
-
 {% macro table_body(list_item, class='', tr_class='') %}
     {% set classes = classlist(class) %}
     {% set tr_classes = classlist(tr_class) %}
     <tbody {{classes}}>
-        {% for item in list_item %}
-            <tr {{tr_classes}} {{kwargs|xmlattr}}>
-                {{ caller(item) }}
-            </tr>
-        {% endfor %}
+        {% if list_item and list_item is iterable %}
+            {% for item in list_item %}
+                <tr {{tr_classes}} {{kwargs|xmlattr}}>
+                    {{ caller(item) }}
+                </tr>
+            {% endfor %}
+        {% else %}
+            {{ caller() }}
+        {% endif %}
     </tbody>
 {% endmacro %}
 
@@ -138,7 +130,7 @@
 {% endmacro %}
 
 {% macro lazysizes_img(image, placeholder='', class='') %}
-    {% set classes = site.classlist(class) %}
+    {% set classes = classlist(class) %}
     <noscript>
         <img {{classes}} src="{{image}}" {{kwargs|xmlattr}}>
     </noscript>
@@ -147,7 +139,7 @@
 {% endmacro %}
 
 {% macro lazysizes_iframe(src, class="") %}
-    {% set classes = site.classlist(class) %}
+    {% set classes = classlist(class) %}
     <noscript>
         <iframe src="{{src}}" {{classes}} {{kwargs|xmlattr}}</iframe>
     </noscript>

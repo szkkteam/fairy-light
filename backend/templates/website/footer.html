@@ -17,15 +17,15 @@
                     {{_('footer.links')}}
                 </h4>
                 <ul>
-                    {{footer_link(_('nav.home'), url_for('site.index',))}}
-                    {{footer_link(_('nav.about'), url_for('site.about'))}}
-                    {{footer_link(_('nav.contact'), url_for('site.index') + '#contact')}}
-                    {{footer_link(_('nav.terms_and_conditions'), url_for('site.tc_shop'))}}
-                    {{footer_link(_('nav.privacy_policy'), url_for('site.privacy_policy'))}}
-                    {{footer_link(_('nav.cookie_policy'), url_for('site.cookie_policy'))}}
-                    {{footer_link(_('nav.return_refund'), url_for('site.refund_policy'))}}
-                    {{footer_link(_('nav.terms_and_service'), url_for('site.service_policy'))}}
-                    {{footer_link(_('nav.disclaimer'), url_for('site.disclaimer'))}}
+                    {{lib.footer_link(_('nav.home'), url_for('site.index',))}}
+                    {{lib.footer_link(_('nav.about'), url_for('site.about'))}}
+                    {{lib.footer_link(_('nav.contact'), url_for('site.index') + '#contact')}}
+                    {{lib.footer_link(_('nav.terms_and_conditions'), url_for('site.tc_shop'))}}
+                    {{lib.footer_link(_('nav.privacy_policy'), url_for('site.privacy_policy'))}}
+                    {{lib.footer_link(_('nav.cookie_policy'), url_for('site.cookie_policy'))}}
+                    {{lib.footer_link(_('nav.return_refund'), url_for('site.refund_policy'))}}
+                    {{lib.footer_link(_('nav.terms_and_service'), url_for('site.service_policy'))}}
+                    {{lib.footer_link(_('nav.disclaimer'), url_for('site.disclaimer'))}}
                 </ul>
             </div>
             <div class="col-lg-3 col-md-6 footer-contact">

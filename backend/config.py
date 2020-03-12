@@ -211,8 +211,7 @@ class BaseConfig(object):
     ##########################################################################
     # Flask - Assets                                                         #
     ##########################################################################
-    #ASSETS_DEBUG = get_boolean_env('FLASK_DEBUG', False)
-    ASSETS_DEBUG = False
+    ASSETS_DEBUG = get_boolean_env('FLASK_DEBUG', False)
 
     ##########################################################################
     # Flask - S3                                                         #
@@ -377,13 +376,13 @@ class DevConfig(BaseConfig):
     # Flask - Assets                                                         #
     ##########################################################################
     ASSETS_AUTO_BUILD = True
-    FLASK_ASSETS_USE_S3 = True  #False
+    FLASK_ASSETS_USE_S3 = False  #False
 
     ##########################################################################
     # Flask - S3                                                         #
     ##########################################################################
     FLASKS3_USE_HTTPS = False
-    FLASKS3_ACTIVE = True # TODO: Remove this when testing S3
+    FLASKS3_ACTIVE = False # TODO: Remove this when testing S3
     FLASKS3_GZIP = False
 
 class TestConfig(BaseConfig):

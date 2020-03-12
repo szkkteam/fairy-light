@@ -89,13 +89,13 @@
                 <div class="col-md-4 subscribe-btn-container">
                     <a class="subscribe-btn" data-toggle="modal" data-target="#subscribe-modal">Subscribe Now</a>						
                 </div>
-                {% call modal.base(id='subscribe-modal', animation='fade', class='modal-dialog-centered')  %}
-                    {% call modal.header(class='text-center') %}
+                {% call modal.modal_base(id='subscribe-modal', animation='fade', class='modal-dialog-centered')  %}
+                    {% call modal.modal_header(class='text-center') %}
                         <h4 class="modal-title w-100">
                             Get Email Updates
                         </h4>
                     {% endcall %}
-                    {% call modal.body() %}
+                    {% call modal.modal_body() %}
                         {{ macro.subscribe() }}
                     {% endcall %}
                 {% endcall %}
