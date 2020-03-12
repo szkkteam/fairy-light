@@ -1,0 +1,80 @@
+{% import 'website/lib.html' as lib with context %}
+{% import 'website/macros.html' as macro with context %}
+
+<div class="footer-top">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 footer-info">
+                <h3>
+                    Fairy Light
+                </h3>
+                <p>
+                    Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus. Scelerisque felis imperdiet proin fermentum leo. Amet volutpat consequat mauris nunc congue.
+                </p>
+            </div>
+            <div class="col-lg-3 col-md-6 footer-links">
+                <h4>
+                    {{_('footer.links')}}
+                </h4>
+                <ul>
+                    {{footer_link(_('nav.home'), url_for('site.index',))}}
+                    {{footer_link(_('nav.about'), url_for('site.about'))}}
+                    {{footer_link(_('nav.contact'), url_for('site.index') + '#contact')}}
+                    {{footer_link(_('nav.terms_and_conditions'), url_for('site.tc_shop'))}}
+                    {{footer_link(_('nav.privacy_policy'), url_for('site.privacy_policy'))}}
+                    {{footer_link(_('nav.cookie_policy'), url_for('site.cookie_policy'))}}
+                    {{footer_link(_('nav.return_refund'), url_for('site.refund_policy'))}}
+                    {{footer_link(_('nav.terms_and_service'), url_for('site.service_policy'))}}
+                    {{footer_link(_('nav.disclaimer'), url_for('site.disclaimer'))}}
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6 footer-contact">
+                <h4>
+                    {{_('contact.contact_us')}}
+                </h4>
+                <p>
+                    {{_('contact.address.street')}}
+                    <br>
+                    {{_('contact.address.city')}}
+                    <br>
+                    {{_('contact.address.country')}}
+                    <br>
+                    <strong>{{_('contact.phone')}}:</strong>
+                    <a href="tel:0036111111111">
+                        +36 11 1111 111
+                    </a>
+                    <br>
+                    <strong>{{_('contact.email')}}:</strong>
+                    <a href="mailto:example@test.com">
+                        example@test.com
+                    </a>
+                    <br>
+                </p>
+                <div class="social-links">
+                    <a href="#" class="facebook">
+                        <i class="fa fa-facebook"></i>
+                    </a>
+                    <a href="#" class="instagram">
+                        <i class="fa fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 footer-newsletter">
+                <h4>
+                    Our Newsletter
+                </h4>
+                <p>
+                    Tamen quem nulla quae legam multos aute sint culpa legam noster magna veniam enim veniam illum dolore legam minim quorum culpa amet magna export quem marada parida nodela caramase seza.
+                </p>
+                {{ macro.subscribe() }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="copyright">
+        © Copyright
+        <strong>Fairy Light</strong>
+        . All Rights Reserved
+    </div>
+</div>

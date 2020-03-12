@@ -1,18 +1,42 @@
 {% import 'website/modules/cart.html' as cart with context %}
 {% import 'website/modules/price.html' as price with context %}
+{% import 'website/elements.html' as html_element with context %}
 
-{% call cart.table_mini() %}
-    {% for category_id, category in cart_items.items() %}
-        {% for key, item in category['products'].items() %}    
-            {{ cart.row_mini(image=item['thumb'], price=item['price'], delete_url=url_for('shop_api.cart_item_api', item_id=item['id'])) }}
+{% macro _cart_mini(list_items, total_price) %}
+    {% call html_element.table_base(class=["cart-table", "table-hover", "w-100"]) %}
+        {% for category_id, category in list_items.items() %}
+            {% set item_price = (category['subTotal'] * (1 - category['discount'])) %}
+            {% set num_items = category['products'].keys()|length %}
+            {% for key, item in category['products'].items() %}
+                <tr class="title-price-same" style="display: table-row">
+                    <td class="cart-photo">
+                        <img class="cart-details-img" width="70px;" src="{{ item['thumb'] }}">
+                    </td>
+                    <td>
+                        <span class="cart-album-title">
+                            Digital Photo
+                        </span>
+                    </td>
+                    <td >
+                        {{ price.discount(item['price'], item['price']) }}
+                    </td>
+                    <td>
+                        {% call html_element.button(style="danger", class=["clear-item", "btn-sm"], href="{{url_for('shop_api.cart_item_api', item_id=item['id'])}}") %}
+                            <i class="fa fa-trash-o"></i>
+                        {% endcall %}
+                    </td>
+                </tr>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
-    <tr class="title-price-same">        
-        <td colspan="2" class="cart-album-remark text-right">
-            <span>Total:</span>
-        </td>
-        <td  class="cart-price">
-            {{ price.discount(total_price, total_price) }}
-        </td>
-    </tr>
-{% endcall %}
+        <tr class="title-price-same">
+            <td colspan="2" class="cart-album-remark text-right">
+                <span>Total:</span>
+            </td>
+            <td  class="cart-price">
+                {{ price.discount(total_price, total_price) }}
+            </td>
+        </tr>
+    {% endcall %}
+{% endmacro %}
+
+{{_cart_mini(cart_items, total_price)}}

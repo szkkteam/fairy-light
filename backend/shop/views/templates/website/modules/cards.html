@@ -1,57 +1,58 @@
 {% import 'website/static.html' as site_static with context %}
+{% import 'website/elements.html' as html_element with context %}
 {% import 'website/modules/social_media.html' as sharer with context %}
 {% import 'website/modules/price.html' as price with context %}
 
 {% macro album(element) %}
-    <div class="card text-center" style="position: relative;">
+    {% call html_element.card_base(class="text-center", style="position: relative;") %}
         <div class="album-cover">
             <a href="{{element.url_category}}">
                 <span>
                     <img class="card-img-top img-fluid" src="{{element.thumbnail}}" width="253" height="220" alt="{{element.title|lower}}">
-                    <div class="album-title-overlay">                            
+                    <div class="album-title-overlay">
                         <h4>{{element.title}}</h4>
                     </div>
                 </span>
-            </a>                        
+            </a>
             <div class="album-social-overlay">
                 <div class="pull-left">
                     <i class="fa fa-picture-o" aria-hidden="true"></i>
-                    <span>{{element.num_of_images}}</span>                                
+                    <span>{{element.num_of_images}}</span>
                 </div>
                 <div class="pull-right pictures-share">
-                    {{sharer.facebook_share(facebook_app_id, element.url_external)}}    
+                    {{sharer.facebook_share(facebook_app_id, element.url_external)}}
                 </div>
             </div>
         </div>
-        {% if element.can_buy %}        
-            <div class="card-body text-left">
+        {% if element.can_buy %}
+            {% call html_element.card_body(class="text-left") %}
                 <p class="mb-1">Buy {{element.num_of_images}} picture now for</p>
                 <div>{{ price.discount(element.original_price, element.discounted_price) }}</div>
                 <div class="mt-2">
-                    <a rel="nofollow" href="{{element.url_add_to_cart}}" class="btn btn-primary album-detail w-100" data-toggle="modal" data-target="#exampleModalLong">ADD ALBUM TO CART</a>
-                </div>                        
-            </div>
+                    {{html_element.a_button(text="ADD ALBUM TO CART", style="primary", class=["album-detail", "w-100"], rel="nofollow" href="{{element.url_add_to_cart}}" data-toggle="modal" data-target="#album-detail-modal")}}
+                </div>
+            {% endcall %}
         {% endif %}
-    </div>
+    {% endcall %}
 {% endmacro %}
 
 {% macro image(element) %}
-    <div class="card text-center">
+    {% call html_element.card_base(class="text-center") %}
         <div class="album-cover">
             <a class="popup-item" href="{{element.url_image}}">
                 <img class="card-img-top img-fluid" src="{{element.thumbnail}}" width="253" height="220" alt="{{element.title|lower}}">
-            </a>                        
+            </a>
             <div class="album-social-overlay">
                 <div class="pull-right pictures-share">
-                    {{sharer.facebook_share(facebook_app_id, element.url_external)}}    
+                    {{sharer.facebook_share(facebook_app_id, element.url_external)}}
                 </div>
             </div>
         </div>
-        <div class="card-body text-left">
+        {% call html_element.card_body(class="text-left") %}
             <div>{{ price.discount(element.discounted_price, element.discounted_price) }}</div>
             <div class="mt-2">
-                <a rel="nofollow" href="{{element.url_add_to_cart}}" data-animation="b-flying-img" class="btn btn-primary cart-add w-100">ADD TO CART</a>
-            </div>                        
-        </div>
-    </div>
+                {{html_element.a_button(text="ADD TO CART", style="primary", class=["cart-add", "w-100"], rel="nofollow" href="{{element.url_add_to_cart}}" data-animation="b-flying-img")}}
+            </div>
+        {% endcall %}
+    {% endcall %}
 {% endmacro %}

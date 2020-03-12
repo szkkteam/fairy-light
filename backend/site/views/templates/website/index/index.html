@@ -3,7 +3,7 @@
 {% import 'website/modules/sections.html' as section with context %}
 {% import 'website/modules/services.html' as services with context %}
 {% import 'website/macros.html' as macro with context %}
-{% import 'website/modules/modals.html' as modal with context %}
+{% import 'website/elements.html' as modal with context %}
 {% import 'website/modules/contact.html' as contact with context %}
 {% import 'website/modules/teams.html' as team with context %}
 {% import 'website/modules/hero.html' as hero_img with context %}
@@ -89,8 +89,8 @@
                 <div class="col-md-4 subscribe-btn-container">
                     <a class="subscribe-btn" data-toggle="modal" data-target="#subscribe-modal">Subscribe Now</a>						
                 </div>
-                {% call modal.base('subscribe-modal', 'fade', 'modal-dialog-centered')  %}
-                    {% call modal.header('text-center') %}
+                {% call modal.base(id='subscribe-modal', animation='fade', class='modal-dialog-centered')  %}
+                    {% call modal.header(class='text-center') %}
                         <h4 class="modal-title w-100">
                             Get Email Updates
                         </h4>
@@ -105,7 +105,7 @@
     <section id="team">
         <div class="container">
             {{ section.header('Our Team', 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium') }}
-            <div class="row col-md-12">
+            <div class="row">
                 <div class="col-md-5 offset-md-1">
                     {{ team.member('http://placehold.it/150x150', 'Anna Toth', 'Photographer', '#', '#') }}
                 </div>

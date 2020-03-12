@@ -1,6 +1,7 @@
 {% extends 'website/layout.html' %}
 {% from 'website/macros.html' import separator with context %}
 {% import 'website/lib.html' as lib with context %}
+{% import 'website/elements.html' as element with context %}
 {% import 'website/modules/breadcrumb_m.html' as breadcrumb_m with context %}
 {% import 'website/modules/cards.html' as card with context %}
 
@@ -12,41 +13,6 @@
     {% endassets %}
 {% endblock %}
 
-
-{% block header_nav_element_block %}
-    {{ super() }}
-    <li class="nav-item">        
-        <div id="shopping-cart-dropdown" class="dropdown">
-            <a id="shopping-cart" href="#" class="nav-link d-inline-block dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span id="shopping-cart-items" class="highlight-item" data-val="{{ cart_num_of_items }}">
-                    {{ cart_num_of_items }}
-                </span>
-                <i class="material-icons" style="padding:0 0 0 15px;font-size: 24px;">shopping_cart</i>
-            </a>
-            <div id="cart-dropdow" class="dropdown-menu">
-                <span class="dropdown-content">
-                    Loading ...
-                </span>
-                <hr class="header-separator"/>
-                <div class="row text-center my-3">
-                    <div class="col">
-                        <a href="{{url_for('shop.cart_detail', url=current_url)}}" class="btn btn-primary" id="shopping-cart-detail">
-                            <span class="text-nowrap">View Cart</span>
-                        </a>
-                    </div>
-                    <div class="col">
-                        <a href="{{url_for('shop_api.cart_api')}}" class="btn btn-primary" id="shopping-cart-clear">
-                            <span class="text-nowrap">Clear Cart</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </li>    
-    {{ separator() }}
-{% endblock %}
-
-
 {% block main_block %}
 <section id="photonav">
     <div class="container">
@@ -54,10 +20,10 @@
             <div class="col-12 col-sm-11">
                 {% if previous_url %}
                 <div class="navigation-back clear-fix">
-                    <a class="btn btn-primary btn-arrow-left pull-left" href="{{previous_url}}">
+                    {% call element.a_button(style="primary", class=["pull-left", "btn-arrow-left"], href="{{previous_url}}") %}
                         <i class="fa fa-arrow-left"></i>
                         Back
-                    </a>
+                    {% endcall %}
                 </div>
                 {% endif %}
                 <div class="navigation-breadcrumb">
@@ -98,13 +64,9 @@
         {% endblock %}
     </div>		
     <!-- Modal -->
-    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                Loading ...
-            </div>
-        </div>
-    </div>
+    {% call element.modal_base(id="album-detail-modal", animations="fade") %}
+        Loading ...
+    {% endcall %}
 </section>
 {% endblock %}
 

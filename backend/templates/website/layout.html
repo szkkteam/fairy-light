@@ -12,7 +12,7 @@
 		{% block hero_block %}
 		{% endblock %}
 		{% block header_block %}
-			{{lib.render_navbar()}}
+			{% include 'website/header.html' %}
 		{% endblock %}
 
 		{% block cart_block %}
@@ -27,18 +27,15 @@
 	
 	{% block footer_block %}
     	<footer id="footer">
-			{{lib.render_footer()}}
+			{% include 'website/footer.html' %}
 		</footer>
 	{% endblock %}    	
-
 
 	{% block globals_js %}
 		{% block cart_url_js %}
 			const cartContentUrl = "{{url_for('shop.cart_mini_refresh')}}";
 		{% endblock %}
 	{% endblock %}
-
-
 
 	{% block cart_modal_block %}
 		{{lib.cart_modal(url_for('shop.cart_detail', url=url_for('shop.index_view')))}}
