@@ -20,7 +20,7 @@
                         {{ price.discount(item['price'], item['price']) }}
                     </td>
                     <td>
-                        {% call html_element.button(style="danger", class=["clear-item", "btn-sm"], href=url_for('shop_api.cart_item_api', item_id=item['id'])) %}
+                        {% call html_element.button(style="danger", class=["cart-remove", "clear-item-mini", "btn-sm"], href=url_for('shop_api.cart_item_api', item_id=item['id'])) %}
                             <i class="fa fa-trash-o"></i>
                         {% endcall %}
                     </td>

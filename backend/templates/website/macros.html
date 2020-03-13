@@ -13,27 +13,24 @@
     <form id="contact-form" action="{{ url_for(contact_endpoint) }}" method="post" role="form" class="contactform needs-validation">
         <div class="form-group">
             <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 character">
-            <div id="name" class="validation">
-
+            <div class="form-errors text-danger" role="alert">
             </div>
         </div>
         <div class="form-group">
             <input type="email" class="form-control" name="email" placeholder="Your Email" data-msg="Pleae enter a valid email">
-            <div id="email" class="validation">
-
+            <div class="form-errors text-danger" role="alert">
             </div>
         </div>
         <div class="form-group">
             <textarea name="message" rows="5" class="form-control" data-rule="required" data-msg="Please write something for us" placeholder="Message">
             </textarea>
-            <div id="message" class="validation">
-
+            <div class="form-errors text-danger" role="alert">
             </div>
         </div>
         <div class="text-center">
             <button class="btn btn-primary" type="submit">{{_('contact.send_message')}}</button>
-        </div>
-        <div id="feedback">
+            <div class="form-success text-success" role="alert">
             </div>
+        </div>
     </form>
 {% endmacro %}
