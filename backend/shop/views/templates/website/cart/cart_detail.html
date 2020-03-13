@@ -1,4 +1,5 @@
 {% import 'website/elements.html' as html_element with context %}
+{% import 'website/modules/price.html' as price with context %}
 
 {% macro _cart_detail(list_items, total_price) %}
     {% call html_element.table_base(class=["cart-table", "table-hover", "w-100"]) %}

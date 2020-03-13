@@ -1,5 +1,17 @@
+var getCountry = function() {
+	var e = $('select[name=country]');
 
-
+	fetch('https://extreme-ip-lookup.com/json/')
+	.then( function(res) {
+		return res.json();
+	})
+	.then( function(response) {
+		e.val(response.countryCode);
+	})
+	.catch(function (data, status) {
+		console.log('Request failed with status: ' + status +' and data: ' + data);
+	})
+};
 
 var initPayment = function(stripe_key, client_secret, success_url, processing_url, failed_url) {
   // Init stripe with the key

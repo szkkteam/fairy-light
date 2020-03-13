@@ -164,16 +164,17 @@
     width: 65%;
 }
 
-#subscribe .modal-body input[type="submit"] {
+#subscribe .modal-body button[type="submit"] {
     background-color: #18d26e;
     border: 0;
+    border-radius: 0;
     width: 35%;
     padding: 6px 0;
     text-align: center;
     color: #fff;
     transition: 0.3s;
     cursor: pointer;
-    float: right;
+    float: right;    
 }
 
 #subscribe .modal-body {

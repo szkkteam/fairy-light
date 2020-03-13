@@ -62,7 +62,7 @@
 									  <option value="SI">Slovenia</option>
 									  <option value="SK">Slovakia</option>
 									  <option value="FI">Finland</option>
-									  <option value="SE" selected="selected">Sweden</option>
+									  <option value="HU" selected="selected">Hungary</option>
 									</select>
 									<div class="form-errors" role="alert">
 									</div>										
@@ -107,6 +107,8 @@
     </div>
 </section>
 <script type="text/javascript">
+
+	getCountry();
 
 	initPayment("{{public_key}}",
 				"{{client_secret}}",

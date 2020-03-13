@@ -47,7 +47,7 @@
         {% endcall %}
         {% call element.modal_footer(class='justify-content-between') %}
             {{ element.button(text="Back", style="secondary", **{'data-dismiss':"modal"}) }}
-            {{ element.a_button(text="View Cart", style="primary") }}
+            {{ element.a_button(text="View Cart", href=url, style="primary") }}
         {% endcall %}
     {% endcall %}
 {% endmacro %}
