@@ -2,32 +2,38 @@
 
 <div class="container photo-lightbox">
     <div class="row">
-        <div class="col">
-            <img class="card-img-top" src="{{data.url_image}}" alt="{{data.title|lower}}"> 
+        <div class="col-8">
+            <img class="lightbox-img" src="{{data.url_image}}" alt="{{data.title|lower}}"> 
         </div>
-        <div class="col my-auto">
-            <form>                
-                <div class="form-group row">
-                    <label class="col-sm-5" for="inputState">Photo size(?)</label>
-                    <div class="col-sm">
+        <div class="col-4 my-auto">
+            <form>
+                <div class="form-row">                   
+                    <div class="form-group col-sm-4">
+                        <label for="inputState">Photo size(?)</label>
+                    </div>
+                    <div class="form-group col-sm-8">
                         <select id="inputState" class="form-control">
                             <option selected>High quality ({{data.size[0]}}x{{data.size[1]}})</option>
                         </select>                        
                     </div>
                 </div>
                 <hr/>
-                <div class="photo-lightbox-price">
-                    <span>Total:</span>
-                    {{ price.discount(data.discounted_price, data.discounted_price) }}
+                <div class="form-group">
+                    <div class="photo-lightbox-price">
+                        <span>Total:</span>
+                        {{ price.discount(data.discounted_price, data.discounted_price) }}
+                    </div>
                 </div>
                 <hr/>
-                <a href="{{data.url_add_to_cart}}" class="btn btn-primary mb-2 cart-add w-100">ADD TO CART</a>  
-                <div class="alert alert-link alert-success alert-dismissible w-100 fade show" role="alert" style="visibility: hidden;">
-                    <strong>1 item</strong> has been added to your cart. Click <a href="{{url_for('shop.cart_detail', url=current_url)}}">HERE</a> to visit your cart.
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
+                <div class="form-group">
+                    <a href="{{data.url_add_to_cart}}" class="btn btn-primary mb-2 cart-add w-100">ADD TO CART</a>
+                    <div class="alert alert-link alert-success alert-dismissible w-100 fade show" role="alert" style="visibility: hidden;">
+                        <strong>1 item</strong> has been added to your cart. Click <a href="{{url_for('shop.cart_detail', url=current_url)}}">HERE</a> to visit your cart.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>  
             </form>
         </div>
     </div>

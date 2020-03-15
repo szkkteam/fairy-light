@@ -16,16 +16,17 @@
 {% block main_block %}
 <section id="photonav">
     <div class="container">
-        <div class="row no-gutters">
-            <div class="col-12 col-sm-11">
+        <div class="row mb-md-3 no-gutters">
+            <div class="col-2 col-md-1 align-self-center">
                 {% if previous_url %}
                 <div class="navigation-back clear-fix">
                     {% call element.a_button(style="primary", class=["pull-left", "btn-arrow-left"], href=previous_url) %}
                         <i class="fa fa-arrow-left"></i>
-                        Back
                     {% endcall %}
                 </div>
                 {% endif %}
+            </div>
+            <div class="col-10 col-md-11">
                 <div class="navigation-breadcrumb">
                     {% block breadcrumb_block %}
                         {% call breadcrumb_m.base() %}
@@ -39,8 +40,8 @@
                             {% endfor %}
                         {% endcall%}
                     {% endblock %}                    
-                </div>
-            </div>		
+                </div>                    
+            </div>
         </div>
         <div class="row">
             <div class="col-12">

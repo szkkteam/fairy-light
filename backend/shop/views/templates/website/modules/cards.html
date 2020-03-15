@@ -39,7 +39,7 @@
 {% macro image(element) %}
     {% call html_element.card_base(class="text-center") %}
         <div class="album-cover">
-            <a class="popup-item" href="{{element.url_image}}">
+            <a class="venobox" data-vbtype="ajax" data-gall="photos" href="{{element.url_image}}">
                 <img class="card-img-top img-fluid" src="{{element.thumbnail}}" width="253" height="220" alt="{{element.title|lower}}">
             </a>
             <div class="album-social-overlay">

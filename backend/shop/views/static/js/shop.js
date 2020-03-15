@@ -27,6 +27,11 @@ $('#shopping-cart').shoppingCart({
             var _that = this;
             // If item not present in the cart
             if (this.numOfItems != resp.shopItems) {
+                // Get alert element if any
+                const alertElement = e.nextAll('.alert');
+                if (alertElement.length) {
+                    alertElement.css('visibility', 'visible');
+                }
                 // Get the defined animation if any
                 const animationClass = e.attr('data-animation');
                 // If animation defined
@@ -68,65 +73,12 @@ $('#shopping-cart').shoppingCart({
 /*
  * Photo viewwer popup init and event handler
  */
-$('.popup-parent').magnificPopup({
-    delegate: 'a.popup-item',
-    type:'ajax',
-    ajax: {
-        settings: null, // Ajax settings object that will extend default one - http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings
-        // For example:
-        // settings: {cache:false, async:false}
-
-        cursor: 'mfp-ajax-cur', // CSS class that will be added to body during the loading (adds "progress" cursor)
-        tError: '<a href="%url%">The content</a> could not be loaded.' //  Error message, can contain %curr% and %total% tags if gallery is enabled
-    },
-    gallery: {
-        enabled: true, // set to true to enable gallery
-
-        preload: [1,1], // read about this option in next Lazy-loading section
-
-        navigateByImgClick: true,
-
-        arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>', // markup of an arrow button
-
-        tPrev: 'Previous (Left arrow key)', // title for left button
-        tNext: 'Next (Right arrow key)', // title for right button
-        tCounter: '<span class="mfp-counter">%curr% of %total%</span>' // markup of counter
-    },
-    callbacks: {
-        lazyLoad: function(item) {
-            //console.log(item); // Magnific Popup data object that should be loaded
-        },
-        open: function() {
-            var mfp = jQuery.magnificPopup.instance;
-
-            // hide image nav when first/last
-            if(mfp.index >= mfp.items.length - 1) {
-                $(".mfp-container").addClass("mfp-last");
-            } else {;
-                $(".mfp-last").removeClass("mfp-last");
-            }
-            if(mfp.index == 0) {
-                $(".mfp-container").addClass("mfp-first");
-            } else {;
-                $(".mfp-first").removeClass("mfp-first");
-            }
-        },
-        change: function(){
-            var mfp = jQuery.magnificPopup.instance;
-
-            // hide image nav when first/last
-            if(mfp.index >= mfp.items.length - 1) {
-                $(".mfp-container").addClass("mfp-last");
-            } else {;
-                $(".mfp-last").removeClass("mfp-last");
-            }
-            if(mfp.index == 0) {
-                $(".mfp-container").addClass("mfp-first");
-            } else {;
-                $(".mfp-first").removeClass("mfp-first");
-            }
-        }, //change
-    },
+/*
+ * Init venobox
+ */
+$('.venobox').venobox({
+    overlayColor: 'rgba(0,0,0,0.6)',
+    bgcolor: '#000',
 });
 /*
  * Open Album detail event handler

@@ -142,8 +142,8 @@ button.mfp-close {
 }
 
 .btn-arrow-left {
-    margin-top: 7px;
-    margin-right: 20px;
+    /*margin-top: 7px;*/
+    /*margin-right: 20px;*/
     padding: 4px 10px;
 }
 
@@ -153,6 +153,38 @@ button.mfp-close {
 
 /* Lightbox
 --------------------------------*/
+/*
+.vbox-container {
+    overflow-y: hidden;
+}
+
+.vbox-content {
+    overflow: initial;
+}
+
+.vbox-inline {
+    overflow: initial;
+    height: auto;
+}
+
+*/
+
+.lightbox-container {
+    position: absolute;
+}
+
+.lightbox-img {
+    float: left;
+    max-height: 70vh;
+}
+
+.lightbox-form {
+    
+}
+
+.card-img-top {
+    
+}
 
 .title-price-same span {
     font-size: 0.9375rem !important;

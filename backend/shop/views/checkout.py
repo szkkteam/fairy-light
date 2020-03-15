@@ -28,7 +28,11 @@ from ..inventory import ProductInventory
 def is_intent_success():
     intent_id = ProductInventory.get_intent_id()
     if intent_id is not None:
-        intent_obj = stripe.PaymentIntent.retrieve(intent_id)
+        try:
+            intent_obj = stripe.PaymentIntent.retrieve(intent_id)
+        except Exception as e:
+            logger.error(e)
+            return False
         if 'charges' in intent_obj:
             data = intent_obj['charges']['data']
             if len(data) > 0:
@@ -139,9 +143,9 @@ def checkout():
         logger.info("Order id: ", order.id)
         logger.info("Order payment status: ",order.payment_status)
         logger.info("Order shipping status: ", order.shipping_status)
-        raise
-
-    client_secret = intent_obj['client_secret']
+        client_secret = None
+    else:
+        client_secret = intent_obj['client_secret']
 
     return render_template('website/checkout/checkout_modal.html',
                            #cart_items=cart_content,
