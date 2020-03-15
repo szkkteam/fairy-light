@@ -5,7 +5,12 @@
 
 
 {% block main_block %}
-    {{ contact.render() }}
+<section id="contact" class="section-begin mt-5">
+    <div class="container">
+        {{ section.header('Contact Us', 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium') }}
+        {{ contact.render() }}        
+    </div>
+</section>
 {% endblock %}
 
 {% block import_js %}

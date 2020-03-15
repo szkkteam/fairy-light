@@ -7,8 +7,8 @@
 {% endblock %}
 
 {% block page_body %}
+	{{ super() }}
 	<header>
-		{{ super() }}
 		{% block hero_block %}
 		{% endblock %}
 		{% block header_block %}
@@ -29,19 +29,19 @@
     	<footer id="footer">
 			{% include 'website/footer.html' %}
 		</footer>
-	{% endblock %}    	
-
-	{% block globals_js %}
-		{% block cart_url_js %}
-			const cartContentUrl = "{{url_for('shop.cart_mini_refresh')}}";
-		{% endblock %}
-	{% endblock %}
-
+	{% endblock %}    
+	
 	{% block cart_modal_block %}
 		{{lib.cart_modal(url_for('shop.cart_detail', url=url_for('shop.index_view')))}}
-	{% endblock %}
-
-
+	{% endblock %}	
 {% endblock %}
+
+{% block globals_js %}
+	{{super()}}
+	{% block cart_url_js %}
+		const cartContentUrl = "{{url_for('shop.cart_mini_refresh')}}";
+	{% endblock %}
+{% endblock %}
+
 
 

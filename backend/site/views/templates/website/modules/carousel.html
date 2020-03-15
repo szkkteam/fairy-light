@@ -41,3 +41,10 @@
     {% endcall %}
 
 {% endmacro %}
+
+{% macro render_testimonails(img, name, role, comment) %}
+    <img src="{{img}}" width="120" height="120" alt="" class="testimonial-img img-fluid">
+    <h3>{{name}}</h3>
+    <h4>{{role}}</h4>
+    <p>{{comment}}</p>
+{% endmacro %}

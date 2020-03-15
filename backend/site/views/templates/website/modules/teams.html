@@ -1,5 +1,7 @@
-{% macro member(picture, name, role, facebook_link, instagram_link, alt=None) %}
-    <div class="team-member">
+{% macro member(picture, name, role, facebook_link, instagram_link, alt=None, class="") %}
+    {% set classes = classlist(class) %}
+    {% do classes.add('team-member') %}
+    <div {{classes}}>
         <div class="team-pic">
             <img class="rounded-circle img-fluid" src="{{picture}}" alt="{{ 'alt|join(' ')' if alt else '' }}">
         </div>

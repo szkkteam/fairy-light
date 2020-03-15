@@ -177,13 +177,19 @@ hr.header-separator {
 }
 
 #shopping-cart-modal button.clear-item-mini {
-    padding: 0.0rem 0.25rem !important;
+    /*padding: 0.0rem 0.25rem !important; */
 }
 
 #shopping-cart-modal .title-price-same span {
     font-size: 0.9375rem !important;
 }
 
+/* Title
+--------------------------------*/
+section.section-begin {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
 
 /* Footer Section
 --------------------------------*/

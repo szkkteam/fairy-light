@@ -1,15 +1,6 @@
-/* Title
---------------------------------*/
-#title {
-    margin-top: 80px;
-}
-
 /* Contact
 --------------------------------*/
-#contact {
-    margin-top: 80px;
-    margin-bottom: 80px;
-}
+
 
 /* Portfolio
 --------------------------------*/
@@ -29,7 +20,7 @@
     color:#222222;
     border-radius:4px;
     text-transform:uppercase;
-    font-family: 'Montserrat', sans-serif;
+    /* font-family: 'Montserrat', sans-serif; */
     background:#f7f7f7;
     margin-bottom:5px;
     transition:all 0.3s ease-in-out;
@@ -117,6 +108,9 @@
     transition: all ease-in-out 0.3s;
 }
 
+#portfolio .portfolio-item {
+    margin-bottom: 2rem;
+}
 
 #portfolio .portfolio-wrap .portfolio-info h4 {
     font-size: 20px;

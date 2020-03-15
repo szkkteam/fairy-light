@@ -9,7 +9,7 @@
             {% for key, item in category['products'].items() %}
                 <tr class="title-price-same" style="display: table-row">
                     <td class="cart-photo">
-                        <img class="cart-details-img" width="70px;" src="{{ item['thumb'] }}">
+                        <img class="cart-details-img img-fluid" width="70px;" src="{{ item['thumb'] }}">
                     </td>
                     <td>
                         <span class="cart-album-title">
@@ -28,7 +28,8 @@
             {% endfor %}
         {% endfor %}
         <tr class="title-price-same">
-            <td colspan="2" class="cart-album-remark text-right">
+            <td></td>
+            <td class="cart-album-remark text-left">
                 <span>Total:</span>
             </td>
             <td  class="cart-price">
@@ -38,4 +39,10 @@
     {% endcall %}
 {% endmacro %}
 
-{{_cart_mini(cart_items, total_price)}}
+{% if cart_items.items()|length > 0 %}
+    {{_cart_mini(cart_items, total_price)}}
+{% else %}
+<div class="">
+    <span>Your shopping cart is empty. Click <a href="{{url_for('shop.index_view')}}">here</a> to start shopping.</span>
+</div>
+{% endif %}

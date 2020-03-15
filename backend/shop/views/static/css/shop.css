@@ -29,6 +29,10 @@
 }
 */
 
+#photos .btn-buy { 
+    font-size: 0.8375rem;
+ }
+
 #photos .price-drop {
     margin: 1em 0;
 }

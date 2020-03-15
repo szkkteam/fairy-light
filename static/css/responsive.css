@@ -1,5 +1,6 @@
 @media only screen and (min-width: 992px) {
     /****Ipad Landscape 1024 Container 970 ****/
+    #testimonials .carousel-item p { width: 80%; }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -9,6 +10,7 @@
     h2{ font-size:30px}
     h6{ font-size:16px;}
     h3{ font-size:15px;}
+    section.section-begin { padding-top: 2rem; padding-bottom: 2rem; }
     #header .list-group-item.logo { padding: 12px 20px; }
 }
 
@@ -19,44 +21,54 @@
     h2{ font-size:26px;}
     h3{ font-size:14px;}
     h6{ font-size:16px; margin-bottom:40px;}
-    p{ line-height:18px;}
+    p{ line-height:16px;}
+    .table td { padding: 0.5rem; }
     #header .list-group-item.logo { padding: 12px 0px; }
     #header .title-description { font-size: 1.5rem; }
     #header .title-description::before,
     #header .title-description::after { width: 1rem; transform: translateY(-0.5rem); }
     #header .list-group-item h1 { font-size: 2.25rem;}
+    #contact .map { width: 100%; }
+    #testimonials .carousel-item { text-align: center; }
+    #testimonials .carousel-item img { float:none; margin:auto; }
+    #testimonials .carousel-item h3, #testimonials .carousel-item h4, #testimonials .carousel-item p {margin-left: 0}
+    #slideshow .carousel-caption { right: 15%; left: 45px; }
+    #slideshow .carousel-caption h4 { font-size: 1rem; }    
 }
 
 @media only screen and (max-width: 479px) {
     /****Mobile Portrait 320 ****/
+    section.section-begin { padding-top: 1rem; padding-bottom: 1rem; }
     #quote .blockquote { font-size: 0.75rem; }
     h1.section-title { font-size: 2rem; }
     p.section-description { margin-bottom: 1rem; }
     #header .list-group-item h1 { letter-spacing: initial; /*margin-top: 0px;*/ }
-    #services { margin-bottom: 1rem; }
+    /* #services { margin-bottom: 1rem; } */
     #subscribe { padding: 30px 0; }
     #subscribe .subscribe-btn-container { padding-top: 0px; }
-    #team { padding: 1rem; }
-    #contact { padding: 1rem 0; }
-    a.btn.album-detail { font-size: 0.42rem; }
-    a.btn.cart-add { font-size: 0.42rem; }
+    /* #team { padding: 1rem; }
+    #contact { padding: 1rem 0; } */
+    #photos .btn-buy { font-size: 0.7rem; }
     .album-cover .album-title-overlay h4 { font-size: 0.8rem; }
     .card-body .price-discount ins { font-size: 0.8rem; }
     .card-body .price-discount del { font-size: 0.6rem; }
     .card-body .price-discount del::before { height: 6px; }
     #photonav { margin-bottom: 2rem; margin-top: 1rem; }
-    #title { padding-top: 1rem; }
     #services .tab-menu a h4 { font-size: 0.7rem; }
     #contact a.w-25 { width: inherit !important; }
-    #portfolio .portfolio-filters li { font-size:  1rem; }
-    #portfolio .portfolio-filters { margin-bottom: 2rem; }
+    #portfolio #portfolio-filters li { padding:5px 10px; margin:0 5px; }
+    #portfolio #portfolio-filters { margin-bottom: 2rem; }
+    #contact .info p { margin-bottom: 0; }
+    #team .team-member-left { margin-right: 0; }
+    #team .team-member-right { margin-left: 0; }
 }
 
-@media only screen and (max-width: 360px) {
+@media only screen and (max-width: 376px) {
     /****Small devices 320 ****/
     #header .list-group-item h1 { letter-spacing: initial; /*margin-top: 0px;*/ font-size: 2.25rem;}
     #header .title-description { font-size: 1.25rem; }
     #header .title-description::after { width: 1rem; transform: translateY(-0.35rem); }
+    #photos .btn-buy { font-size: 0.5rem; padding: 0.175rem 0.25rem; }
 }
 
 /* Small devices (landscape phones, 544px and up) */

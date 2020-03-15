@@ -4,12 +4,12 @@
 {% import 'website/modules/portfolio.html' as folio with context %}
 
 {% block main_block %}
-    <section id="title">
-        <div class="container mt-5">
+    <section id="title" class="section-begin mt-5">
+        <div class="container">
             {{ section.header('Portfolio', 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium') }}
         </div>            
     </section>
-    <section id="portfolio">
+    <section id="portfolio" class="section-begin">
         <div class="container">
             <div class="row">
                 <div class="col">
@@ -28,7 +28,7 @@
             </div>
         </div>
     </section>
-    <section id="contact">
+    <section id="contact" class="section-begin">
         <div class="container">
             {% call section.header('Are you interested?', 'We are happy to answer your questions.') %}
                 <div class="text-center">

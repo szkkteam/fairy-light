@@ -3,15 +3,15 @@
 {% import 'website/modules/services.html' as services with context %}
 
 {% block main_block %}
-    <section id="title">
-        <div class="container my-5">
+    <section id="title" class="section-begin mt-5">
+        <div class="container">
             {{ section.header('Our Services', 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium') }}
         </div>
     </section>
-    <section id="services">
+    <section id="services" class="section-begin">
         <div class="container">
             <div class="row no-gutters tab-container">
-                <div class="col-2">
+                <div class="col-4 col-md-2">
                     <div class="nav flex-column nav-pills tab-menu" id="service-tab" role="tablist" aria-orientation="vertical">
                         {{ services.tab_item('service-service1', 'Event', is_active=True) }}
                         {{ services.tab_item('service-service2', 'Wedding') }}
@@ -19,7 +19,7 @@
                         {{ services.tab_item('service-service4', 'Portfolio') }}
                     </div>
                 </div>
-                <div class="col-10">
+                <div class="col-6 col-md-10">
                     <div class="tab-content" id="service-tab-content">
                         {% call services.tab_content('service-service1', is_active=True) %}
                             {% include 'website/contents/service_event.html' %}
@@ -38,7 +38,7 @@
             </div>
         </div>
     </section>
-    <section id="contact">
+    <section id="contact" class="section-begin">
         <div class="container">
             {% call section.header('Contact us', 'We are happy to answer your questions.') %}
                 <div class="text-center">

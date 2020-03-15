@@ -170,3 +170,42 @@
     {% endif %}
     </a>
 {% endmacro %}
+
+{% macro carousel(id, class="", list_item=None, indicators=None, show_navigation=True, next_text="Next", prev_text="Previous") %}
+    {% set classes = classlist(class) %}
+    {% do classes.add('carousel', 'slide') %}
+    <div id={{id}} {{classes}} {{kwargs|xmlattr}} data-ride="carousel">       
+        <div class="carousel-inner">
+        {% if list_item %}
+            {% for item in list_item %}
+                <div class="carousel-item {{'active' if loop.first else ''}}">
+                    {{ caller(item) }}
+                </div>
+            {% endfor %}
+        {% else %}
+            {{ caller() }}
+        {% endif %}
+        </div>
+        {% if indicators %} 
+        <ol class="carousel-indicators position-relative">
+            {% for i in range(indicators) %}
+                {% if i.first %}
+                    <li data-target="#{{id}}" data-slide-to="{{i}}" class="active"></li>
+                {% else %}
+                    <li data-target="#{{id}}" data-slide-to="{{i}}"></li>
+                {% endif %}                
+            {% endfor %}
+        </ol>
+        {% endif %}
+        {% if show_navigation %}
+            <a class="carousel-control-prev" href="#{{id}}" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">{{prev_text}}</span>
+            </a>
+            <a class="carousel-control-next" href="#{{id}}" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">{{next_text}}</span>
+            </a>
+        {% endif %}
+    </div>
+{% endmacro %}

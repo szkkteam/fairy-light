@@ -78,21 +78,22 @@
 }
 
 .carousel-control-prev {
+    z-index: 200;
     top: -20% !important;
+    cursor: pointer;
     /* left: -5% !important; Buggy on small screen size */
 }
 
 .carousel-control-next {
+    z-index: 200;
     top: -20% !important;
+    cursor: pointer;
     /* right: -5% !important; Buggy on small screen size */
 }
 
 
 /* Service Section
 --------------------------------*/
-#services {
-	padding-bottom: 80px;
-}
 
 #services .service-item {
     margin-bottom: 20px;
@@ -181,15 +182,50 @@
     padding: 26px 1rem;
 }
 
+/* Testimonials
+--------------------------------*/
+#testimonials .carousel-item img {
+    width: 120px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    float: left;
+}
+
+#testimonials .carousel-item h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0 5px 0;
+    margin-left: 140px;
+}
+
+#testimonials .carousel-item h4 {
+    font-size: 14px;
+    color: #999;
+    margin: 0 0 15px 0;
+    margin-left: 140px;
+}
+
+#testimonials .carousel-item p {
+    font-style: italic;
+    margin: 0 0 15px 140px;
+}
+
 /* Team Section
 --------------------------------*/
-#team {
-	padding: 80px;
-}
 
 #team .team-member {
 	text-align: center;
 	margin-bottom: 20px;
+}
+
+#team .team-member-left {
+    float: right;
+    margin-right: 3rem;
+}
+
+#team .team-member-right {
+    float: left;
+    margin-left: 3rem;
 }
 
 #team .team-member h4 {
@@ -219,9 +255,6 @@
 
 /* Contact Section
 --------------------------------*/
-#contact {
-    padding: 80px 0;
-}
 
 #contact .info {
     color: #3333;
@@ -236,7 +269,7 @@
 
 #contact .info p {
     padding: 0 0 10px 50px;
-    line-height: 24px;
+    /* line-height: 24px;*/ 
     color: #fff;
 }
 
@@ -246,7 +279,7 @@
 }
 
 .social-link{
-	padding:35px 0;
+	padding:20px 0;
 	margin:0 0 0 10px;
 	display:block;
 	overflow:hidden;
