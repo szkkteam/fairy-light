@@ -2,7 +2,7 @@
 {% import 'website/modules/price.html' as price with context %}
 
 {% macro _cart_detail(list_items, total_price) %}
-    {% call html_element.table_base(class=["cart-table", "table-hover", "w-100"]) %}
+    {% call html_element.table_base(class=["cart-table", "table-hover", "table-sm", "w-100"]) %}
         {% for category_id, category in list_items.items() %}
             {% set item_price = (category['subTotal'] * (1 - category['discount'])) %}
             {% set num_items = category['products'].keys()|length %}

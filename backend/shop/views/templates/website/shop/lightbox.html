@@ -2,16 +2,16 @@
 
 <div class="container photo-lightbox">
     <div class="row">
-        <div class="col-8">
-            <img class="lightbox-img" src="{{data.url_image}}" alt="{{data.title|lower}}"> 
+        <div class="col-7 col-lg-7 col-xl-8">
+            <img class="lightbox-img img-fluid" src="{{data.url_image}}" alt="{{data.title|lower}}"> 
         </div>
-        <div class="col-4 my-auto">
+        <div class="col-5 col-lg-5 col-xl-4 my-auto">
             <form>
                 <div class="form-row">                   
-                    <div class="form-group col-sm-4">
+                    <div class="form-group col-sm-12 col-md-3 col-lg-4">
                         <label for="inputState">Photo size(?)</label>
                     </div>
-                    <div class="form-group col-sm-8">
+                    <div class="form-group col-sm-12 col-md-9 col-lg-8">
                         <select id="inputState" class="form-control">
                             <option selected>High quality ({{data.size[0]}}x{{data.size[1]}})</option>
                         </select>                        

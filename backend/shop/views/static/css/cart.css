@@ -1,6 +1,6 @@
 /* Checkout form
 ---------------------------------*/
-#register-form .field-border {
+#payment #register-form .field-border {
    border-radius: 0.25rem;
    border: 1px solid #666;
    padding-left: 25px;
@@ -9,34 +9,37 @@
    padding-bottom: 10px;
  }
 
- #register-form .field-border legend {
+ #payment #register-form .field-border legend {
    text-align: center;
    font-size: 1rem;
  }
 
- #shipping-billing {
+ #payment #shipping-billing {
    margin-bottom: 20px;
  }
 
- #personal {
+ #payment #personal {
    margin-bottom: 20px;
  }
 
- #terms-condition {
+ #payment #terms-condition {
      padding-left: 25px;
      padding-right: 25px;
      margin-top: 25px;
  }
 
  /* Payment button */
- .pay-btn-processing {
+ #payment .pay-btn-processing {
      display: none;
  }
 
- .pay-btn-idle {
+ #payment .pay-btn-idle {
      display: block;
  }
 
+ #payment .card-body {
+     padding: 1.25rem 0;
+ }
 
 /* Cart Section
 --------------------------------*/
@@ -113,24 +116,6 @@
 
 #cart tr.cart-table-album.active td:last-of-type:after {
     content: "Less \2212";
-}
-
-#cart .btn-point-left {
-    margin-left: 50px;
-    width: 160px;
-}
-
-#cart .btn-point-left::before {
-    content: "<";
-}
-
-#cart .btn-point-right {
-    margin-right: 50px;
-    width: 160px;
-}
-
-#cart .btn-point-right::after {
-    content: ">";
 }
 
 /* Override the standard price discount class */

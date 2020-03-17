@@ -26,19 +26,17 @@
             </div>
         </div>
         <div class="row">
-            <div class="col">
-                <span id="cart-details">
-                    {% include 'website/cart/cart_detail.html' %}
-                </span>
+            <div id="cart-details" class="col">
+                {% include 'website/cart/cart_detail.html' %}
                 <hr class="header-separator"/>
                 <div class="row my-3">
-                    <div class="col text-left">
-                        <a href="{{return_url}}" class="btn btn-primary btn-point-left" id="shopping-cart-back">
-                            <span class="text-nowrap">Continue Shopping</span>
+                    <div class="col-6 text-left">
+                        <a href="{{return_url}}" class="btn btn-primary btn-navigation btn-point-left" id="shopping-cart-back">
+                            <span class="text-nowrap">Back To Shop</span>
                         </a>
                     </div>
-                    <div class="col text-right">
-                        <a rel="nofollow" href="{{url_for('shop.checkout')}}" class="btn btn-primary btn-point-right" aria-disabled="false" id="checkout-modal-btn" data-toggle="modal" data-target="#checkout-modal">
+                    <div class="col-6 text-right">
+                        <a rel="nofollow" href="{{url_for('shop.checkout')}}" class="btn btn-primary btn-navigation btn-point-right" aria-disabled="false" id="checkout-modal-btn" data-toggle="modal" data-target="#checkout-modal">
                             <span class="text-nowrap">Check Out</span>
                         </a>
                     </div>
