@@ -93,9 +93,9 @@ class BaseConfig(object):
     # session/cookies                                                        #
     ##########################################################################
     SESSION_TYPE = 'redis'
-    SESSION_REDIS = os.environ.get('REDIS_URL') if 'REDIS_URL' in os.environ else 'redis://{host}:{port}/0'.format(
+    SESSION_REDIS = redis.from_url(os.environ.get('REDIS_URL')) if 'REDIS_URL' in os.environ else redis.Redis(
         host=os.getenv('FLASK_REDIS_HOST', '127.0.0.1'),
-        port=os.getenv('FLASK_REDIS_PORT', 6379),
+        port=int(os.getenv('FLASK_REDIS_PORT', 6379)),
     )
     SESSION_PROTECTION = 'strong'
     SESSION_COOKIE_HTTPONLY = True
