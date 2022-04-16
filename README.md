@@ -50,7 +50,7 @@ Dependencies:
 
 ```bash
 # install
-$ git clone git@github.com:briancappello/flask-react-spa.git
+$ git clone git@github.com:szkkteam/fairy-light.git
 $ cd flask-react-spa
 $ mkvirtualenv -p /path/to/python3 flask_react_spa
 $ pip install -r requirements.txt
