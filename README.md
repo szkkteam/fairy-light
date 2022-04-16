@@ -5,7 +5,7 @@ A server-side rendered simple web application which consist a landing page and a
 - [Flask Backend](#flask-backend)
 - [Template rendering](#template-rendering)
 - [Local Development](#local-development-quickstart)
-- [Usage](#usage)
+- [License](#license)
 
 ## Features
 - Localized frontend
